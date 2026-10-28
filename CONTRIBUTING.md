@@ -6,4 +6,4 @@ Describe the business behavior, input grain and metric impact in the PR. Add a f
 
 Do not update the baseline hash to make a failing PR green. A baseline change requires a separately reviewed release, new tag/asset and a lock update. Release assets, raw archives, virtual environments, generated databases and credentials do not belong in Git.
 
-The repository owner should require the Linux CI check on `main`, disallow force-pushes and protect baseline/CI changes with review where feasible. The initial portfolio publication has no remote protection configured yet.
+Protected `main` requires a PR, an up-to-date `validate` check from GitHub Actions, resolved review conversations and linear history, including administrator changes. Use squash merge after the current revision passes. Force-pushes and deletion are disabled. Second-person approval is optional for this sole-maintainer portfolio; see [policy and acceptance evidence](specs/main-protection.md).

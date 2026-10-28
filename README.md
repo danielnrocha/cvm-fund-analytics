@@ -45,9 +45,8 @@ flowchart LR
 - Docker-free local development with Make and VS Code. The same Docker-based Linux ARM64 CI runner executes in GitHub Actions; see the [remote run history](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml).
 - A durable baseline package with a versioned Release tag and SHA-256 lock. The [immutable baseline Release](https://github.com/danielnrocha/cvm-fund-analytics/releases/tag/baseline-v1) is public and its asset hash matches the committed lock.
 
-## Roadmap and pending activation
+## Roadmap
 
-- Configure branch protection and validate the complete PR review workflow.
 - Extend the current identity/history models into the full planned Data Vault architecture and additional marts.
 - Add returns and holdings analytics after validating the relevant sources and business contracts.
 - Build and evaluate an AI BI agent over the semantic layer, using the [planned evaluation scenarios](specs/ai-bi-evals.md).
@@ -97,3 +96,5 @@ The `compatibility/` directory contains earlier experiments, not the production 
 ## Repository metadata
 
 GitHub name, description and topics from [repository.json](.github/repository.json) have been applied to the public repository. GitHub does not automatically synchronize subsequent edits to that file.
+
+Protected `main` requires an up-to-date GitHub Actions `validate` check before merge, including administrator changes. A controlled PR proved that offsetting daily metric regressions are rejected even when monthly totals match. See [merge policy and evidence](specs/main-protection.md). Second-person approval is optional for this sole-maintainer portfolio.

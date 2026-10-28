@@ -110,10 +110,10 @@ Aceite: metas de [ai-bi-evals.md](ai-bi-evals.md) satisfeitas ou falhas explicit
 ## Entrega 6 — CI, UAT e release
 
 - [x] Bootstrap CI Linux ARM64: imagem e driver fixados, build, docs e runner completos aprovados offline em container local. [Evidência e limites](ci-uat.md).
-- [ ] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota pendente; lint de formatação SQL permanece separado.
+- [x] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota executada; lint de formatação SQL permanece separado.
 - [x] Guardar artifacts e logs em workspaces exclusivos por release, com invocation ID registrado; baseline selado não é sobrescrito. Workflow preparado para publicar artefatos de cada run.
 - [ ] Slim CI opcional: fixture baseline físico fechado + manifest correspondente; attach read-only; provar que nada escreve no baseline.
-- [x] Gate semântico cobre mudança somente em métrica: mutação de semiaditividade bloqueada em teste real. Workflow não filtra caminhos e configura full build em toda execução; runner Linux local aprovado; execução do workflow no GitHub ainda pendente.
+- [x] Gate semântico cobre mudança somente em métrica: mutação de semiaditividade bloqueada em teste real. Workflow não filtra caminhos e configura full build em toda execução; runner Linux local aprovado; execução remota comprovada, incluindo rejeição de regressão diária no PR #1.
 - [x] UAT local: comparação MetricFlow em total/mês/classe-dia/cobertura, mesmos inputs, null ≠ zero, schema obrigatório e relatório vinculado aos bundles/CAS. Provas positiva e negativa executadas; igualdade obrigatória antes da promoção.
 - [ ] Aprovação humana antes da promoção; usar environments protegidos apenas se disponíveis. Caso contrário, documentar gate manual por release sem fingir proteção automatizada.
 - [x] Empacotar snapshot consistente; testar promoção e rollback locais; registrar fingerprints de código/locks/dados. [Implementação e evidências](snapshot-publication.md).
@@ -160,11 +160,11 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 
 ## Publicação local concluída — 28/10/2026
 
-[Spec de snapshots](snapshot-publication.md): 13 cenários Python de publicação, dois builds reais de 48 recursos, promoção/rollback com leitor fixado, isolamento dev/UAT e MetricFlow read-only com oráculos preservados. A construção usa workspace e artefatos próprios por ambiente/release. Revisão adversarial em [snapshots-review.md](../reviews/snapshots-review.md). Esse foi o aceite da publicação local. O incremento CI/UAT abaixo acrescenta Linux e comparação semântica; aprovação protegida remota continua pendente.
+[Spec de snapshots](snapshot-publication.md): 13 cenários Python de publicação, dois builds reais de 48 recursos, promoção/rollback com leitor fixado, isolamento dev/UAT e MetricFlow read-only com oráculos preservados. A construção usa workspace e artefatos próprios por ambiente/release. Revisão adversarial em [snapshots-review.md](../reviews/snapshots-review.md). Esse foi o aceite da publicação local. O incremento CI/UAT abaixo acrescenta Linux e comparação semântica; proteção remota de merge implementada posteriormente em [main-protection.md](main-protection.md); aprovação humana de promoção permanece uma política separada.
 
 ## CI/UAT — implementação e aceite separados
 
-[Spec CI/UAT](ci-uat.md): **70 testes Python e 48 recursos dbt aprovados no Linux ARM64 offline**, docs v2 com 13 modelos/manifesto preservado, quatro arestas de linhagem, comparação real baseline/candidato, promoção/rollback, replay, rejeições e mutação semântica bloqueada. Oráculos preservados: PL `119385193058.06`, fluxo `4725910556.15`, 7.554/7.560 observações. [Resultado](../transform/evidence/ci/linux-acceptance/result.json). Dev/UAT locais continuam em `cvm-atomic-v2`; promoção ocorreu apenas no sandbox CI. **Publicação GitHub e download da Release executados.** O histórico remoto registra o CI atual; proteção de `main` e validação do fluxo de PR continuam pendentes. Hashes das distribuições Python continuam pendentes; os locks atuais fixam versões.
+[Spec CI/UAT](ci-uat.md): **70 testes Python e 48 recursos dbt aprovados no Linux ARM64 offline**, docs v2 com 13 modelos/manifesto preservado, quatro arestas de linhagem, comparação real baseline/candidato, promoção/rollback, replay, rejeições e mutação semântica bloqueada. Oráculos preservados: PL `119385193058.06`, fluxo `4725910556.15`, 7.554/7.560 observações. [Resultado](../transform/evidence/ci/linux-acceptance/result.json). Dev/UAT locais continuam em `cvm-atomic-v2`; promoção ocorreu apenas no sandbox CI. **Publicação GitHub e download da Release executados.** O histórico remoto registra o CI atual; proteção de `main` aplicada e regressão semântica bloqueada no PR #1; ver [aceite de PR](main-protection.md). Hashes das distribuições Python continuam pendentes; os locks atuais fixam versões.
 
 ## Portfólio e baseline durável — 28/10/2026
 
@@ -176,7 +176,7 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 - [x] Repositório público `danielnrocha/cvm-fund-analytics`, metadados aplicados, baseline publicado com imutabilidade e download público verificado.
 - [ ] Selecionar licença de código (publicação pública não concede licença automaticamente).
 - [x] Executar download real da Release e iniciar CI remoto normal; primeiro run revelou dependência de pasta vazia, corrigida nos testes auxiliares.
-- [ ] Configurar proteção de `main` e validar fluxo completo de PR; acompanhar conclusão atual do CI no histórico remoto.
+- [x] Configurar proteção de `main` e comprovar bloqueio de regressão semântica no PR #1; aceite da revisão final e pós-merge acompanhado no histórico remoto ([política e evidências](main-protection.md)).
 
 Contrato e comandos: [portfolio.md](portfolio.md). Retenção de logs/artefatos do CI permanece 14 dias; disponibilidade dos ZIPs CVM upstream é uma restrição separada. Preparação local não implica publicação remota.
 

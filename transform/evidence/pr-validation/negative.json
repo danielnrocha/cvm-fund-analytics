@@ -1,0 +1,42 @@
+{
+  "baseline": "cvm-linux-uat-v3",
+  "baseline_hash": "eb58b199ae4aa30251d7fd8db876ce3aba4b24b2cd350cf700b9d319b009ce75",
+  "candidate": "cvm-ci-40770238983-1",
+  "candidate_hash": "6bb15632c181d6246fa8b6b8bfc4fe0e569fe2ef7621a182e1ebfc0685a216f9",
+  "differences": {
+    "daily_entity": [
+      {
+        "baseline": "0.0",
+        "candidate": "0.01",
+        "group": [
+          "2026-04-01 00:00:00",
+          "CVM:CLASS:621"
+        ],
+        "metric": "net_flow"
+      },
+      {
+        "baseline": "0.0",
+        "candidate": "-0.01",
+        "group": [
+          "2026-04-02 00:00:00",
+          "CVM:CLASS:621"
+        ],
+        "metric": "net_flow"
+      }
+    ]
+  },
+  "expected": "cvm-linux-uat-v3",
+  "passed": false,
+  "version": 1,
+  "run_url": "https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40770238983",
+  "head_sha": "4e82cdcb4dff403386db69c8c6d28589f29b908f",
+  "required_check": "validate",
+  "check_conclusion": "FAILURE",
+  "merge_state": "BLOCKED",
+  "uat_pointer_after_rejection": "cvm-linux-uat-v3",
+  "unchanged_queries": [
+    "total",
+    "monthly",
+    "coverage"
+  ]
+}

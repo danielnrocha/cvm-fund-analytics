@@ -82,7 +82,7 @@ The immutable baseline does not preserve the mutable upstream raw CVM archives. 
 
 Seven baseline tests were run red before implementation, then green: hidden-file roundtrip, byte drift, deterministic packing, traversal, wrong release, preservation of existing destination and inner checksum corruption. The real approved Linux bundle was packed and restored locally with full manifest verification. The full native Python suite passed 77 tests; Docker was not started for this preparation. The restored real database preserved PL `119385193058.06`, net flow `4725910556.15` and coverage `7554/7560`. Workflow YAML and embedded shell syntax were checked. [Preparation evidence](../transform/evidence/portfolio/preparation.json).
 
-The preceding Linux acceptance (70 Python tests, 48 dbt resources) remains historical evidence. Release download, immutability and workflow dispatch have now been verified remotely. Repository branch protection remains pending. Current job conclusions are available in the remote run history.
+The preceding Linux acceptance (70 Python tests, 48 dbt resources) remains historical evidence. Release download, immutability and workflow dispatch have now been verified remotely. Repository branch protection is configured; the required check rejected a controlled daily metric regression in [PR #1](main-protection.md). Current job conclusions are available in the remote run history.
 
 ## First remote run and clean-checkout fix
 
