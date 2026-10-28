@@ -37,8 +37,7 @@ models:
       - name: net_flow
         type: simple
         agg: sum
-        # TEMPORARY PR validation: equal monthly totals must not hide daily drift.
-        expr: "net_flow + case when entity_id = 'CVM:CLASS:621' and report_date = date '2026-04-01' then 0.01 when entity_id = 'CVM:CLASS:621' and report_date = date '2026-04-02' then -0.01 else 0 end"
+        expr: net_flow
       - name: reporting_observations
         type: simple
         agg: sum

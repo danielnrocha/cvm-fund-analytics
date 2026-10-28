@@ -49,14 +49,14 @@ Decisão de portfólio: GitHub Actions + Docker no runner remoto; desenvolviment
 
 `ci/baseline.lock.json` fixa tag, asset, snapshot ID, tamanho e SHA-256 de uma GitHub Release. `ci/baseline.py fetch` baixa o asset público, verifica hash e estrutura e restaura todos os membros do bundle em `baseline/releases`. Nenhum baseline depende mais de `CVM_BASELINE_RUN_ID`, variáveis de repositório ou expiração de Actions artifacts. Os artefatos do run continuam com retenção de 14 dias apenas para diagnóstico.
 
-O pacote real `dist/cvm-baseline-v1.zip` foi publicado em `baseline-v1` com imutabilidade habilitada e download público verificado. O primeiro CI normal exige esse asset publicado. Bootstrap manual é explícito e não altera a seleção aprovada. Para substituir o baseline, revisar um novo bundle e publicar uma nova tag/asset com lock correspondente; não sobrescrever a release. Release immutability está habilitada; proteção/revisão obrigatória de `main` continua pendente.
+O pacote real `dist/cvm-baseline-v1.zip` foi publicado em `baseline-v1` com imutabilidade habilitada e download público verificado. O primeiro CI normal exige esse asset publicado. Bootstrap manual é explícito e não altera a seleção aprovada. Para substituir o baseline, revisar um novo bundle e publicar uma nova tag/asset com lock correspondente; não sobrescrever a release. Release immutability está habilitada; proteção de `main` exige PR e check `validate`; aprovação por segunda pessoa não é obrigatória no portfólio de mantenedor único. Ver [política](main-protection.md).
 
 Runners padrão em repositório público não exigem serviços dbt pagos; limites de armazenamento e governança do GitHub continuam aplicáveis. [Documentação dos runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). O isolamento do container remoto continua sendo `--network none`. Executar o container no Mac é opção excepcional de diagnóstico, não o fluxo normal.
 
 ## Fronteiras
 
 - O proprietário do filesystem, o código de validação e a escolha humana do baseline são confiáveis. Hashes não são assinatura, ACL ou aprovação protegida.
-- Um autor com poder de mudar o próprio workflow pode alterar os gates: branch protection/review humano continuam necessários para governança real. Nenhuma proteção remota foi configurada aqui.
+- Um autor com poder de mudar o próprio workflow pode alterar os gates: branch protection/review humano continuam necessários para governança real. A proteção remota está registrada na [política de main](main-protection.md); ela não protege contra alteração deliberada pelo próprio administrador.
 - Não reivindicamos validação amd64: a emulação local falhou ao importar DuckDB Python com SIGILL. O alvo previsto deste incremento é Linux ARM64.
 - Locks Python fixam versões; ainda não fixam hashes de todas as distribuições. Driver e imagem-base têm hashes próprios.
 - Comparação cobre o conjunto explícito de métricas/grãos, não todas as perguntas possíveis de BI. Fonte externa nova e mudança intencional de métrica exigem novo aceite.

@@ -17,6 +17,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   validate:
+    name: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap && 'bootstrap-certification' || 'validate' }}
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 45
     env:
