@@ -9,6 +9,7 @@ from fixture_loader import load as load_sources
 results=[]
 with tempfile.TemporaryDirectory(prefix='cvm-gates-') as tmp:
     p=Path(tmp)/'transform';shutil.copytree(P,p,ignore=shutil.ignore_patterns('target','logs','evidence','*.duckdb*'))
+    (p/'seeds').mkdir(exist_ok=True) # Git does not retain empty fixture directories.
     env={**os.environ,'DBT_PROFILES_DIR':str(p),'CVM_DB_PATH':str(p/'gate.duckdb'),'DBT_SEND_ANONYMOUS_USAGE_STATS':'false'}
     def write(name,header,rows):
         with (p/'seeds'/name).open('w',newline='') as f:w=csv.writer(f);w.writerow(header);w.writerows(rows)

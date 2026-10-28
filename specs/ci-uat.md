@@ -1,6 +1,6 @@
 # CI Linux e comparação semântica para UAT
 
-Estado em 28/10/2026: gate UAT implementado e runner Linux ARM64 aprovado em container local com `--network none`. Workflow GitHub preparado, ainda não ativado: o repositório local foi inicializado, mas ainda não há remote.
+Estado em 28/10/2026: gate UAT implementado e runner Linux ARM64 aprovado em container local com `--network none`. Workflow GitHub ativado no repositório público `danielnrocha/cvm-fund-analytics`; consultar o histórico remoto para o estado atual dos runs.
 
 ## Gate antes da promoção
 
@@ -49,7 +49,7 @@ Decisão de portfólio: GitHub Actions + Docker no runner remoto; desenvolviment
 
 `ci/baseline.lock.json` fixa tag, asset, snapshot ID, tamanho e SHA-256 de uma GitHub Release. `ci/baseline.py fetch` baixa o asset público, verifica hash e estrutura e restaura todos os membros do bundle em `baseline/releases`. Nenhum baseline depende mais de `CVM_BASELINE_RUN_ID`, variáveis de repositório ou expiração de Actions artifacts. Os artefatos do run continuam com retenção de 14 dias apenas para diagnóstico.
 
-O pacote real `dist/cvm-baseline-v1.zip` foi preparado/restaurado; sua publicação está pendente. O primeiro CI normal exige esse asset publicado. Bootstrap manual é explícito e não altera a seleção aprovada. Para substituir o baseline, revisar um novo bundle e publicar uma nova tag/asset com lock correspondente; não sobrescrever a release. Habilitar release immutability e exigir revisão do workflow/lock em `main` são configurações remotas ainda pendentes.
+O pacote real `dist/cvm-baseline-v1.zip` foi publicado em `baseline-v1` com imutabilidade habilitada e download público verificado. O primeiro CI normal exige esse asset publicado. Bootstrap manual é explícito e não altera a seleção aprovada. Para substituir o baseline, revisar um novo bundle e publicar uma nova tag/asset com lock correspondente; não sobrescrever a release. Release immutability está habilitada; proteção/revisão obrigatória de `main` continua pendente.
 
 Runners padrão em repositório público não exigem serviços dbt pagos; limites de armazenamento e governança do GitHub continuam aplicáveis. [Documentação dos runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). O isolamento do container remoto continua sendo `--network none`. Executar o container no Mac é opção excepcional de diagnóstico, não o fluxo normal.
 
@@ -73,9 +73,9 @@ Runners padrão em repositório público não exigem serviços dbt pagos; limite
 - Docs v2: HTML + `info_schema/v1/dbt.models.parquet`, 13 modelos, manifesto preservado. Não exigir o antigo `catalog.json`. Driver fixado atende todos os comandos pelo `ADBC_DRIVER_PATH` do container. [Evidência](../transform/evidence/ci/linux-acceptance/docs.log).
 - Comparação Linux `cvm-atomic-v2` → `cvm-linux-uat-v3`: zero diferenças. [Relatório completo](../transform/evidence/ci/linux-acceptance/semantic-comparison.json). Mutação de semiaditividade rejeitada (seis meses e total), ponteiro intacto. [Resultado](../transform/evidence/ci/linux-acceptance/semantic-mutation.json).
 - A falha inicial de extração por I/O foi superada após liberar espaço. A execução offline revelou e corrigiu duas regressões: driver não exposto ao build e verificador de docs legado. Logs de falhas e testes red/green permanecem em `transform/evidence/ci/`.
-- Os ambientes locais publicados permanecem em `cvm-atomic-v2`. O CI ainda não foi ativado em GitHub, pois ainda não há remote configurado.
+- Os ambientes locais publicados permanecem em `cvm-atomic-v2`. O CI está ativado no GitHub; o primeiro run identificou a dependência de diretório vazio nos testes auxiliares, corrigida e documentada no runbook de portfólio.
 
-Para reproduzir o aceite local, usar saída e ID novos no comando abaixo. O aceite prova o container Linux ARM64 local; o primeiro run no GitHub e o transporte real entre runs continuam pendentes de publicar o repositório e o asset de baseline aprovado. Hashes completos das distribuições Python permanecem como melhoria explícita, sem confundir os locks de versão atuais com locks por hash.
+Para reproduzir o aceite local, usar saída e ID novos no comando abaixo. O aceite prova o container Linux ARM64 local; a publicação remota e o download real da Release estão documentados no [runbook](portfolio.md). Hashes completos das distribuições Python permanecem como melhoria explícita, sem confundir os locks de versão atuais com locks por hash.
 
 ```sh
 docker build --platform linux/arm64 -f ci/Dockerfile -t cvm-ci:run .

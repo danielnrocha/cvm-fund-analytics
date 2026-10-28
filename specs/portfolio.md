@@ -8,7 +8,7 @@ Approved name: **`cvm-fund-analytics`**. The English description and topics are 
 
 ## Repository state
 
-The repository is initialized locally on `main`. There is no remote, public repository, initial commit or remotely executed workflow yet. Preparation does not imply publication. The root README presents implemented behavior separately from the full Data Vault and AI BI roadmap; data attribution is in `DATA_SOURCES.md`. No code license has been selected; no permissive license is implied by the portfolio.
+Published on 2026-10-28: [danielnrocha/cvm-fund-analytics](https://github.com/danielnrocha/cvm-fund-analytics), public, default branch `main`. Description and all ten topics are applied. The initial commit and immutable `baseline-v1` Release are published; Actions is enabled. The [run history](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml) records remote results. The root README presents implemented behavior separately from the full Data Vault and AI BI roadmap; data attribution is in `DATA_SOURCES.md`. No code license has been selected; no permissive license is implied by the portfolio.
 
 Source control excludes raw archives, databases, drivers, virtual environments, local tooling indexes, user state, generated targets, release ZIPs and raw logs. Historical evidence is scoped and is not a badge claiming remote CI passed. A scan of publishable source filenames/content found no home-directory paths or common GitHub/private-key credential patterns; this is a narrow check, not a general secret-scan certification.
 
@@ -22,7 +22,7 @@ The committed `ci/baseline.lock.json` selects:
 - Size: 3,251,493 bytes.
 - SHA-256: `5904eb6deac37cd2158ecb8c8500b9dae68b04ed461a00ee2dcf363fb78bc59c`.
 
-The prepared asset is `dist/cvm-baseline-v1.zip` (ignored by Git). `ci/baseline.py` packs only the selected verified bundle, preserving all manifest members including hidden files. Its restore checks outer size/hash, archive bounds and paths, duplicate entries, regular files only, exact release identity and the complete inner bundle checksums. Invalid input never publishes a partially restored destination; existing destinations are not overwritten.
+The published asset is available in [baseline-v1](https://github.com/danielnrocha/cvm-fund-analytics/releases/tag/baseline-v1); `dist/cvm-baseline-v1.zip` is the retained local copy (ignored by Git). GitHub reports `immutable: true`; both its asset digest and an unauthenticated public download matched the lock. `ci/baseline.py` packs only the selected verified bundle, preserving all manifest members including hidden files. Its restore checks outer size/hash, archive bounds and paths, duplicate entries, regular files only, exact release identity and the complete inner bundle checksums. Invalid input never publishes a partially restored destination; existing destinations are not overwritten.
 
 Normal PR/push CI downloads the public asset from the current repository's Release URL without credentials, restores it to `baseline/releases`, and compares the candidate against the locked ID. This is intended for a public portfolio; private-release authentication is not implemented. Missing/deleted assets, changed bytes and changed frozen input contracts fail closed. No automatic self-baseline fallback exists. `bootstrap=true` remains an explicitly labeled manual diagnostic/certification run; it does not update the baseline lock or upload a Release.
 
@@ -32,7 +32,7 @@ A maintainer who can modify workflow, lock and validator remains trusted. Requir
 
 ## First publication runbook
 
-The repository name is selected: `cvm-fund-analytics`. Choose the personal account and a code license before public release. The following are operator steps, not actions already executed. Review `git status --short` and the publication set before the first commit.
+The repository name is selected: `cvm-fund-analytics`. Choose the personal account and a code license before public release. The following is the reusable publication procedure. The original publication has been executed for `danielnrocha/cvm-fund-analytics`; do not rerun creation or tag commands against the existing immutable release. Review `git status --short` and the publication set before the first commit.
 
 ```sh
 # From the project root; replace OWNER/cvm-fund-analytics with the chosen public repo.
@@ -82,4 +82,8 @@ The immutable baseline does not preserve the mutable upstream raw CVM archives. 
 
 Seven baseline tests were run red before implementation, then green: hidden-file roundtrip, byte drift, deterministic packing, traversal, wrong release, preservation of existing destination and inner checksum corruption. The real approved Linux bundle was packed and restored locally with full manifest verification. The full native Python suite passed 77 tests; Docker was not started for this preparation. The restored real database preserved PL `119385193058.06`, net flow `4725910556.15` and coverage `7554/7560`. Workflow YAML and embedded shell syntax were checked. [Preparation evidence](../transform/evidence/portfolio/preparation.json).
 
-The preceding Linux acceptance (70 Python tests, 48 dbt resources) remains historical evidence. New workflow Release download, first remote execution, immutability settings and repository protection must be verified after publication; they are not claimed as completed here.
+The preceding Linux acceptance (70 Python tests, 48 dbt resources) remains historical evidence. Release download, immutability and workflow dispatch have now been verified remotely. Repository branch protection remains pending. Current job conclusions are available in the remote run history.
+
+## First remote run and clean-checkout fix
+
+Run [40766562898](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40766562898) restored the public baseline, verified CVM inputs, built the runtime, and passed the native build, semantic comparison and adversarial mutation. It failed in history integration because an empty local `transform/seeds/` directory is not stored by Git. Both history and rejection scripts now create their temporary fixture directory explicitly. Both real integrations passed natively from `git checkout-index` files with no existing seeds directory; the full remote suite is rerun after the correction. No local Docker was used for publication or diagnosis.

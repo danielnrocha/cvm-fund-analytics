@@ -42,12 +42,12 @@ flowchart LR
 - Local MetricFlow metrics for PL, net cash flow and reporting coverage, with frozen real-data oracles.
 - Semantic baseline/candidate comparison before UAT promotion; sealed snapshots, independent dev/UAT pointers and rollback.
 - dbt documentation and column-lineage acceptance checks.
-- Docker-free local development with Make and VS Code. A Docker-based Linux ARM64 CI runner has passed locally; its GitHub Actions workflow is prepared but remote execution is pending.
-- A durable baseline package with a versioned Release tag and SHA-256 lock. The package is prepared and verified; uploading the Release is pending.
+- Docker-free local development with Make and VS Code. The same Docker-based Linux ARM64 CI runner executes in GitHub Actions; see the [remote run history](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml).
+- A durable baseline package with a versioned Release tag and SHA-256 lock. The [immutable baseline Release](https://github.com/danielnrocha/cvm-fund-analytics/releases/tag/baseline-v1) is public and its asset hash matches the committed lock.
 
 ## Roadmap and pending activation
 
-- Publish the personal GitHub repository and baseline Release, run the first remote CI, and configure branch protection.
+- Configure branch protection and validate the complete PR review workflow.
 - Extend the current identity/history models into the full planned Data Vault architecture and additional marts.
 - Add returns and holdings analytics after validating the relevant sources and business contracts.
 - Build and evaluate an AI BI agent over the semantic layer, using the [planned evaluation scenarios](specs/ai-bi-evals.md).
@@ -77,9 +77,9 @@ The previous Linux ARM64 offline acceptance passed **70 Python tests + 48 dbt re
 
 Frozen oracles: PL **BRL 119,385,193,058.06**, net flow **BRL 4,725,910,556.15**, **7,554 reported / 7,560 expected** class/day observations. These are dataset checks, not investment advice or population-wide statistics.
 
-The [Actions workflow](.github/workflows/linux-ci.yml) is ready but has not run on GitHub yet. Do not infer remote CI status from the local Linux acceptance. The baseline is a versioned GitHub Release asset pinned in [baseline.lock.json](ci/baseline.lock.json); expiring Actions artifacts are diagnostic output only.
+The [Actions workflow](.github/workflows/linux-ci.yml) is active in the [public repository](https://github.com/danielnrocha/cvm-fund-analytics). Consult [remote run results](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml) for current CI status; historical local acceptance is separate evidence. The baseline is a versioned GitHub Release asset pinned in [baseline.lock.json](ci/baseline.lock.json); expiring Actions artifacts are diagnostic output only.
 
-[Publish this repository and its baseline](specs/portfolio.md) before expecting the first normal CI run to pass. No automatic workflow is permitted to overwrite the approved baseline.
+The repository and baseline are published. The [publication runbook](specs/portfolio.md) documents setup and baseline replacement. No automatic workflow is permitted to overwrite the approved baseline.
 
 ## Explore the engineering decisions
 
@@ -96,4 +96,4 @@ The `compatibility/` directory contains earlier experiments, not the production 
 
 ## Repository metadata
 
-GitHub name, description and topics are recorded in [repository.json](.github/repository.json) for application during publication. That file documents the intended metadata; GitHub does not apply it automatically.
+GitHub name, description and topics from [repository.json](.github/repository.json) have been applied to the public repository. GitHub does not automatically synchronize subsequent edits to that file.

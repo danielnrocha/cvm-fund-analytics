@@ -34,3 +34,11 @@ The deterministic archive test now actually changes a source file timestamp with
 ## Limits
 
 No Docker invocation, new Linux acceptance, live Release download, GitHub repository mutation or remote workflow run was performed. The previous 70-test Linux run remains historical evidence; the 77-test result here is native Python validation of the current increment. Clean-machine dependency installation and complete local build/docs were not rerun by this reviewer. The first real published Release download and normal GitHub Actions run remain required operational acceptance.
+
+## Post-publication clean-checkout repair review
+
+Follow-up on 2026-10-28, reviewing the two staged changes against initial commit `a898230`: `scripts/check_history.py` and `scripts/check_rejections.py` now create their temporary `seeds` directory immediately after copying the project and before writing synthetic fixture CSVs.
+
+The author reported that first GitHub run `40766562898` reached the history check and failed because Git does not preserve the local empty `transform/seeds` directory. Both additions address that cause directly. The copied project parent already exists, and `exist_ok=True` supports both clean checkouts and local projects that already contain the directory. The fixture loader consumes precisely these generated CSV paths. No new findings identified in the two-line repair.
+
+The author also reported publication to `danielnrocha/cvm-fund-analytics` and a verified immutable Release. Those operations were not independently rechecked by this reviewer. The earlier review's no-publication/no-remote-run statements describe its original review session, not the project's later state. Native execution from a tracked-files-only checkout and a subsequent successful remote workflow remain separate acceptance evidence; this targeted review did not run those builds or Docker.

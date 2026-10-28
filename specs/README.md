@@ -1,6 +1,6 @@
 # dbt demo — revisão e proposta
 
-Data da pesquisa: **28 de outubro de 2026**. Estado: **vertical real de PL/fluxo, ingestão imutável e snapshots implementados; gate semântico UAT e runner Linux ARM64 offline aprovados; workflow GitHub ainda não ativado. Projeto completo ainda em evolução**.
+Data da pesquisa: **28 de outubro de 2026**. Estado: **vertical real de PL/fluxo, ingestão imutável e snapshots implementados; gate semântico UAT e runner Linux ARM64 offline aprovados; workflow GitHub ativado, com resultados no histórico remoto. Projeto completo ainda em evolução**.
 
 1. [Revisão do prompt e pesquisa](research-review.md): evidências, problemas, custos, versões e comparação de datasets.
 2. [Design proposto](design-proposal.md): requisitos, arquitetura, grãos, métricas, ambientes e decisões.
@@ -42,4 +42,4 @@ A [publicação atômica local](snapshot-publication.md) implementa bundles veri
 
 ## Publicação como portfólio
 
-[GitHub Actions remoto, desenvolvimento sem Docker e baseline durável](portfolio.md). Repositório local preparado; publicação e primeiro run remoto ainda pendentes.
+[GitHub Actions remoto, desenvolvimento sem Docker e baseline durável](portfolio.md). Repositório público e baseline imutável publicados; CI remoto ativado. Consultar o runbook para os resultados e a correção identificada no primeiro run.

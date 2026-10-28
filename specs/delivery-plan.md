@@ -173,7 +173,11 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 - [x] Baseline retirado da retenção de Actions: pacote versionado de Release, lock SHA-256, restauração segura e checksums internos.
 - [x] Pacote Linux aprovado preparado e restaurado localmente; testes TDD de transporte executados.
 - [x] Nome aprovado: `cvm-fund-analytics`; descrição/topics preparados e README em inglês com gate semântico em destaque e roadmap separado.
-- [ ] Definir conta/remote e licença de código; publicar repositório e draft Release com o asset preparado, habilitar imutabilidade e publicar.
-- [ ] Executar download real da Release e CI remoto normal, configurar proteção de `main` e só então adicionar badge de CI.
+- [x] Repositório público `danielnrocha/cvm-fund-analytics`, metadados aplicados, baseline publicado com imutabilidade e download público verificado.
+- [ ] Selecionar licença de código (publicação pública não concede licença automaticamente).
+- [x] Executar download real da Release e iniciar CI remoto normal; primeiro run revelou dependência de pasta vazia, corrigida nos testes auxiliares.
+- [ ] Configurar proteção de `main` e validar fluxo completo de PR; acompanhar conclusão atual do CI no histórico remoto.
 
 Contrato e comandos: [portfolio.md](portfolio.md). Retenção de logs/artefatos do CI permanece 14 dias; disponibilidade dos ZIPs CVM upstream é uma restrição separada. Preparação local não implica publicação remota.
+
+Publicação executada em 28/10/2026: [repositório](https://github.com/danielnrocha/cvm-fund-analytics), [baseline imutável](https://github.com/danielnrocha/cvm-fund-analytics/releases/tag/baseline-v1), [CI remoto](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml). Histórico de preparação acima permanece datado; publicação e download não estão mais pendentes.
