@@ -1,0 +1,13 @@
+version: 2
+sources:
+  - name: fixture_landing
+    schema: main
+    tables:
+      - name: raw_json_fixture
+        columns:
+          - name: file_sha256
+            data_type: varchar
+          - name: line_number
+            data_type: integer
+          - name: payload
+            data_type: varchar

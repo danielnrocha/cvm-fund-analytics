@@ -1,0 +1,22 @@
+[
+  {
+    "case": "null-kind",
+    "blocked": true
+  },
+  {
+    "case": "null-pl",
+    "blocked": true
+  },
+  {
+    "case": "orphan-capture",
+    "blocked": true
+  },
+  {
+    "case": "changed-replay",
+    "blocked": true
+  },
+  {
+    "case": "outside-calendar",
+    "blocked": true
+  }
+]

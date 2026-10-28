@@ -1,0 +1,97 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dbt: build v2",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv-dbt/bin/dbt",
+      "args": [
+        "build",
+        "--profiles-dir",
+        "."
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DBT_PROFILES_DIR": "${workspaceFolder}",
+          "DBT_SEND_ANONYMOUS_USAGE_STATS": "false"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dbt: compile with column lineage",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv-dbt/bin/dbt",
+      "args": [
+        "compile",
+        "--profiles-dir",
+        ".",
+        "--static-analysis",
+        "strict",
+        "--generate-info-schema"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DBT_PROFILES_DIR": "${workspaceFolder}",
+          "DBT_SEND_ANONYMOUS_USAGE_STATS": "false"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "dbt: docs with column lineage",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv-mf/bin/python",
+      "args": [
+        "pinned_docs.py"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DBT_PROFILES_DIR": "${workspaceFolder}",
+          "DBT_SEND_ANONYMOUS_USAGE_STATS": "false"
+        }
+      },
+      "problemMatcher": [],
+      "dependsOn": "dbt: compile with column lineage"
+    },
+    {
+      "label": "MetricFlow: validate local",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv-mf/bin/mf",
+      "args": [
+        "validate-configs"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DBT_PROFILES_DIR": "${workspaceFolder}",
+          "DBT_SEND_ANONYMOUS_USAGE_STATS": "false"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "MetricFlow: query local",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv-mf/bin/mf",
+      "args": [
+        "query",
+        "--metrics",
+        "total_revenue,margin_rate",
+        "--group-by",
+        "metric_time__month"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "DBT_PROFILES_DIR": "${workspaceFolder}",
+          "DBT_SEND_ANONYMOUS_USAGE_STATS": "false"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}

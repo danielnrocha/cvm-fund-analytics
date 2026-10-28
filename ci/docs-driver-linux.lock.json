@@ -1,0 +1,12 @@
+{
+  "platform": "Linux-aarch64",
+  "dbt_version": "2.0.9",
+  "driver_version": "0.21.0.dev+dbt0.0.31",
+  "filename": "libadbc_driver_duckdb_extended-0.21.0.dev+dbt0.0.31.so",
+  "sha256": "344d183eaaf97255b49a1a084497999a50989397444fe4aaf44bbbca19b66917",
+  "size": 86705784,
+  "compressed_sha256": "f0ce4722f82fe3b3751451cc67325046c5670a42beea58579b79fdba37441d63",
+  "compressed_size": 25428970,
+  "url": "https://public.cdn.getdbt.com/fs/adbc/duckdb_extended/adbc_driver_duckdb_extended-0.21.0.dev%2Bdbt0.0.31-aarch64-manylinux_2_17-linux-gnu.so.zst",
+  "source": "Official dbt CDN; URL format verified in dbt-labs/dbt-core crates/dbt-adbc/src/install.rs. Downloaded and hashed 2026-10-28; runtime validation tracked separately."
+}

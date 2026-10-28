@@ -1,0 +1,10 @@
+{
+  "platform": "Darwin-arm64",
+  "dbt_version": "2.0.9",
+  "driver_version": "0.21.0.dev+dbt0.0.31",
+  "filename": "libadbc_driver_duckdb_extended-0.21.0.dev+dbt0.0.31.dylib",
+  "sha256": "4de5870f4da9a141993369f11b92affae48eb7f6dd6d3e8d94e378cba1bf47d4",
+  "size": 72060224,
+  "entrypoint": "duckdb_adbc_init",
+  "source": "Official dbt 2.0.9 automatic driver download; verified cache artifact"
+}

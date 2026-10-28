@@ -1,0 +1,10 @@
+version: 2
+sources:
+  - name: cvm_landing
+    schema: landing
+    tables:
+      - name: raw_envelopes
+      - name: captures
+      - name: registry_cohort
+      - name: report_calendar
+      - name: files

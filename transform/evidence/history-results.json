@@ -1,0 +1,18 @@
+{
+  "captures": [
+    {
+      "capture": 1,
+      "versions": 1
+    },
+    {
+      "capture": 2,
+      "versions": 2
+    },
+    {
+      "capture": 3,
+      "versions": 3
+    }
+  ],
+  "replay": true,
+  "rebuild": true
+}

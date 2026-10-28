@@ -1,0 +1,13 @@
+cvm_demo:
+  target: "{{ env_var('CVM_TARGET', 'dev') }}"
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('CVM_DB_PATH', 'cvm_demo.duckdb') }}"
+      schema: main
+      threads: 1
+    uat:
+      type: duckdb
+      path: "{{ env_var('CVM_UAT_DB_PATH', 'uat.duckdb') }}"
+      schema: main
+      threads: 1

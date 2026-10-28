@@ -1,0 +1,104 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CVM: local test suite (no Docker)",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: ingest frozen archives",
+      "type": "process",
+      "command": "${workspaceFolder}/compatibility/dbt-v2-metricflow/.venv-mf/bin/python",
+      "args": [
+        "${workspaceFolder}/scripts/ingest_cvm.py"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: build and test",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "CVM: semantic oracles",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "metrics"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "dependsOn": "CVM: build and test"
+    },
+    {
+      "label": "CVM: test release and UAT",
+      "type": "process",
+      "command": "${workspaceFolder}/compatibility/dbt-v2-metricflow/.venv-mf/bin/python",
+      "args": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/release",
+        "-v"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: compare UAT candidate",
+      "type": "process",
+      "command": "${workspaceFolder}/compatibility/dbt-v2-metricflow/.venv-mf/bin/python",
+      "args": [
+        "scripts/snapshot.py",
+        "compare",
+        "--environment",
+        "uat",
+        "--baseline",
+        "${input:uatBaseline}",
+        "--id",
+        "${input:uatCandidate}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "uatBaseline",
+      "type": "promptString",
+      "description": "Current approved UAT release ID",
+      "default": "cvm-atomic-v2"
+    },
+    {
+      "id": "uatCandidate",
+      "type": "promptString",
+      "description": "Validated candidate release ID"
+    }
+  ]
+}

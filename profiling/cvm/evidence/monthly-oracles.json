@@ -1,0 +1,62 @@
+[
+  {
+    "period": "2026-04",
+    "cutoff": "2026-04-30",
+    "observations": 1196,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "109568170483.04",
+    "net_flow": "1226480088.40",
+    "reported_investor_accounts_eop": 753344
+  },
+  {
+    "period": "2026-05",
+    "cutoff": "2026-05-29",
+    "observations": 1199,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "110473691592.44",
+    "net_flow": "-308203062.21",
+    "reported_investor_accounts_eop": 758410
+  },
+  {
+    "period": "2026-06",
+    "cutoff": "2026-06-30",
+    "observations": 1260,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "112891311818.67",
+    "net_flow": "1121105426.83",
+    "reported_investor_accounts_eop": 765525
+  },
+  {
+    "period": "2026-07",
+    "cutoff": "2026-07-31",
+    "observations": 1380,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "116615972210.14",
+    "net_flow": "2368618346.76",
+    "reported_investor_accounts_eop": 779863
+  },
+  {
+    "period": "2026-08",
+    "cutoff": "2026-08-31",
+    "observations": 1259,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "118248666378.67",
+    "net_flow": "402382657.29",
+    "reported_investor_accounts_eop": 790678
+  },
+  {
+    "period": "2026-09",
+    "cutoff": "2026-09-30",
+    "observations": 1260,
+    "entities": 60,
+    "reporting_at_cutoff": 60,
+    "reported_net_assets_eop": "119385193058.06",
+    "net_flow": "-84472900.92",
+    "reported_investor_accounts_eop": 795245
+  }
+]

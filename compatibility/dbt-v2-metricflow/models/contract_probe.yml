@@ -1,0 +1,8 @@
+version: 2
+models:
+  - name: contract_probe
+    columns:
+      - name: shipment_id
+        data_type: integer
+      - name: profit
+        data_type: decimal(18,2)

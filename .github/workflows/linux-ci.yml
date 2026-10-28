@@ -1,0 +1,71 @@
+name: Linux dbt and semantic UAT
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: Explicit initial baseline certification (no historical comparison)
+        type: boolean
+        default: false
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: cvm-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 45
+    env:
+      BOOTSTRAP: ${{ github.event_name == 'workflow_dispatch' && inputs.bootstrap && 'true' || 'false' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, resolved 2026-10-28
+        with:
+          persist-credentials: false
+      - name: Restore pinned baseline from durable Release asset
+        if: env.BOOTSTRAP != 'true'
+        env:
+          BASELINE_REPOSITORY: ${{ github.repository }}
+        run: python ci/baseline.py fetch --repository "$BASELINE_REPOSITORY"
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: profiling/cvm/raw
+          key: cvm-frozen-${{ hashFiles('profiling/cvm/evidence/sources.json') }}
+      - name: Fetch and verify frozen inputs (online setup)
+        run: python ci/fetch_inputs.py
+      - name: Build pinned Linux runtime and documentation driver (online setup)
+        run: docker build --platform linux/arm64 -f ci/Dockerfile -t cvm-ci:run .
+      - name: Execute gates with network disabled
+        shell: bash
+        run: |
+          mkdir -p ci-output baseline
+          BASELINE_ID=$(python -c 'import json; print(json.load(open("ci/baseline.lock.json"))["release_id"])')
+          args=(--output /results --id "cvm-ci-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}")
+          if [ "$BOOTSTRAP" = true ]; then
+            args+=(--bootstrap)
+          else
+            args+=(--baseline-root /baseline/releases --baseline-id "$BASELINE_ID")
+          fi
+          docker run --rm --platform linux/arm64 --network none \
+            -v "$PWD/profiling/cvm/raw:/workspace/profiling/cvm/raw:ro" \
+            -v "$PWD/baseline:/baseline:ro" \
+            -v "$PWD/ci-output:/results" \
+            cvm-ci:run /opt/venv-mf/bin/python ci/run.py "${args[@]}"
+      - name: Make root-created evidence readable by the runner
+        if: always()
+        shell: bash
+        run: |
+          if [ -d ci-output ]; then
+            sudo chown -R "$(id -u):$(id -g)" ci-output
+          fi
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: cvm-release
+          path: ci-output/
+          include-hidden-files: true # Sealed manifests include hidden dbt artifacts.
+          retention-days: 14
+          if-no-files-found: warn

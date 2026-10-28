@@ -1,0 +1,5 @@
+metric_time__month,account,balance_last_observed_date,balance_latest_per_account
+2026-02-01 00:00:00,A,130.0,130.0
+2026-01-01 00:00:00,B,,220.0
+2026-01-01 00:00:00,A,110.0,110.0
+2026-02-01 00:00:00,B,260.0,260.0

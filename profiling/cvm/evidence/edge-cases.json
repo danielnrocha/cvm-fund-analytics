@@ -1,0 +1,110 @@
+{
+  "duplicate_payloads": [
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "CNPJ_FUNDO_CLASSE": "49.963.346/0001-84",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-07",
+      "VL_TOTAL": "87123602.40",
+      "VL_QUOTA": "1.359304000000",
+      "VL_PATRIM_LIQ": "87135462.86",
+      "CAPTC_DIA": "1000.00",
+      "RESG_DIA": "657362.06",
+      "NR_COTST": "1812",
+      "cnpj": "49963346000184"
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "CNPJ_FUNDO_CLASSE": "49.963.346/0001-84",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-07",
+      "VL_TOTAL": "87123602.40",
+      "VL_QUOTA": "1.359304000000",
+      "VL_PATRIM_LIQ": "87135462.86",
+      "CAPTC_DIA": "1000.00",
+      "RESG_DIA": "657362.06",
+      "NR_COTST": "1812",
+      "cnpj": "49963346000184"
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "CNPJ_FUNDO_CLASSE": "49.963.346/0001-84",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-08",
+      "VL_TOTAL": "86637360.45",
+      "VL_QUOTA": "1.360110500000",
+      "VL_PATRIM_LIQ": "86647662.28",
+      "CAPTC_DIA": "2000.00",
+      "RESG_DIA": "541495.16",
+      "NR_COTST": "1809",
+      "cnpj": "49963346000184"
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "CNPJ_FUNDO_CLASSE": "49.963.346/0001-84",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-08",
+      "VL_TOTAL": "86637360.45",
+      "VL_QUOTA": "1.360110500000",
+      "VL_PATRIM_LIQ": "86647662.28",
+      "CAPTC_DIA": "2000.00",
+      "RESG_DIA": "541495.16",
+      "NR_COTST": "1809",
+      "cnpj": "49963346000184"
+    }
+  ],
+  "cohort_gaps": [
+    {
+      "cnpj": "09518581000122",
+      "DT_COMPTC": "2026-05-25"
+    },
+    {
+      "cnpj": "31963249000126",
+      "DT_COMPTC": "2026-08-28"
+    },
+    {
+      "cnpj": "66034762000117",
+      "DT_COMPTC": "2026-04-01"
+    },
+    {
+      "cnpj": "66034762000117",
+      "DT_COMPTC": "2026-04-02"
+    },
+    {
+      "cnpj": "66034762000117",
+      "DT_COMPTC": "2026-04-06"
+    },
+    {
+      "cnpj": "66034762000117",
+      "DT_COMPTC": "2026-04-07"
+    }
+  ],
+  "extra_dates": [
+    {
+      "DT_COMPTC": "2026-09-07"
+    },
+    {
+      "DT_COMPTC": "2026-05-01"
+    },
+    {
+      "DT_COMPTC": "2026-06-04"
+    },
+    {
+      "DT_COMPTC": "2026-04-21"
+    },
+    {
+      "DT_COMPTC": "2026-04-03"
+    }
+  ],
+  "negative_cohort": [
+    {
+      "negative_pl": 0,
+      "nonpositive_quota": 0
+    }
+  ],
+  "subclass_unmatched": [
+    {
+      "n": 3445
+    }
+  ]
+}

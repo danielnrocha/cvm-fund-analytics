@@ -1,0 +1,8 @@
+.venv*/
+target/
+logs/
+*.duckdb*
+.home/
+dbt_internal_packages/
+drivers/
+docs-driver-isolated.sb

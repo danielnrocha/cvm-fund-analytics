@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-28",
+  "python_tests": 77,
+  "platform": "macOS ARM64 native",
+  "docker_executed": false,
+  "remote_published": false,
+  "baseline_release_id": "cvm-linux-uat-v3",
+  "baseline_archive_sha256": "5904eb6deac37cd2158ecb8c8500b9dae68b04ed461a00ee2dcf363fb78bc59c",
+  "baseline_restored_and_verified": true,
+  "oracles": {
+    "pl": "119385193058.06",
+    "flow": "4725910556.15",
+    "reported": 7554,
+    "expected": 7560
+  },
+  "workflow_checks": [
+    "YAML parse",
+    "bash syntax"
+  ],
+  "remote_release_download_validated": false
+}

@@ -1,0 +1,4 @@
+dbt==2.0.9
+mashumaro==3.23
+msgpack==1.2.4
+typing-extensions==4.16.0

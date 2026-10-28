@@ -1,0 +1,32 @@
+[
+  {
+    "mutation": "duplicate_inflation",
+    "returncode": 1,
+    "assertion_detected": true
+  },
+  {
+    "mutation": "erase_capture_history",
+    "returncode": 1,
+    "assertion_detected": true
+  },
+  {
+    "mutation": "collapse_subclass_scope",
+    "returncode": 1,
+    "assertion_detected": true
+  },
+  {
+    "mutation": "arbitrary_dimension_match",
+    "returncode": 1,
+    "assertion_detected": true
+  },
+  {
+    "mutation": "recede_cutoff",
+    "returncode": 1,
+    "assertion_detected": true
+  },
+  {
+    "mutation": "missing_equals_zero",
+    "returncode": 1,
+    "assertion_detected": true
+  }
+]

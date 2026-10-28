@@ -1,0 +1,65 @@
+[
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/CAD/DADOS/registro_fundo_classe.zip",
+    "file": "raw/registro_fundo_classe.zip",
+    "bytes": 6869034,
+    "sha256": "30f33e8ee5865a054a6210441ea5f77b5d56ba7fdd86d7c34ec05eaf712b4304",
+    "observed_at": "2026-10-28T19:17:19.190086+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/CAD/META/meta_registro_fundo_classe.zip",
+    "file": "raw/meta_registro_fundo_classe.zip",
+    "bytes": 2222,
+    "sha256": "068ebe8f7643494ed3cda83ba7f1b25136a4ffd20c69b4256f4b47f57e0f91b6",
+    "observed_at": "2026-10-28T19:17:18.797279+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/META/meta_inf_diario_fi.txt",
+    "file": "raw/meta_inf_diario_fi.txt",
+    "bytes": 1891,
+    "sha256": "c1df999f4f20353dbe0d92c33aa683c4631e969ae6706f98589a87e2a2e712f9",
+    "observed_at": "2026-10-28T19:17:18.743450+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202604.zip",
+    "file": "raw/inf_diario_fi_202604.zip",
+    "bytes": 11063367,
+    "sha256": "1c94c1e25a8ee75be025711befb9a0d170ca5fbdf93544b3d592f9b89ef66bb9",
+    "observed_at": "2026-10-28T19:17:19.150354+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202605.zip",
+    "file": "raw/inf_diario_fi_202605.zip",
+    "bytes": 11072489,
+    "sha256": "67908d82e939e36ddf7cb14092707cb3bc80e88abe5558e565128aac844c0af9",
+    "observed_at": "2026-10-28T19:17:19.845359+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202606.zip",
+    "file": "raw/inf_diario_fi_202606.zip",
+    "bytes": 11631104,
+    "sha256": "5a654ba878f26b0de254120aef148a8733e9abbf03b3cc134cde920f35102ffb",
+    "observed_at": "2026-10-28T19:17:19.792412+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202607.zip",
+    "file": "raw/inf_diario_fi_202607.zip",
+    "bytes": 12656332,
+    "sha256": "5d0066cf4954999fd2a161e1dfce0a708f13a2de84cfabdccea967caa656bf85",
+    "observed_at": "2026-10-28T19:17:19.989951+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202608.zip",
+    "file": "raw/inf_diario_fi_202608.zip",
+    "bytes": 11609134,
+    "sha256": "f113e276a29d916d4549bcb53ac6d1486184190c3691033f76f245f474a3237d",
+    "observed_at": "2026-10-28T19:17:20.314487+00:00"
+  },
+  {
+    "url": "https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_202609.zip",
+    "file": "raw/inf_diario_fi_202609.zip",
+    "bytes": 11626064,
+    "sha256": "a90d1d4927204474b4fb2b1aa5ade023adf2cab5149f54a336d53ef23e0dc658",
+    "observed_at": "2026-10-28T19:17:21.008949+00:00"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "pinned_reader_and_environment_isolation": true,
+  "stale_cas_rejected": true,
+  "rollback_exact_bundle": {
+    "release_id": "cvm-ingestion-v1",
+    "pl": "119385193058.06",
+    "flow": "4725910556.15",
+    "reported": 7554,
+    "expected": 7560
+  },
+  "readonly_enforced": true,
+  "published_metricflow": {
+    "monthly_oracles": 6,
+    "total_stock_not_sum": true,
+    "flow_total": true,
+    "filtered_gap_no_backfill": true,
+    "coverage": true
+  },
+  "database_unchanged_sha256": "3b7a05899f2c685af46a146fd2070cd36b37bba4d6e5f58f0ea4004a758dc71b",
+  "final": {
+    "dev": {
+      "release_id": "cvm-atomic-v2",
+      "pl": "119385193058.06",
+      "flow": "4725910556.15",
+      "reported": 7554,
+      "expected": 7560
+    },
+    "uat": {
+      "release_id": "cvm-atomic-v2",
+      "pl": "119385193058.06",
+      "flow": "4725910556.15",
+      "reported": 7554,
+      "expected": 7560
+    }
+  }
+}

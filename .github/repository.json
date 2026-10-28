@@ -1,0 +1,16 @@
+{
+  "name": "cvm-fund-analytics",
+  "description": "Brazilian investment fund analytics with dbt v2, DuckDB and MetricFlow. Semantic regression gates, immutable ingestion and atomic snapshot promotion.",
+  "topics": [
+    "dbt",
+    "duckdb",
+    "metricflow",
+    "analytics-engineering",
+    "financial-data",
+    "cvm",
+    "data-quality",
+    "semantic-layer",
+    "github-actions",
+    "semantic-regression-testing"
+  ]
+}

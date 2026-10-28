@@ -1,0 +1,14 @@
+{
+  "source_hashes": true,
+  "daily_count": true,
+  "cohort_count": true,
+  "cohort_observations": true,
+  "calendar_count": true,
+  "six_internal_gaps": true,
+  "all_monthly_cutoffs_full": true,
+  "cohort_grain": true,
+  "no_subclasses": true,
+  "non_null_daily_keys": true,
+  "normalized_cnpj_shape": true,
+  "dates_in_filename_month": true
+}

@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "platform": "Linux-6.12.54-linuxkit-aarch64-with-glibc2.36",
+  "candidate": "cvm-linux-uat-v3",
+  "required_lineage_edges": 4,
+  "baseline": "cvm-atomic-v2",
+  "bootstrap": false,
+  "gate": "/results/releases/gates/cvm-atomic-v2--cvm-linux-uat-v3-ot0m25m9.json",
+  "metrics": {
+    "release_id": "cvm-linux-uat-v3",
+    "pl": "119385193058.06",
+    "flow": "4725910556.15",
+    "reported": 7554,
+    "expected": 7560
+  }
+}

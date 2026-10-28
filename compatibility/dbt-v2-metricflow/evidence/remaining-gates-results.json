@@ -1,0 +1,119 @@
+[
+  {
+    "test": "36-unit-green",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "37-unit-red",
+    "passed": true,
+    "exit_code": 1
+  },
+  {
+    "test": "38-unit-green-restored",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "39-contract-green",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "40-contract-red-type",
+    "passed": true,
+    "exit_code": 1
+  },
+  {
+    "test": "40-contract-red-missing",
+    "passed": true,
+    "exit_code": 1
+  },
+  {
+    "test": "41-contract-restored",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "42-semantic-validate",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-monthly",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-total",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-daily",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-jan",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-account",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "43-balance-no-observation",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "semiadditive-oracles-and-grain",
+    "passed": true,
+    "naive_sum": 1380,
+    "correct_total": 390,
+    "january_common_observed": 110,
+    "january_latest_per_account": 330
+  },
+  {
+    "test": "44-mutated-semantic-parse",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "45-mutated-query",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "semantic-mutation-detected-by-oracle",
+    "passed": true
+  },
+  {
+    "test": "46-final-build",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "47-restored-balance",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "48-driver-verify",
+    "passed": true,
+    "exit_code": 0
+  },
+  {
+    "test": "49-corrupt-driver-rejected",
+    "passed": true,
+    "exit_code": 1
+  },
+  {
+    "test": "50-pinned-docs",
+    "passed": true,
+    "exit_code": 0
+  }
+]

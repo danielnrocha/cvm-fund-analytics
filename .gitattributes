@@ -1,0 +1,5 @@
+* text=auto eol=lf
+# Frozen inputs and CSV evidence are byte-addressed; never normalize their bytes.
+*.csv -text whitespace=cr-at-eol
+profiling/cvm/evidence/* -text
+*.zip binary

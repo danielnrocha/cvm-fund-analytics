@@ -1,0 +1,24 @@
+data/
+__pycache__/
+*.pyc
+ci/drivers/
+ci-output/
+baseline/
+# Local tooling, generated state and publication staging
+.DS_Store
+.code-review-graph/
+.venv*/
+**/.user.yml
+**/target/
+**/logs/
+*.duckdb*
+.env
+.env.*
+!.env.example
+dist/
+# Raw execution logs remain local; curated summaries are versioned.
+**/evidence/**/*.log
+**/evidence/*.log
+transform/evidence/ci/linux-acceptance/image.json
+transform/evidence/ci/linux-acceptance/semantic-comparison.json
+transform/evidence/ci/linux-acceptance/run_results.json

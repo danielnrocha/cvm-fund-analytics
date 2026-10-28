@@ -1,0 +1,6 @@
+*.duckdb*
+target/
+logs/
+seeds/observations.csv
+__pycache__/
+dbt_internal_packages/

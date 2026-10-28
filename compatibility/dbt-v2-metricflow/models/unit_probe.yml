@@ -1,0 +1,15 @@
+version: 2
+unit_tests:
+  - name: classifies_invalid_json_and_revenue
+    model: stg_external_json
+    given:
+      - input: source('fixture_landing', 'raw_json_fixture')
+        rows:
+          - {file_sha256: abc, line_number: 1, payload: '{"event_id":"ok","shipment":{"revenue":"12.50"},"tags":[]}'}
+          - {file_sha256: abc, line_number: 2, payload: '{"event_id":"bad","shipment":{"revenue":"oops"}}'}
+          - {file_sha256: abc, line_number: 3, payload: '{broken'}
+    expect:
+      rows:
+        - {event_id: ok, revenue: 12.50, tag_count: 0, rejection_reason: null}
+        - {event_id: bad, revenue: null, tag_count: 0, rejection_reason: invalid_revenue}
+        - {event_id: null, revenue: null, tag_count: 0, rejection_reason: malformed_json}

@@ -1,0 +1,3 @@
+shipment__region,total_revenue,total_cost,shipment_count,margin_rate
+SE,400.0,240.0,2,0.4
+NE,600.0,360.0,2,0.4

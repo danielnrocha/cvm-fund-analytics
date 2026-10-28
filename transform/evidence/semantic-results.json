@@ -1,0 +1,7 @@
+{
+  "monthly_oracles": 6,
+  "total_stock_not_sum": true,
+  "flow_total": true,
+  "filtered_gap_no_backfill": true,
+  "coverage": true
+}

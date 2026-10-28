@@ -1,0 +1,119 @@
+{
+  "eligible": [
+    {
+      "Classificacao": "Renda Fixa",
+      "n": 6634
+    },
+    {
+      "Classificacao": "Multimercado",
+      "n": 12472
+    },
+    {
+      "Classificacao": "A\u00e7\u00f5es",
+      "n": 3861
+    }
+  ],
+  "cohort_daily": [
+    {
+      "observations": 7554,
+      "dates": 126,
+      "first_date": "2026-04-01",
+      "last_date": "2026-09-30"
+    }
+  ],
+  "registry_duplicate_examples": [
+    {
+      "ID_Registro_Fundo": "63518",
+      "n": 4
+    },
+    {
+      "ID_Registro_Fundo": "87226",
+      "n": 4
+    },
+    {
+      "ID_Registro_Fundo": "57459",
+      "n": 4
+    },
+    {
+      "ID_Registro_Fundo": "87347",
+      "n": 3
+    },
+    {
+      "ID_Registro_Fundo": "74444",
+      "n": 3
+    }
+  ],
+  "daily_duplicate_examples": [
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "cnpj": "49963346000184",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-08",
+      "n": 2
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "cnpj": "49963346000184",
+      "ID_SUBCLASSE": null,
+      "DT_COMPTC": "2026-07-07",
+      "n": 2
+    }
+  ],
+  "cohort_missing_observed_dates": [
+    {
+      "missing_pairs": 306
+    }
+  ],
+  "subclass_examples": [
+    {
+      "cnpj": "00888897000131",
+      "DT_COMPTC": "2026-04-01",
+      "n": 2,
+      "distinct_pl": 2
+    },
+    {
+      "cnpj": "00888897000131",
+      "DT_COMPTC": "2026-04-02",
+      "n": 2,
+      "distinct_pl": 2
+    },
+    {
+      "cnpj": "00888897000131",
+      "DT_COMPTC": "2026-04-06",
+      "n": 2,
+      "distinct_pl": 2
+    },
+    {
+      "cnpj": "00888897000131",
+      "DT_COMPTC": "2026-04-07",
+      "n": 2,
+      "distinct_pl": 2
+    },
+    {
+      "cnpj": "00888897000131",
+      "DT_COMPTC": "2026-04-08",
+      "n": 2,
+      "distinct_pl": 2
+    }
+  ],
+  "daily_membership": [
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "n": 3225291,
+      "no_class": 87649,
+      "no_fund": 4865
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSE FIF/FAPI",
+      "n": 1638,
+      "no_class": 0,
+      "no_fund": 0
+    },
+    {
+      "TP_FUNDO_CLASSE": "FI",
+      "n": 1055,
+      "no_class": 865,
+      "no_fund": 0
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "vscode": "1.143.1",
+  "extension": {
+    "version": "0.122.0",
+    "active": true
+  },
+  "sqlDiagnosticProbe": {
+    "diagnostics": [],
+    "detected": false
+  },
+  "language": "sql",
+  "diagnostics": [],
+  "commands": [
+    "dbt.compileFile",
+    "dbt.showColumnLineage",
+    "dbt.buildProject"
+  ],
+  "task": {
+    "exitCode": 0
+  }
+}

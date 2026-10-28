@@ -1,0 +1,51 @@
+version: 2
+models:
+  - name: fct_shipments
+    semantic_model:
+      enabled: true
+    agg_time_dimension: shipped_at
+    columns:
+      - name: shipment_id
+        data_tests: [unique, not_null]
+        entity:
+          name: shipment
+          type: primary
+      - name: shipped_at
+        granularity: day
+        dimension:
+          type: time
+      - name: region
+        dimension:
+          type: categorical
+      - name: revenue
+        data_tests: [not_null]
+    metrics:
+      - name: total_revenue
+        label: Total revenue
+        type: simple
+        agg: sum
+        expr: revenue
+      - name: total_cost
+        label: Total cost
+        type: simple
+        agg: sum
+        expr: cost
+      - name: shipment_count
+        label: Shipment count
+        type: simple
+        agg: count_distinct
+        expr: shipment_id
+  - name: time_spine
+    time_spine:
+      standard_granularity_column: date_day
+    columns:
+      - name: date_day
+        granularity: day
+metrics:
+  - name: margin_rate
+    label: Margin rate
+    type: derived
+    expr: (total_revenue - total_cost) / total_revenue
+    input_metrics:
+      - name: total_revenue
+      - name: total_cost

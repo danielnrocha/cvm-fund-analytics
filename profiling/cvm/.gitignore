@@ -1,0 +1,5 @@
+raw/
+extracted/
+*.duckdb*
+evidence/*.log
+__pycache__/

@@ -1,0 +1,72 @@
+version: 2
+models:
+  - name: fct_daily
+    semantic_model:
+      enabled: true
+    agg_time_dimension: report_date
+    columns:
+      - name: observation_id
+        data_type: varchar
+        data_tests: [unique, not_null]
+        entity: {name: observation, type: primary}
+      - name: entity_id
+        data_type: varchar
+        data_tests: [not_null]
+        entity: {name: reporting_entity, type: foreign}
+      - name: classification_at_capture
+        data_type: varchar
+        dimension: {type: categorical}
+      - name: report_date
+        data_type: date
+        dimension: {type: time}
+        granularity: day
+      - name: pl
+        data_type: decimal(17,2)
+      - name: net_flow
+        data_type: decimal(38,2)
+      - name: reported
+        data_type: integer
+      - name: expected
+        data_type: integer
+    metrics:
+      - name: reported_net_assets_eop
+        type: simple
+        agg: sum
+        expr: pl
+        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}
+      - name: net_flow
+        type: simple
+        agg: sum
+        expr: net_flow
+      - name: reporting_observations
+        type: simple
+        agg: sum
+        expr: reported
+      - name: expected_observations
+        type: simple
+        agg: sum
+        expr: expected
+      - name: reporting_entities_eop
+        type: simple
+        agg: sum
+        expr: reported
+        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}
+      - name: expected_entities_eop
+        type: simple
+        agg: sum
+        expr: expected
+        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}
+  - name: time_spine
+    time_spine: {standard_granularity_column: date_day}
+    columns:
+      - name: date_day
+        granularity: day
+metrics:
+  - name: reporting_coverage_period
+    type: ratio
+    numerator: reporting_observations
+    denominator: expected_observations
+  - name: reporting_coverage_eop
+    type: ratio
+    numerator: reporting_entities_eop
+    denominator: expected_entities_eop

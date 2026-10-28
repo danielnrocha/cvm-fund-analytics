@@ -1,0 +1,208 @@
+{
+  "monthly": [
+    {
+      "period": "2026-04",
+      "row_count": 512012,
+      "cnpjs": 25567,
+      "subclass_rows": 13252,
+      "first_date": "2026-04-01",
+      "last_date": "2026-04-30"
+    },
+    {
+      "period": "2026-05",
+      "row_count": 511730,
+      "cnpjs": 25560,
+      "subclass_rows": 14330,
+      "first_date": "2026-05-01",
+      "last_date": "2026-05-29"
+    },
+    {
+      "period": "2026-06",
+      "row_count": 538538,
+      "cnpjs": 25605,
+      "subclass_rows": 16129,
+      "first_date": "2026-06-01",
+      "last_date": "2026-06-30"
+    },
+    {
+      "period": "2026-07",
+      "row_count": 589255,
+      "cnpjs": 25611,
+      "subclass_rows": 18450,
+      "first_date": "2026-07-01",
+      "last_date": "2026-07-31"
+    },
+    {
+      "period": "2026-08",
+      "row_count": 538192,
+      "cnpjs": 25579,
+      "subclass_rows": 18526,
+      "first_date": "2026-08-03",
+      "last_date": "2026-08-31"
+    },
+    {
+      "period": "2026-09",
+      "row_count": 538257,
+      "cnpjs": 25583,
+      "subclass_rows": 20195,
+      "first_date": "2026-09-01",
+      "last_date": "2026-09-30"
+    }
+  ],
+  "types": [
+    {
+      "TP_FUNDO_CLASSE": "CLASSE FIF/FAPI",
+      "row_count": 1638
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "row_count": 3225291
+    },
+    {
+      "TP_FUNDO_CLASSE": "FI",
+      "row_count": 1055
+    }
+  ],
+  "daily_duplicates": [
+    {
+      "duplicate_groups": 2
+    }
+  ],
+  "registry_keys": [
+    {
+      "entity": "fundo",
+      "row_count": 90876,
+      "ids": 89721,
+      "cnpjs": 81949
+    },
+    {
+      "entity": "classe",
+      "row_count": 37010,
+      "ids": 37005,
+      "cnpjs": 36997
+    },
+    {
+      "entity": "subclasse",
+      "row_count": 11518,
+      "ids": 11518,
+      "cnpjs": 11518
+    }
+  ],
+  "joins": [
+    {
+      "TP_FUNDO_CLASSE": "CLASSE FIF/FAPI",
+      "row_count": 1638,
+      "no_class": 0,
+      "no_fund": 0
+    },
+    {
+      "TP_FUNDO_CLASSE": "CLASSES - FIF",
+      "row_count": 3513563,
+      "no_class": 90759,
+      "no_fund": 4865
+    },
+    {
+      "TP_FUNDO_CLASSE": "FI",
+      "row_count": 1078,
+      "no_class": 887,
+      "no_fund": 0
+    }
+  ],
+  "orphans": [
+    {
+      "class_without_fund": 0,
+      "subclass_without_class": 0
+    }
+  ],
+  "classifications": [
+    {
+      "Classificacao": "Multimercado",
+      "n": 14412
+    },
+    {
+      "Classificacao": null,
+      "n": 10242
+    },
+    {
+      "Classificacao": "Renda Fixa",
+      "n": 7910
+    },
+    {
+      "Classificacao": "A\u00e7\u00f5es",
+      "n": 4285
+    },
+    {
+      "Classificacao": "FMP-FGTS",
+      "n": 93
+    },
+    {
+      "Classificacao": "Cambial",
+      "n": 68
+    }
+  ],
+  "subclass_mixed": [
+    {
+      "mixed_groups": 0
+    }
+  ],
+  "multiple_subclasses": [
+    {
+      "group_count": 28187
+    }
+  ],
+  "hierarchy": [
+    {
+      "multi_class_funds": 56
+    }
+  ],
+  "columns": [
+    {
+      "name": "VL_TOTAL",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 2038,
+      "minimum": "-1045946834.21",
+      "maximum": "294492279474.31"
+    },
+    {
+      "name": "VL_QUOTA",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 3990,
+      "minimum": "-7562437125.748502990000",
+      "maximum": "99908086666.000000000000"
+    },
+    {
+      "name": "VL_PATRIM_LIQ",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 3975,
+      "minimum": "-1099630810.89",
+      "maximum": "294491966322.91"
+    },
+    {
+      "name": "CAPTC_DIA",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 0,
+      "minimum": "0.00",
+      "maximum": "23479754257.36"
+    },
+    {
+      "name": "RESG_DIA",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 0,
+      "minimum": "0.00",
+      "maximum": "9013419187.29"
+    },
+    {
+      "name": "NR_COTST",
+      "nulls": 0,
+      "invalid": 0,
+      "negatives": 0,
+      "minimum": 0,
+      "maximum": 816847
+    }
+  ]
+}

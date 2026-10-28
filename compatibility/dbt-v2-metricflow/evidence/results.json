@@ -1,0 +1,130 @@
+[
+  {
+    "test": "05-network-denied-control",
+    "exit_code": 1,
+    "passed": true
+  },
+  {
+    "test": "00-load-external-landing",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "06-offline-build",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "07-validate",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "08-totals",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "08-daily",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "08-monthly",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "08-regions",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "08-filtered",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "09-invalid-metric",
+    "exit_code": 1,
+    "passed": true
+  },
+  {
+    "test": "10-invalid-dimension",
+    "exit_code": 1,
+    "passed": true
+  },
+  {
+    "test": "11-explain",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "manifest-unchanged-by-mf",
+    "passed": true,
+    "sha256": "828194075615409ae65606dcc65979e50881fe6ead82999e11acef6dc0f60c1b"
+  },
+  {
+    "test": "12-rebuild",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "oracle-totals",
+    "passed": true
+  },
+  {
+    "test": "oracle-daily",
+    "passed": true
+  },
+  {
+    "test": "oracle-monthly",
+    "passed": true
+  },
+  {
+    "test": "oracle-regions",
+    "passed": true
+  },
+  {
+    "test": "oracle-filtered",
+    "passed": true
+  },
+  {
+    "test": "json-and-incremental-idempotency",
+    "passed": true
+  },
+  {
+    "test": "duckdb-python-version",
+    "version": "2.0.0",
+    "passed": true
+  },
+  {
+    "test": "13-late-correction",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "incremental-correction-oracle",
+    "passed": true
+  },
+  {
+    "test": "14-restore-fixture",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "15-driver-version",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "16-compile-docs",
+    "exit_code": 0,
+    "passed": true
+  },
+  {
+    "test": "16-docs",
+    "exit_code": 0,
+    "passed": true
+  }
+]

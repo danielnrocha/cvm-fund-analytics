@@ -1,0 +1,6 @@
+[
+ {"capture":"v1","source":"file1:2","kind":"CLASS","cnpj":"00.000.000/0001-00","subclass":null,"date":"2026-04-01","pl":"100.00","flow":"10.00"},
+ {"capture":"v1","source":"file1:3","kind":"CLASS","cnpj":"00000000000100","subclass":null,"date":"2026-04-01","pl":"100.00","flow":"10.00"},
+ {"capture":"v1","source":"file1:4","kind":"CLASS","cnpj":"00000000000200","subclass":null,"date":"2026-04-01","pl":"200.00","flow":"20.00"},
+ {"capture":"v1","source":"file1:5","kind":"CLASS","cnpj":"00000000000100","subclass":null,"date":"2026-04-02","pl":"110.00","flow":"0.00"}
+]

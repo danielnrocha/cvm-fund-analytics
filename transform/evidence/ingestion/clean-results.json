@@ -1,0 +1,9 @@
+{
+  "fresh_database": true,
+  "replay": true,
+  "accepted": 7554,
+  "rejected": 0,
+  "excluded": 3220430,
+  "source_records": 3227984,
+  "oracles_and_metricflow": true
+}

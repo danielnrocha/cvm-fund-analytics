@@ -1,0 +1,4 @@
+{"event_id":"a","shipment":{"id":11,"revenue":"125.50"},"tags":["fragile","insured"]}
+{"event_id":"b","shipment":{"id":12,"revenue":null},"tags":[],"new_field":"kept in raw"}
+{"event_id":"c","shipment":{"id":13,"revenue":"bad-number"}}
+{"event_id":"broken"

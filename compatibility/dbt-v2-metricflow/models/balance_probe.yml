@@ -1,0 +1,36 @@
+version: 2
+models:
+  - name: balance_probe
+    semantic_model:
+      enabled: true
+    agg_time_dimension: balance_date
+    columns:
+      - name: balance_id
+        entity:
+          name: balance_observation
+          type: primary
+      - name: account_id
+        entity:
+          name: account
+          type: foreign
+      - name: balance_date
+        dimension:
+          type: time
+        granularity: day
+    metrics:
+      - name: balance_last_observed_date
+        type: simple
+        agg: sum
+        expr: balance
+        non_additive_dimension:
+          name: balance_date
+          window_agg: max
+          group_by: []
+      - name: balance_latest_per_account
+        type: simple
+        agg: sum
+        expr: balance
+        non_additive_dimension:
+          name: balance_date
+          window_agg: max
+          group_by: [account]

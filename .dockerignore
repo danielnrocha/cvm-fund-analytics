@@ -1,0 +1,17 @@
+.git
+**/.venv*
+**/__pycache__
+**/target
+**/logs
+**/*.duckdb*
+compatibility/vscode-*
+data
+profiling/cvm/raw
+profiling/cvm/extracted
+**/drivers
+**/evidence/*.log
+transform/evidence
+.code-review-graph
+ci-output
+baseline
+dist
