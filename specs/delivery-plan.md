@@ -164,7 +164,7 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 
 ## CI/UAT — implementação e aceite separados
 
-[Spec CI/UAT](ci-uat.md): **70 testes Python e 48 recursos dbt aprovados no Linux ARM64 offline**, docs v2 com 13 modelos/manifesto preservado, quatro arestas de linhagem, comparação real baseline/candidato, promoção/rollback, replay, rejeições e mutação semântica bloqueada. Oráculos preservados: PL `119385193058.06`, fluxo `4725910556.15`, 7.554/7.560 observações. [Resultado](../transform/evidence/ci/linux-acceptance/result.json). Dev/UAT locais continuam em `cvm-atomic-v2`; promoção ocorreu apenas no sandbox CI. **Ativação GitHub e transporte real entre runs pendentes** (repositório local sem remote). Próximo passo operacional: publicar o repositório e o baseline durável preparado, executar o primeiro CI normal e validar um PR. Hashes das distribuições Python continuam pendentes; os locks atuais fixam versões.
+[Spec CI/UAT](ci-uat.md): **70 testes Python e 48 recursos dbt aprovados no Linux ARM64 offline**, docs v2 com 13 modelos/manifesto preservado, quatro arestas de linhagem, comparação real baseline/candidato, promoção/rollback, replay, rejeições e mutação semântica bloqueada. Oráculos preservados: PL `119385193058.06`, fluxo `4725910556.15`, 7.554/7.560 observações. [Resultado](../transform/evidence/ci/linux-acceptance/result.json). Dev/UAT locais continuam em `cvm-atomic-v2`; promoção ocorreu apenas no sandbox CI. **Publicação GitHub e download da Release executados.** O histórico remoto registra o CI atual; proteção de `main` e validação do fluxo de PR continuam pendentes. Hashes das distribuições Python continuam pendentes; os locks atuais fixam versões.
 
 ## Portfólio e baseline durável — 28/10/2026
 

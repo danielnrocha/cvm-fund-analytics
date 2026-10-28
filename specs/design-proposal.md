@@ -220,6 +220,6 @@ A [publicação atômica local](snapshot-publication.md) implementa bundles veri
 
 ## Gate semântico de promoção UAT
 
-A [spec CI/UAT](ci-uat.md) implementa a comparação por múltiplos grãos antes da promoção, com inputs e bundles vinculados ao relatório e CAS. O runner Linux ARM64 passou offline em container local, incluindo docs, oráculos, comparação semântica e mutação adversarial. O workflow remoto continua sem ativação no repositório local ainda sem remote.
+A [spec CI/UAT](ci-uat.md) implementa a comparação por múltiplos grãos antes da promoção, com inputs e bundles vinculados ao relatório e CAS. O runner Linux ARM64 passou offline em container local, incluindo docs, oráculos, comparação semântica e mutação adversarial. O workflow remoto está ativado em `danielnrocha/cvm-fund-analytics`; resultados atuais e baseline imutável estão vinculados no [runbook de portfólio](portfolio.md).
 
 Decisão de execução: CI canônico em GitHub Actions com Docker remoto; desenvolvimento nativo sem Docker. Baseline aprovado em Release versionada com hash, sem dependência da retenção de artefatos de run. [Contrato de portfólio](portfolio.md).
