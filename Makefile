@@ -15,7 +15,7 @@ fetch:
 	$(PY) ci/fetch_inputs.py
 
 test:
-	@set -e; for group in business ingestion release ci; do $(PY) -m unittest discover -s tests/$$group -v; done
+	@set -e; for group in business ingestion release ci demo; do $(PY) -m unittest discover -s tests/$$group -v; done
 
 build: fetch
 	$(PY) scripts/ingest_cvm.py
@@ -27,4 +27,10 @@ metrics:
 	$(PY) scripts/check_semantics.py
 
 docs:
-	cd transform && $(DBT) docs generate --profiles-dir . --no-compile
+	$(PY) $(COMPAT)/pinned_docs.py --project transform
+
+.PHONY: demo-prepare demo-reset
+demo-prepare:
+	$(PY) demo/workspace.py prepare
+demo-reset:
+	$(PY) demo/workspace.py reset

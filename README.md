@@ -54,6 +54,12 @@ flowchart LR
 
 These items are planned work, not implemented capabilities. The [delivery plan](specs/delivery-plan.md) records their scope and acceptance criteria.
 
+## Present the 20–25 minute demo
+
+Use the [presenter runbook](demo/RUNBOOK.md) for real commands and two red/green exercises: missing values incorrectly replaced by zero, and a stock metric incorrectly summed across time. `make demo-prepare` creates a disposable project from a locally verified baseline; `make demo-reset` discards only that marked workspace. `bash demo/rehearse.sh` checks the complete sequence without Docker. Prepare dependencies and the baseline before going offline.
+
+The [demo specification](specs/live-demo.md) separates technical rehearsal evidence from the presenter's spoken rehearsal. It does not require the full Data Vault or an AI agent.
+
 ## Run locally
 
 Validated local development platform: macOS ARM64. Requirements: Python 3.12 (or let `uv` provision it), `uv`, and `make`. No cloud warehouse, dbt account, paid semantic service or Docker is required. Initial dependency, driver and input acquisition needs internet.

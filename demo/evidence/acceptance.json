@@ -1,0 +1,124 @@
+{
+  "recorded_at": "2026-10-29T00:28:30.074510+00:00",
+  "base_revision": "b0ea64e6804bc7ff07a028a41f53002aba09a337",
+  "platform": "macOS ARM64",
+  "local_docker_used": false,
+  "network_denial": "sandbox-exec for build/query/exercise steps; separate sandbox-exec for docs (nested sandboxes unsupported)",
+  "baseline_release": "cvm-linux-uat-v3",
+  "python_tests": 84,
+  "native_build": {
+    "models": 13,
+    "unit_tests": 12,
+    "data_tests": 23,
+    "passed": 48
+  },
+  "tdd": {
+    "initial_lifecycle_tests_failed": 6,
+    "reset_preservation_regression_observed": true,
+    "final_lifecycle_tests_passed": 7
+  },
+  "sql_red": {
+    "test": "dense_calendar_keeps_missing_distinct_from_zero",
+    "observed_diff": "NULL -> 0.0",
+    "artifact_status": "error",
+    "restored_test_passed": true
+  },
+  "semantic_red": {
+    "broken_total": {
+      "reported_net_assets_eop": "14331925203091.17",
+      "net_flow": "4725910556.15"
+    },
+    "oracle_rejection": "named reported_net_assets_eop monthly mismatch",
+    "restored_total": {
+      "reported_net_assets_eop": "119385193058.06",
+      "net_flow": "4725910556.15"
+    },
+    "all_real_oracles_passed": true
+  },
+  "lineage": {
+    "required_edges_verified": 4,
+    "browser_model_graph_verified": true,
+    "browser_column_graph_verified": "current_daily.subscriptions and current_daily.redemptions -> fct_daily.net_flow",
+    "screenshot": "column-lineage.png",
+    "extension_panel_verified": false
+  },
+  "rehearsals": [
+    {
+      "run": 1,
+      "wall_seconds": 23.78,
+      "max_rss_bytes": 403505152,
+      "log_sha256": "b72ff4fde53a0873c6af890e3597ad8e8119644eca4e2a73790086dacb84f7b1",
+      "passed": true
+    },
+    {
+      "run": 2,
+      "wall_seconds": 21.81,
+      "max_rss_bytes": 444383232,
+      "log_sha256": "77d8f926670de4f118037e5cda761550b3ff86231858eedf9d46df91151fd3fb",
+      "passed": true
+    },
+    {
+      "run": 3,
+      "wall_seconds": 22.15,
+      "max_rss_bytes": 472940544,
+      "log_sha256": "921e6397d2216c063332c209619821a5fbbd49abe83297c16cdd27ff52ce846a",
+      "passed": true
+    }
+  ],
+  "memory_note": "Maximum RSS reported by /usr/bin/time -l; not a measurement of total laptop/VS Code/browser memory.",
+  "protected_resources_unchanged": {
+    "transform/cvm_demo.duckdb": "d7b3e60bc2cb8e19cdb95a3845db1d8e9fc81c4289de19c7c3d6b8f8951c8954",
+    "data/releases/environments/uat/current.json": "c2bcd934505b16ad880652b1d5b6f41b194277fa47fec3e05fdb4e5868dadfcd",
+    "data/releases/environments/dev/current.json": "c2bcd934505b16ad880652b1d5b6f41b194277fa47fec3e05fdb4e5868dadfcd",
+    "transform/models/audit_ingestion_files.sql": "e0989b20aea6576e3fb4b4feef45d595dc2f6035a060e04e1f612e0ed6c1d6f6",
+    "transform/models/int_daily.sql": "ea441663e3fc297079cb75c9ca0fa9d1f2c77a66ee0648d1a8127414e312c190",
+    "transform/models/stg_observations.sql": "0a6b21943ba3d0f2d46e18f06d847b4a6d65a5fa6e400a4c3890ab55ec4f2e16",
+    "transform/models/report_calendar.sql": "46d2eea551d5ea9ea5421b8c814318b73b58a8bc32bcf48d736ade765fb1d004",
+    "transform/models/time_spine.sql": "d9c4cde07db898832d35c9ab7b1b1d97cc8ca191d128d0fa44b6095d4308cbe2",
+    "transform/models/fct_daily.sql": "af2e00454d603ee328a5f5ca6bc019dbf1b4a879a549806ec1b52ac756c76398",
+    "transform/models/landing.yml": "dda92d41fa95cfc54e6e608e7aa666478ddaa791202a42e7ccf67c2892a8f66f",
+    "transform/models/unit_tests.yml": "03fa67e085e0bd1188e5d3ef86eb5585704a59a6022f04097c39239ca2eab582",
+    "transform/models/current_daily.sql": "0950c2bf6d2b4d7b02821204d007386efe1da13639c7a14e78784bd02c6149cd",
+    "transform/models/quality.yml": "53123f334bb32881f53114e6af13e936ede19d0b7f8e0efde15909ff74974f7a",
+    "transform/models/int_resolved.sql": "087c9888bec3fd89d11d50aae40efe0080da8ccbb97aed71e504c51eea457b6f",
+    "transform/models/semantic.yml": "3a54e80be73d5a50d984a466f24101e42ef96a0869e7fa2cd547f39aadb4193b",
+    "transform/models/quarantine.sql": "19113ed2374b957682cdcda767e20b6363d4f90309e6d3e03be6f8517c8e637f",
+    "transform/models/ingestion_unit_tests.yml": "6a312477307cfaf4a78b6c25fd7585ee225970be899444056229e6fcbf99b0fd",
+    "transform/models/entities.sql": "f87976cd657014e88afacdf4085f9970a7b5fb28034dbe897a7049ccf9ee0b8a",
+    "transform/models/captures.sql": "49bbe22eabb6f7fbfb50b4b63b317080e4d1e13cbc24ddc98d30551c575c31f1",
+    "transform/models/sat_daily_report.sql": "c58cf60a64502162b303ad4ca5984aed7da56797c86a355e1c8bb91d7e361ef1",
+    "transform/models/bronze_classified.sql": "05d54a4f083057c95064aa8836d77418f8cf2c70994c7d524b1386698fe030f9",
+    "baseline/releases/snapshots/cvm-linux-uat-v3/snapshot.duckdb": "f86324f20c6cd6d264236d713192533bac778ff24d91dfaafde3284cc93f419a"
+  },
+  "source_fingerprints": {
+    "demo/workspace.py": "ec71736ca4b6a6c348d3c52e84d30c86c8c92d0e16261e2d9b174b352ddc1777",
+    "demo/rehearse.sh": "7c4b065d1ccc5c2fe39b06cdc270110f3a4bf5b739ce63e7b57e53aa50e8785a",
+    "tests/demo/test_workspace.py": "8726ce3f7384e001720a6adbfa81e4a66c462f1f78cf79815e3b84365af3e910",
+    "transform/models/audit_ingestion_files.sql": "e0989b20aea6576e3fb4b4feef45d595dc2f6035a060e04e1f612e0ed6c1d6f6",
+    "transform/models/int_daily.sql": "ea441663e3fc297079cb75c9ca0fa9d1f2c77a66ee0648d1a8127414e312c190",
+    "transform/models/stg_observations.sql": "0a6b21943ba3d0f2d46e18f06d847b4a6d65a5fa6e400a4c3890ab55ec4f2e16",
+    "transform/models/report_calendar.sql": "46d2eea551d5ea9ea5421b8c814318b73b58a8bc32bcf48d736ade765fb1d004",
+    "transform/models/time_spine.sql": "d9c4cde07db898832d35c9ab7b1b1d97cc8ca191d128d0fa44b6095d4308cbe2",
+    "transform/models/fct_daily.sql": "af2e00454d603ee328a5f5ca6bc019dbf1b4a879a549806ec1b52ac756c76398",
+    "transform/models/landing.yml": "dda92d41fa95cfc54e6e608e7aa666478ddaa791202a42e7ccf67c2892a8f66f",
+    "transform/models/unit_tests.yml": "03fa67e085e0bd1188e5d3ef86eb5585704a59a6022f04097c39239ca2eab582",
+    "transform/models/current_daily.sql": "0950c2bf6d2b4d7b02821204d007386efe1da13639c7a14e78784bd02c6149cd",
+    "transform/models/quality.yml": "53123f334bb32881f53114e6af13e936ede19d0b7f8e0efde15909ff74974f7a",
+    "transform/models/int_resolved.sql": "087c9888bec3fd89d11d50aae40efe0080da8ccbb97aed71e504c51eea457b6f",
+    "transform/models/semantic.yml": "3a54e80be73d5a50d984a466f24101e42ef96a0869e7fa2cd547f39aadb4193b",
+    "transform/models/quarantine.sql": "19113ed2374b957682cdcda767e20b6363d4f90309e6d3e03be6f8517c8e637f",
+    "transform/models/ingestion_unit_tests.yml": "6a312477307cfaf4a78b6c25fd7585ee225970be899444056229e6fcbf99b0fd",
+    "transform/models/entities.sql": "f87976cd657014e88afacdf4085f9970a7b5fb28034dbe897a7049ccf9ee0b8a",
+    "transform/models/captures.sql": "49bbe22eabb6f7fbfb50b4b63b317080e4d1e13cbc24ddc98d30551c575c31f1",
+    "transform/models/sat_daily_report.sql": "c58cf60a64502162b303ad4ca5984aed7da56797c86a355e1c8bb91d7e361ef1",
+    "transform/models/bronze_classified.sql": "05d54a4f083057c95064aa8836d77418f8cf2c70994c7d524b1386698fe030f9",
+    "compatibility/dbt-v2-metricflow/pinned_docs.py": "a48596ced09ee572ca5d7808ae0f27f7dce282143f30f6332377f04becd03d0b",
+    "Makefile": "00a1880f8b624b4f7657e26b1a0b0644bd7f679fe9627b4f394af8e190a1ff87",
+    "ci/run.py": "89534f34c63cd7979503a5a952d3724bd4a21b6d7106878de2496dee85f9666a"
+  },
+  "limitations": [
+    "Technical sequence rehearsed; presenter spoken timing remains to be rehearsed.",
+    "Single presenter; stop tools and docs server before reset.",
+    "Historical capture, full Vault and AI agent expansion are not part of the live exercise."
+  ]
+}

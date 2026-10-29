@@ -19,7 +19,7 @@ def main():
     (ROOT/'transform/evidence').mkdir(exist_ok=True)
     def run(name,args):
         with (out/(name+'.log')).open('w') as f:subprocess.run(args,cwd=ROOT,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=900)
-    for group in ['business','ingestion','release','ci']:
+    for group in ['business','ingestion','release','ci','demo']:
         run('tests-'+group,[str(PYTHON),'-m','unittest','discover','-s','tests/'+group,'-v'])
     # Full native build is never replaced by a state-based subset.
     candidate=build(root,'dev',a.id)
