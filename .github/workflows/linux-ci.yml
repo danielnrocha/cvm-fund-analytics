@@ -26,6 +26,14 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, resolved 2026-10-28
         with:
           persist-credentials: false
+      - name: Check SQL style before building the remote image
+        env:
+          DBT_SEND_ANONYMOUS_USAGE_STATS: 'false'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/cvm-style"
+          "$RUNNER_TEMP/cvm-style/bin/python" -m pip install -r compatibility/dbt-v2-metricflow/requirements-dbt.lock
+          "$RUNNER_TEMP/cvm-style/bin/dbt" lint --project-dir transform --profiles-dir transform --no-version-check
+          "$RUNNER_TEMP/cvm-style/bin/dbt" format --check --project-dir transform --profiles-dir transform --no-version-check
       - name: Restore pinned baseline from durable Release asset
         if: env.BOOTSTRAP != 'true'
         env:

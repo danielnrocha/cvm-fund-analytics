@@ -1,0 +1,8 @@
+version: 2
+models:
+  - name: bronze_classified
+    description: Parse derived JSON envelopes and classify accepted, rejected and
+      excluded source rows without losing original payload provenance.
+  - name: stg_observations
+    description: Typed accepted daily observations; JSON transport does not imply
+      the CVM original file was JSON.

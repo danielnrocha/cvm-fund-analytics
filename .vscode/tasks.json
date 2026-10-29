@@ -2,6 +2,19 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "CVM: SQL lint and format check",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "lint",
+        "format-check"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "CVM: local test suite (no Docker)",
       "type": "process",
       "command": "make",

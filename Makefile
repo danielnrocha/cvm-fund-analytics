@@ -34,3 +34,11 @@ demo-prepare:
 	$(PY) demo/workspace.py prepare
 demo-reset:
 	$(PY) demo/workspace.py reset
+
+.PHONY: lint format-check format
+lint:
+	cd transform && $(DBT) lint --profiles-dir . --no-version-check
+format-check:
+	cd transform && $(DBT) format --check --profiles-dir . --no-version-check
+format:
+	cd transform && $(DBT) format --profiles-dir . --no-version-check

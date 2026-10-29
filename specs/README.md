@@ -1,5 +1,7 @@
 # dbt demo — revisão e proposta
 
+[Revisão de organização e boas práticas dbt](repository-review.md): diagnóstico do repositório, baseline de lint/format, organização aplicada e aceite local antes do agente; [resultados e revisão](../reviews/repository-refactor-review.md).
+
 Data da pesquisa: **28 de outubro de 2026**. Estado: **vertical real de PL/fluxo, ingestão imutável e snapshots implementados; gate semântico UAT e runner Linux ARM64 offline aprovados; workflow GitHub ativado, com resultados no histórico remoto. Projeto completo ainda em evolução**.
 
 1. [Revisão do prompt e pesquisa](research-review.md): evidências, problemas, custos, versões e comparação de datasets.

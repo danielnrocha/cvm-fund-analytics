@@ -1,0 +1,10 @@
+version: 2
+models:
+  - name: sat_daily_report
+    description: Append-only capture versions. Replay is idempotent; late corrections
+      preserve earlier captured values.
+    columns:
+      - name: version_id
+        data_tests:
+          - unique
+          - not_null

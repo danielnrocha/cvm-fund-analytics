@@ -189,3 +189,7 @@ Publicação executada em 28/10/2026: [repositório](https://github.com/danielnr
 - [ ] Apresentador ensaiar a fala e navegação em 20–25 minutos, usando o notebook da sessão.
 
 Nada nesta entrega publica nova baseline, promove dev/UAT ou transforma o roadmap de AI BI/Vault completo em capacidade implementada.
+
+## Organização do repositório — 28/10/2026
+
+Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). O aceite Linux deste PR será executado no GitHub Actions antes do merge.

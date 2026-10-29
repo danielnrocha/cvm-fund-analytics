@@ -2,7 +2,7 @@
 import argparse,json,os,shutil,subprocess,sys,tempfile
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
-import yaml
+from demo.mutations import remove_stock_rule
 from release.snapshots import _verify,seal,promote,resolve
 from release.uat import evaluate
 ROOT=Path(__file__).resolve().parents[2]
@@ -15,7 +15,7 @@ def main():
   for f in work.rglob('*'):
    if f.is_file():f.chmod(0o644)
   (work/'bundle.json').unlink()
-  config=work/'project/models/semantic.yml';data=yaml.safe_load(config.read_text());data['models'][0]['metrics'][0].pop('non_additive_dimension');config.write_text(yaml.safe_dump(data,sort_keys=False))
+  remove_stock_rule(work/'project')
   env={**os.environ,'CVM_TARGET':'dev','CVM_DB_PATH':str(work/'snapshot.duckdb'),'DBT_PROFILES_DIR':str(work/'project'),'DBT_SEND_ANONYMOUS_USAGE_STATS':'false'}
   r=subprocess.run([str(ROOT/'compatibility/dbt-v2-metricflow/.venv-dbt/bin/dbt'),'parse','--profiles-dir',str(work/'project')],cwd=work/'project',env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=240)
   if r.returncode:raise RuntimeError(r.stdout)

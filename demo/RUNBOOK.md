@@ -16,7 +16,7 @@ bash demo/rehearse.sh
 
 The baseline fetch verifies the pinned Release archive and bundle. The docs command copies/verifies an already bootstrapped Darwin ARM64 driver from the local cache; if it is missing, bootstrap explicitly before the session using `pinned_docs.py --bootstrap`, then verify again. It must not silently download during the presentation. Local setup is validated on macOS ARM64; Linux CI has its separate pinned driver.
 
-After rehearsing, leave the restored green workspace and generated docs ready. Do not reset just before presenting unless you also rerun the preparation build below. Open the repository and `data/demo/project` in VS Code. No extension login or advanced LSP feature is required.
+After rehearsing, leave the restored green workspace and generated docs ready. Do not reset just before presenting unless you also rerun the preparation build below. Open `data/demo/official-dbt.code-workspace` in VS Code. Preparation recreates this workspace with the dev target, formatting defaults and deferral disabled. In VS Code **User** settings, set `dbt.dbtPath` to the absolute path of `compatibility/dbt-v2-metricflow/.venv-dbt/bin/dbt` and confirm version 2.0.9 in the extension status/output. This setting is machine-scoped and cannot be pinned in the workspace JSON; restore a previous setting when using other projects. Use the official dbt extension; no login is required for the demonstrated development features.
 
 The local dbt CLI may emit `dbt1005` because no `dbt_cloud.yml` is configured. The separate local `mf validate-configs` and metric queries are the semantic validation used here; no cloud login is required.
 
@@ -55,26 +55,34 @@ Expected full-period PL: **119,385,193,058.06 BRL**. Net flow: **4,725,910,556.1
 
 ## 3–6 minutes — trace the number
 
+In the official extension, open `models/marts/fct_daily.sql`. Use its model actions to run the model, compile/view compiled SQL, and open lineage. For predictable command visibility, use the VS Code integrated terminal with the equivalent commands below. Use the extension's test/build actions where offered; terminal execution remains the fallback and is required for local MetricFlow. The right-hand Copilot chat is not dbt Wizard.
+
+```sh
+"$DBT" run --profiles-dir . --select fct_daily
+```
+
+Explain that `run` materializes a model but does not establish test acceptance. The preparation `build` ran models and tests together; the next exercise uses `test` explicitly.
+
 ```sh
 "$DBT" ls --profiles-dir . --select +fct_daily --resource-type model
 "$DBT" compile --profiles-dir . --select fct_daily --static-analysis strict --generate-info-schema
 ```
 
-Open `models/fct_daily.sql`, `models/semantic.yml`, and the compiled `target/compiled/cvm_demo/models/fct_daily.sql`. Show `ref()`, the class/day calendar, the left join preserving missing reports, explicit decimal types and the enforced output contract. Explain `run` builds models, `test` checks them, and `build` orders models and tests together, including native unit tests.
+Open `models/marts/fct_daily.sql`, `models/marts/semantic.yml`, and the compiled `target/compiled/cvm_demo/models/marts/fct_daily.sql`. Show `ref()`, the class/day calendar, the left join preserving missing reports, explicit decimal types and the enforced output contract. Explain `run` builds models, `test` checks them, and `build` orders models and tests together, including native unit tests.
 
-In docs, choose **Models → fct_daily → General** to see model lineage. Choose **Columns → net_flow**, expand its chevron and scroll to see `subscriptions` and `redemptions` flowing into the metric input. This column view was visually verified in the integrated browser; [recorded screenshot](evidence/column-lineage.png). Trace upstream models as time allows. Distinguish model lineage from column lineage. The four required column edges are verified from the generated Parquet; do not claim automatic JSONPath-level lineage. Use the lineage fallback described below if the docs UI cannot expose the desired column view quickly.
+In the official extension, open the column lineage action for `net_flow` and trace both inputs. As a fallback in generated docs, choose **Models → fct_daily → General** to see model lineage. Choose **Columns → net_flow**, expand its chevron and scroll to see `subscriptions` and `redemptions` flowing into the metric input. This column view was visually verified in the integrated browser; [recorded screenshot](evidence/column-lineage.png). Trace upstream models as time allows. Distinguish model lineage from column lineage. The four required column edges are verified from the generated Parquet; do not claim automatic JSONPath-level lineage. Use the lineage fallback described below if the docs UI cannot expose the desired column view quickly.
 
 ## 6–11 minutes — native unit test, red then green
 
-Open `models/unit_tests.yml`, test `dense_calendar_keeps_missing_distinct_from_zero`. Explain the tiny A/B fixture: one observed zero is valid; absent class/day values must remain null. The test already captures the business requirement, before the deliberate code change.
+Open `models/intermediate/unit_tests.yml`, test `dense_calendar_keeps_missing_distinct_from_zero`. Explain the tiny A/B fixture: one observed zero is valid; absent class/day values must remain null. The test already captures the business requirement, before the deliberate code change.
 
-In **the disposable** `models/fct_daily.sql`, change only:
+In **the disposable** `models/marts/fct_daily.sql`, change only:
 
 ```sql
 -- Correct:
-  d.pl::decimal(17,2) as pl,
+    d.pl::decimal(17, 2) as pl,
 -- Deliberately wrong:
-  coalesce(d.pl, 0)::decimal(17,2) as pl,
+    coalesce(d.pl, 0)::decimal(17, 2) as pl,
 ```
 
 Run:
@@ -85,14 +93,17 @@ Run:
 
 Expected: nonzero exit, the named test fails, and the diff shows `NULL -> 0.0`. dbt v2 records this mismatch as `error` in `run_results.json`; that label does not mean the expected business failure was absent. An unrelated compilation/connection failure is not a successful demonstration.
 
-Restore `d.pl::decimal(17,2) as pl,` and rerun the **same command**. Expected: one successful native unit test. The test fixture is synthetic; do not present its A/B rows as actual CVM observations.
+Restore `d.pl::decimal(17, 2) as pl,` and rerun the **same command**. Expected: one successful native unit test. The test fixture is synthetic; do not present its A/B rows as actual CVM observations.
 
 ## 11–18 minutes — valid SQL, wrong business metric
 
-Open `models/semantic.yml`. Under **only** `reported_net_assets_eop`, remove this line (leave the closing entity-count rules intact):
+Open `models/marts/semantic.yml`. Under **only** `reported_net_assets_eop`, remove this block (leave the closing entity-count rules intact):
 
 ```yaml
-        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}
+        non_additive_dimension:
+          name: report_date
+          window_agg: max
+          group_by: []
 ```
 
 ```sh
@@ -103,7 +114,7 @@ Open `models/semantic.yml`. Under **only** `reported_net_assets_eop`, remove thi
 
 Expected: parse and query succeed; PL is now a sum of daily stocks and wrong, while flow remains correct. The frozen monthly oracle rejects it. This proves a syntactically valid metric can still violate business semantics. Do not update the oracle to make the demonstration pass.
 
-Restore the removed line under `reported_net_assets_eop`:
+Restore the removed block under `reported_net_assets_eop`:
 
 ```sh
 "$DBT" parse --profiles-dir .
@@ -121,7 +132,7 @@ Do not create a live regression in the public repository or wait for remote CI o
 
 ## 22–25 minutes — history and questions
 
-If time permits, open `models/sat_daily_report.sql` and `models/current_daily.sql`. Show append-only capture identity, the replay anti-join, and the distinction between reporting date and capture timestamp. Existing integration evidence demonstrates corrections and A→B→A; avoid rebuilding that entire scenario live.
+If time permits, open `models/history/sat_daily_report.sql` and `models/intermediate/current_daily.sql`. Show append-only capture identity, the replay anti-join, and the distinction between reporting date and capture timestamp. Existing integration evidence demonstrates corrections and A→B→A; avoid rebuilding that entire scenario live.
 
 Close with the limits: minimal history satellite, not full Vault; semantic queries, not an evaluated AI agent; derived JSON envelope, not a native JSON source. Ask which business rule the audience would test next.
 

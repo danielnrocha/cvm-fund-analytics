@@ -52,6 +52,23 @@ def prepare(root, database):
     tools = root / 'compatibility/dbt-v2-metricflow'
     env = {'DEMO_ROOT': str(root), 'DEMO_PROJECT': str(project), 'DBT': str(tools / '.venv-dbt/bin/dbt'), 'MF': str(tools / '.venv-mf/bin/mf'), 'PY': str(tools / '.venv-mf/bin/python'), 'DBT_PROJECT_DIR': str(project), 'DBT_TARGET': 'dev', 'DBT_TARGET_PATH': str(project / 'target'), 'DBT_LOG_PATH': str(project / 'logs'), 'DBT_PROFILES_DIR': str(project), 'CVM_PROJECT_DIR': str(project), 'CVM_DB_PATH': str(work / 'demo.duckdb'), 'CVM_TARGET': 'dev', 'DBT_SEND_ANONYMOUS_USAGE_STATS': 'false'}
     (work / 'env.sh').write_text('\n'.join('export ' + k + '=' + shlex.quote(v) for k, v in env.items()) + '\nunset PYTHONOPTIMIZE\ncd "$DEMO_PROJECT"\n')
+    workspace = {
+        'folders': [{'path': 'project'}],
+        'settings': {
+            'dbt.targetName': 'dev',
+            'dbt.flag.defer': False,
+            'dbt.formatOnSave': True,
+            'dbt.lintFixOnSave': False,
+            'editor.insertSpaces': True,
+            'editor.detectIndentation': False,
+            'editor.tabSize': 4,
+            '[yaml]': {'editor.tabSize': 2},
+            '[json]': {'editor.tabSize': 2},
+        },
+        'extensions': {'recommendations': ['dbtLabsInc.dbt']},
+    }
+    (work / 'official-dbt.code-workspace').write_text(
+        json.dumps(workspace, indent=2) + '\n')
     (work / MARKER).write_text(json.dumps({'owner': 'cvm-live-demo-v1', 'root': str(root)}))
     return work
 

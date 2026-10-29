@@ -1,0 +1,98 @@
+version: 2
+unit_tests:
+  - name: classify_json_without_rounding_or_zero_fill
+    model: bronze_classified
+    given:
+      - input: source('cvm_landing','raw_envelopes')
+        rows:
+          - capture_id: c
+            source_id: malformed
+            period: '202604'
+            payload: '{bad'
+          - capture_id: c
+            source_id: width
+            period: '202604'
+            payload: '{"schema_version":1,"error":"csv_width","data":{}}'
+          - capture_id: c
+            source_id: missing
+            period: '202604'
+            payload: '{"schema_version":1,"error":null,"data":{}}'
+          - capture_id: c
+            source_id: precision
+            period: '202604'
+            payload: '{"schema_version":1,"error":null,"data":{"TP_FUNDO_CLASSE":"CLASSES
+              - FIF","CNPJ_FUNDO_CLASSE":"00000000000100","ID_SUBCLASSE":null,"DT_COMPTC":"2026-04-01","VL_TOTAL":"100.00","VL_QUOTA":"1.000000000000","VL_PATRIM_LIQ":"100.001","CAPTC_DIA":"10.00","RESG_DIA":"0.00","NR_COTST":"2"}}'
+          - capture_id: c
+            source_id: date
+            period: '202605'
+            payload: '{"schema_version":1,"error":null,"data":{"TP_FUNDO_CLASSE":"CLASSES
+              - FIF","CNPJ_FUNDO_CLASSE":"00000000000100","ID_SUBCLASSE":null,"DT_COMPTC":"2026-04-01","VL_TOTAL":"100.00","VL_QUOTA":"1.000000000000","VL_PATRIM_LIQ":"100.00","CAPTC_DIA":"10.00","RESG_DIA":"0.00","NR_COTST":"2"}}'
+          - capture_id: c
+            source_id: valid
+            period: '202604'
+            payload: '{"schema_version":1,"error":null,"data":{"TP_FUNDO_CLASSE":"CLASSES
+              - FIF","CNPJ_FUNDO_CLASSE":"00000000000100","ID_SUBCLASSE":null,"DT_COMPTC":"2026-04-01","VL_TOTAL":"100.00","VL_QUOTA":"1.000000000000","VL_PATRIM_LIQ":"-100.00","CAPTC_DIA":"10.00","RESG_DIA":"0.00","NR_COTST":"2"}}'
+    expect:
+      rows:
+        - source_id: malformed
+          disposition: rejected
+          rejection_reason: malformed_json
+        - source_id: width
+          disposition: rejected
+          rejection_reason: csv_width
+        - source_id: missing
+          disposition: rejected
+          rejection_reason: required_field
+        - source_id: precision
+          disposition: rejected
+          rejection_reason: invalid_decimal
+        - source_id: date
+          disposition: rejected
+          rejection_reason: wrong_period
+        - source_id: valid
+          disposition: accepted
+          rejection_reason: null
+  - name: file_imbalance_cannot_cancel_across_files
+    model: audit_ingestion_files
+    given:
+      - input: source('cvm_landing','files')
+        rows:
+          - capture_id: c
+            file_sha256: file_a
+            enveloped: 1
+            excluded: 0
+          - capture_id: c
+            file_sha256: file_b
+            enveloped: 1
+            excluded: 0
+      - input: ref('bronze_classified')
+        rows:
+          - capture_id: c
+            source_id: file_a:member:2
+            disposition: accepted
+          - capture_id: c
+            source_id: file_a:member:3
+            disposition: accepted
+    expect:
+      rows:
+        - capture_id: c
+          file_sha256: file_a
+          balanced: false
+        - capture_id: c
+          file_sha256: file_b
+          balanced: false
+  - name: capture_time_preserves_utc_and_microseconds_across_offsets
+    model: captures
+    given:
+      - input: source('cvm_landing','captures')
+        rows:
+          - capture_id: utc
+            captured_at: '2026-10-28T19:17:21.008949+00:00'
+          - capture_id: offset
+            captured_at: '2026-10-28T22:17:21.008949+03:00'
+    expect:
+      rows:
+        - capture_id: utc
+          captured_at: '2026-10-28T19:17:21.008949'
+        - capture_id: offset
+          captured_at: '2026-10-28T19:17:21.008949'

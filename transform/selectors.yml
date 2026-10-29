@@ -1,0 +1,15 @@
+selectors:
+  - name: daily_vertical
+    description: Daily fact and all ancestors, with adjacent tests.
+    definition:
+      method: fqn
+      value: fct_daily
+      parents: true
+  - name: ingestion_audit
+    description: File reconciliation and quarantine, with adjacent tests.
+    definition:
+      union:
+        - method: fqn
+          value: audit_ingestion_files
+        - method: fqn
+          value: quarantine

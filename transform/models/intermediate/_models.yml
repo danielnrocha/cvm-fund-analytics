@@ -1,0 +1,26 @@
+version: 2
+models:
+  - name: int_resolved
+    description: Resolve normalized source identity to exactly one class; ambiguity
+      cannot multiply observations.
+    columns:
+      - name: identity_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - resolved
+  - name: int_daily
+    description: One class/day/capture group; identical duplicates retain provenance
+      and conflicting values fail quality tests.
+    columns:
+      - name: conflict
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - false
+                quote: false
+  - name: current_daily
+    description: Latest captured observation per reporting class and business date;
+      earlier versions remain in the satellite.

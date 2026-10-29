@@ -3,10 +3,11 @@ version: 0.1.0
 config-version: 2
 profile: cvm_demo
 model-paths:
-- models
-seed-paths: [_no_seeds]
+  - models
+seed-paths:
+  - _no_seeds
 test-paths:
-- tests
+  - tests
 models:
   cvm_demo:
     +materialized: table
