@@ -18,10 +18,12 @@ fi
 "$PY" "$DEMO_ROOT/scripts/check_semantics.py"
 # Exercise 1: the existing native unit fixture is the independent expectation.
 "$PY" - <<'PY'
+import os, sys
 from pathlib import Path
-p=Path('models/fct_daily.sql');s=p.read_text()
-assert s.count('d.pl::decimal(17,2)')==1
-p.write_text(s.replace('d.pl::decimal(17,2)', 'coalesce(d.pl, 0)::decimal(17,2)'))
+sys.path.insert(0, os.environ['DEMO_ROOT'])
+from demo.mutations import replace_missing_pl
+p, original = replace_missing_pl(Path('.'))
+Path('evidence/original-fct.sql').write_bytes(original)
 PY
 if "$DBT" test --profiles-dir . --select dense_calendar_keeps_missing_distinct_from_zero 2>&1 | tee evidence/expected-unit-failure.log; then
   echo 'ERROR: broken SQL unexpectedly passed'; exit 1
@@ -33,16 +35,17 @@ r=json.loads(Path('target/run_results.json').read_text())['results']
 assert len(r)==1 and r[0]['status'] in ('fail','error') and 'dense_calendar_keeps_missing_distinct_from_zero' in r[0]['unique_id'],r
 log=Path('evidence/expected-unit-failure.log').read_text()
 assert 'Test failed: dense_calendar_keeps_missing_distinct_from_zero' in log and 'NULL -> 0.0' in log
-p=Path('models/fct_daily.sql');p.write_text(p.read_text().replace('coalesce(d.pl, 0)::decimal(17,2)', 'd.pl::decimal(17,2)'))
+Path('models/marts/fct_daily.sql').write_bytes(Path('evidence/original-fct.sql').read_bytes())
 PY
 "$DBT" test --profiles-dir . --select dense_calendar_keeps_missing_distinct_from_zero
 # Exercise 2: valid YAML/SQL is not sufficient for a correct stock aggregation.
 "$PY" - <<'PY'
+import os, sys
 from pathlib import Path
-p=Path('models/semantic.yml');s=p.read_text()
-line='        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}\n'
-assert line in s
-p.write_text(s.replace(line,'',1))
+sys.path.insert(0, os.environ['DEMO_ROOT'])
+from demo.mutations import remove_stock_rule
+p, original = remove_stock_rule(Path('.'))
+Path('evidence/original-semantic.yml').write_bytes(original)
 PY
 "$DBT" parse --profiles-dir .
 "$MF" query --metrics reported_net_assets_eop,net_flow --csv evidence/broken-total.csv
@@ -61,10 +64,7 @@ assert "AssertionError: ('reported_net_assets_eop'," in Path('evidence/expected-
 monthly=list(csv.DictReader(Path('evidence/semantic-monthly.csv').open()))
 assert len(monthly)==6
 assert Decimal(next(x for x in monthly if x['metric_time__month'].startswith('2026-09'))['reported_net_assets_eop']) != Decimal('119385193058.06')
-p=Path('models/semantic.yml');s=p.read_text()
-anchor='        expr: pl\n'
-assert s.count(anchor)==1
-p.write_text(s.replace(anchor,anchor+'        non_additive_dimension: {name: report_date, window_agg: max, group_by: []}\n'))
+Path('models/marts/semantic.yml').write_bytes(Path('evidence/original-semantic.yml').read_bytes())
 PY
 "$DBT" parse --profiles-dir .
 "$MF" query --metrics reported_net_assets_eop,net_flow --csv evidence/correct-total.csv

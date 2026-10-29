@@ -1,0 +1,4 @@
+target/
+logs/
+evidence/
+dbt_packages/

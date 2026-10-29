@@ -46,3 +46,7 @@ Three final technical rehearsals passed on macOS ARM64: 23.78, 21.81 and 22.15 s
 [Independent review](../reviews/live-demo-review.md) identified two issues, both corrected and rechecked: reset now validates source inputs before deletion, and semantic red requires the named PL mismatch rather than a generic assertion. The offline harness uses separate network-denied processes for exercises and docs because macOS rejects nested sandbox-exec. Earlier failed harness attempts are not counted among the three accepted runs.
 
 Raw logs are kept locally in `data/demo-rehearsals/`; compact evidence and the lineage screenshot are versioned. The remaining presentation-specific action is the presenter's spoken rehearsal.
+
+## Repository refactor acceptance (2026-10-28)
+
+The runbook now uses layered model paths and official-extension entry points. Preparation/reset recreates `official-dbt.code-workspace`; the binary override is a User setting, not a workspace setting. Fail-closed mutation helpers support both old sealed baseline YAML and the new layout. Both offline red/green exercises passed and restored exact original bytes in a separate scratch workspace. [Full results](../reviews/repository-refactor-review.md). Existing screenshots remain historical evidence; fresh column lineage was checked in generated artifacts.

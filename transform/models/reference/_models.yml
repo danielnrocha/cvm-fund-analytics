@@ -1,0 +1,34 @@
+version: 2
+models:
+  - name: entities
+    description: Fixed eligible CVM reporting-class cohort; one row per class identifier
+      and CNPJ.
+    columns:
+      - name: cnpj
+        data_tests:
+          - unique
+          - not_null
+      - name: entity_id
+        data_tests:
+          - unique
+          - not_null
+  - name: report_calendar
+    description: Expected reporting days in the frozen cohort; this is not every calendar
+      date.
+    columns:
+      - name: report_date
+        data_tests:
+          - unique
+          - not_null
+  - name: captures
+    description: Capture identity and observation timestamp, distinct from the business
+      reporting date.
+    columns:
+      - name: capture_id
+        data_tests:
+          - unique
+          - not_null
+      - name: captured_at
+        data_tests:
+          - unique
+          - not_null

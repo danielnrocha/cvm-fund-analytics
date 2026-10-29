@@ -1,13 +1,14 @@
 """Remove PL non-additivity in a disposable project; oracle must reject result."""
 from pathlib import Path
 from decimal import Decimal
-import csv,os,shutil,subprocess,tempfile,yaml,json
+import csv,os,shutil,subprocess,tempfile,json,sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from demo.mutations import remove_stock_rule
 ROOT=Path(__file__).resolve().parents[1];E=ROOT/'transform/evidence'
 with tempfile.TemporaryDirectory(prefix='cvm-semantic-mutation-') as tmp:
     p=Path(tmp)/'transform';shutil.copytree(ROOT/'transform',p,ignore=shutil.ignore_patterns('target','logs','evidence','*.duckdb*'))
     shutil.copy(ROOT/'transform/cvm_demo.duckdb',p/'mutated.duckdb')
-    config=p/'models/semantic.yml';d=yaml.safe_load(config.read_text())
-    d['models'][0]['metrics'][0].pop('non_additive_dimension');config.write_text(yaml.safe_dump(d,sort_keys=False))
+    remove_stock_rule(p)
     env={**os.environ,'DBT_PROFILES_DIR':str(p),'CVM_DB_PATH':str(p/'mutated.duckdb'),'DBT_SEND_ANONYMOUS_USAGE_STATS':'false'}
     for name,cmd in [('parse',[str(ROOT/'compatibility/dbt-v2-metricflow/.venv-dbt/bin/dbt'),'parse','--profiles-dir',str(p)]),('query',[str(ROOT/'compatibility/dbt-v2-metricflow/.venv-mf/bin/mf'),'query','--metrics','reported_net_assets_eop','--csv',str(p/'result.csv')])]:
         run=subprocess.run(cmd,cwd=p,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)

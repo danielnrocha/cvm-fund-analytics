@@ -1,5 +1,6 @@
 """Lifecycle regressions: never delete user files or mutate the source database."""
 import importlib.util
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -16,9 +17,9 @@ class WorkspaceTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.project = self.root / 'transform'
-        (self.project / 'models').mkdir(parents=True)
-        (self.project / 'models/fct_daily.sql').write_text('original SQL')
-        (self.project / 'models/semantic.yml').write_text('original YAML')
+        (self.project / 'models/marts').mkdir(parents=True)
+        (self.project / 'models/marts/fct_daily.sql').write_text('original SQL')
+        (self.project / 'models/marts/semantic.yml').write_text('original YAML')
         (self.project / 'dbt_project.yml').write_text('name: test')
         self.database = self.root / 'baseline.duckdb'
         self.database.write_bytes(b'closed database fixture')
@@ -29,12 +30,22 @@ class WorkspaceTests(unittest.TestCase):
     def test_reset_restores_database_and_models_without_touching_source(self):
         work = self.prepare()
         (work / 'demo.duckdb').write_bytes(b'changed')
-        (work / 'project/models/fct_daily.sql').write_text('broken SQL')
+        (work / 'project/models/marts/fct_daily.sql').write_text('broken SQL')
         self.api.reset(self.root, self.database)
         self.assertEqual((work / 'demo.duckdb').read_bytes(), b'closed database fixture')
-        self.assertEqual((work / 'project/models/fct_daily.sql').read_text(), 'original SQL')
+        self.assertEqual((work / 'project/models/marts/fct_daily.sql').read_text(), 'original SQL')
         self.assertEqual(self.database.read_bytes(), b'closed database fixture')
-        self.assertEqual((self.project / 'models/fct_daily.sql').read_text(), 'original SQL')
+        self.assertEqual((self.project / 'models/marts/fct_daily.sql').read_text(), 'original SQL')
+
+    def test_prepared_editor_uses_disposable_project_without_machine_settings(self):
+        work = self.prepare()
+        config = work / 'official-dbt.code-workspace'
+        self.assertTrue(config.is_file(), 'Preparation must recreate editor entry point')
+        workspace = json.loads(config.read_text())
+        self.assertEqual(workspace['folders'], [{'path': 'project'}])
+        self.assertNotIn('dbt.dbtPath', workspace['settings'])
+        self.assertFalse(workspace['settings']['dbt.flag.defer'])
+        self.assertEqual(workspace['settings']['dbt.targetName'], 'dev')
 
     def test_prepare_refuses_to_overwrite_existing_workspace(self):
         work = self.prepare()
@@ -65,7 +76,7 @@ class WorkspaceTests(unittest.TestCase):
         (work / 'external').symlink_to(self.project, target_is_directory=True)
         with self.assertRaises(ValueError):
             self.api.reset(self.root, self.database)
-        self.assertTrue((self.project / 'models/fct_daily.sql').exists())
+        self.assertTrue((self.project / 'models/marts/fct_daily.sql').exists())
 
     def test_failed_reset_preserves_workspace_when_source_project_is_invalid(self):
         work = self.prepare()

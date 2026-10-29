@@ -1,0 +1,57 @@
+version: 2
+sources:
+  - name: cvm_landing
+    description: Immutable source bytes are preserved separately; these physical tables
+      transport derived JSON envelopes and capture metadata.
+    schema: landing
+    tables:
+      - name: raw_envelopes
+        description: One derived JSON envelope per capture/source record; original
+          CSV bytes remain immutable.
+        columns:
+          - name: capture_id
+            description: Capture batch identifier; joins to captures.
+          - name: source_id
+            description: File hash and row identity within the capture.
+          - name: period
+            description: Source reporting month, not ingestion time.
+          - name: payload
+            description: Derived JSON transport of the original CVM CSV record.
+      - name: captures
+        description: One ingestion capture per capture_id; capture time is distinct
+          from the reporting date.
+        columns:
+          - name: capture_id
+            description: Unique capture batch identifier.
+          - name: captured_at
+            description: Timestamp of source capture, used to order observed versions.
+      - name: registry_cohort
+        description: Frozen eligible reporting classes; parent funds and subclasses
+          are excluded.
+        columns:
+          - name: cnpj
+            description: Normalized 14-digit class CNPJ.
+          - name: entity_id
+            description: Stable reporting-class business identifier.
+          - name: classification_at_capture
+            description: Classification captured for the cohort; not effective-dated
+              history.
+      - name: report_calendar
+        description: One expected reporting day in the frozen cohort; not every calendar
+          date.
+        columns:
+          - name: report_date
+            description: Expected business reporting date for completeness checks.
+      - name: files
+        description: One file per capture/hash with ingestion reconciliation counts.
+        columns:
+          - name: capture_id
+            description: Capture batch identifier.
+          - name: file_sha256
+            description: Content hash of the source file.
+          - name: member
+            description: Selected archive member name.
+          - name: enveloped
+            description: Number of rows represented as JSON envelopes.
+          - name: excluded
+            description: Rows excluded by the frozen cohort selection.

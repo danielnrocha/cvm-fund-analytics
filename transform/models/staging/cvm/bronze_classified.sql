@@ -30,8 +30,7 @@ with decoded as (
    or not regexp_full_match(redemptions_text,'-?[0-9]{1,15}(\.[0-9]{1,2})?')
    or not regexp_full_match(assets_text,'-?[0-9]{1,15}(\.[0-9]{1,2})?')
    or not regexp_full_match(quota_text,'-?[0-9]{1,15}(\.[0-9]{1,12})?') then 'invalid_decimal'
- when not regexp_full_match(investors_text,'[0-9]{1,10}') then 'invalid_investors'
- else null end as rejection_reason
+ when not regexp_full_match(investors_text,'[0-9]{1,10}') then 'invalid_investors' end as rejection_reason
  from fields
 )
 select capture_id,source_id,period,payload,kind,cnpj,subclass,

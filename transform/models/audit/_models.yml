@@ -1,0 +1,8 @@
+version: 2
+models:
+  - name: quarantine
+    description: Rejected raw envelopes with reasons; rejection is observable and
+      blocks publication under the current policy.
+  - name: audit_ingestion_files
+    description: Reconcile source rows into accepted, rejected and excluded counts
+      for each frozen file.

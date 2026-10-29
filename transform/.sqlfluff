@@ -1,0 +1,22 @@
+[sqlfluff]
+dialect = duckdb
+templater = dbt
+max_line_length = 80
+# Explicit casts and projection order are teaching choices; do not reorder them.
+exclude_rules = CV11,ST06
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+
+[sqlfluff:layout:type:comma]
+line_position = trailing
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = lower

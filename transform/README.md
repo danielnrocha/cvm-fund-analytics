@@ -40,3 +40,14 @@ Consulte [snapshots](../specs/snapshot-publication.md) para build isolado, promo
 ## CI e gate semântico UAT
 
 [Operação e contrato](../specs/ci-uat.md). `scripts/snapshot.py compare` gera um relatório vinculado a baseline/candidato; promoção UAT exige `--gate` e `--expected`. Linux é executado via `ci/Dockerfile` e `ci/run.py`, com bootstrap online e aceite offline.
+
+## Project navigation and style
+
+- `models/staging/cvm`: source metadata, JSON classification and typed observations.
+- `models/reference`: frozen cohort/calendar, captures and the semantic time spine.
+- `models/intermediate`: identity resolution, duplicate aggregation and latest capture selection.
+- `models/history`: append-only report versions; not a claim of a complete Data Vault framework.
+- `models/marts`: daily fact contract and MetricFlow definitions.
+- `models/audit`: quarantine and file reconciliation.
+
+Names and output schemas remain stable across folder moves. Unit fixtures spanning multiple models stay in `models/intermediate/unit_tests.yml`. Run `make lint format-check` from the repository root. See [contributor conventions](../CONTRIBUTING.md) and [refactor evidence](../specs/repository-review.md).
