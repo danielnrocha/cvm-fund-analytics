@@ -1,8 +1,8 @@
 # Design proposto — Fund Analytics com dbt
 
-> Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A implementação completa ainda não foi iniciada. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
+> Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A vertical CVM e sua governança estão implementadas; a arquitetura completa continua parcialmente planejada. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
-Estado: stack aprovada; arquitetura de domínio proposta, sujeita a profiling e testes. Autoridade: requisitos do usuário e evidências de [research-review.md](research-review.md). Nomes de modelos abaixo são contratos propostos, não tabelas já existentes.
+Estado: stack e recorte real validados; consultar [demo prática](live-demo.md) para o escopo executável atual. A arquitetura ampliada abaixo permanece proposta. Autoridade: requisitos do usuário e evidências de [research-review.md](research-review.md). Nomes de modelos abaixo são contratos propostos, não tabelas já existentes.
 
 ## Objetivo e escopo
 

@@ -2,11 +2,11 @@
 
 > Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A primeira vertical mínima está implementada; a pipeline completa permanece pendente. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
-**Estado:** execução autorizada e concluída apenas para a primeira vertical mínima; demais entregas continuam planejadas. A spec final de execução deverá incorporar os resultados dos gates de compatibilidade e profiling. Nenhuma versão de package ou grão ainda não testado é tratado como garantido.
+**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. A prioridade atual é a [demo prática de 20–25 minutos](live-demo.md). Vault completo, carteira, retornos e agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente.
 
 **Objetivo:** pipeline local de fundos CVM com histórico verificável, métricas governadas e interface segura para AI BI.
 
-## Organização futura
+## Organização de referência (implementada parcialmente)
 
 | Caminho proposto | Responsabilidade |
 |---|---|
@@ -41,7 +41,7 @@ Não criar um framework de configuração novo. SQL+YAML dbt, `uv.lock`, manifes
 
 O resultado específico de VS Code/LSP e a evidência da linhagem constam de [compatibility-extended.md](compatibility-extended.md). A baseline de apresentação usa tarefas VS Code e documentação estática local; recursos avançados da extensão só entram no roteiro com evidência de funcionamento. Wizard continua opcional.
 
-Aceite: testes reproduzíveis com dois ambientes isolados e um banco local, sem rebuild Core para gerar o manifesto. Não exigir instalação conjunta nem confundir preparação com internet e execução offline. Gates técnicos do laptop concluídos; próximo passo é contrato/profiling de dados, não implementação automática da arquitetura inteira.
+Aceite: testes reproduzíveis com dois ambientes isolados e um banco local, sem rebuild Core para gerar o manifesto. Não exigir instalação conjunta nem confundir preparação com internet e execução offline. Gates técnicos e profiling concluídos; a entrega atual é preparar e ensaiar a apresentação da vertical implementada.
 
 ## Entrega 1 — contrato de dados e fixture de negócio
 
@@ -50,7 +50,7 @@ Aceite: testes reproduzíveis com dois ambientes isolados e um banco local, sem 
 - [x] Decidir a população em que PL e cotistas são economicamente disjuntos. Se impossível no escopo, restringir a coorte e documentar a exclusão.
 - [x] Criar `specs/data-contracts.md` e `specs/metrics.md`; incluir fonte de cada regra e grain por tabela.
 - [x] Criar e executar fixtures sintéticas de duplicatas, lacunas, identidade e fanout; TDD, mutações e revisão independente em [business-fixtures.md](business-fixtures.md).
-- [ ] Completar fixtures de [ai-bi-evals.md](ai-bi-evals.md): unknown asset, CDA, parsing integral, replay persistente A→B→A e demais limites temporais. O probe A→B→A atual só valida separação de capturas em memória.
+- [ ] Completar fixtures futuras de [ai-bi-evals.md](ai-bi-evals.md): unknown asset, CDA, parsing integral e demais limites temporais. A→B→A persistente, replay e rebuild já são cobertos por `scripts/check_history.py`; cenários de CDA/ativos continuam fora da vertical.
 
 Profiling e contratos concluídos; fixtures dos quatro riscos executadas em laboratório isolado, demais fixtures e integração pendentes. [60 classes e 7.554 observações](cvm-profiling.md), seis lacunas e seis fechamentos reconciliados. A disjunção validada é hierárquica; participações cruzadas não foram consolidadas. Retornos e CDA continuam bloqueados.
 
@@ -99,8 +99,9 @@ Aceite: métricas apresentam população, competência e cobertura; carteira par
 ## Entrega 5 — camada semântica e AI BI
 
 - [ ] Completar catálogo de métricas e dimensões permitidas, com descrições e sinônimos PT/EN.
-- [ ] Modelar time spine; validar ausência vs zero, fechamento comum vs último disponível e retorno composto.
-- [ ] Executar `mf validate-configs` e queries reais; comparar todas as métricas publicadas com oráculos.
+- [x] Time spine, ausência vs zero e fechamento comum implementados para PL/fluxo/cobertura.
+- [ ] Retorno composto e produto de consulta latest-available continuam fora desta entrega.
+- [x] Executar `mf validate-configs` e queries reais para as métricas publicadas da vertical; demais métricas exigem novos oráculos.
 - [ ] Implementar contrato de ferramentas de leitura sobre MetricFlow. Nenhuma escrita/SQL livre como fallback.
 - [ ] Rodar suíte determinística e, se houver modelo disponível, evals de intenção e narrativa com holdout.
 - [ ] Demonstrar um gráfico alimentado somente pelos resultados validados, com unidade, período e cobertura.
@@ -128,25 +129,20 @@ Autor corrige; revisor verifica. P0/P1 bloqueiam. P2 aceito exige justificativa 
 
 Este pacote recebeu revisão de consistência pelo autor; **o laboratório de fixtures recebeu revisão independente**, documentada em [reviews/business-fixtures-review.md](../reviews/business-fixtures-review.md). A primeira vertical também recebeu [revisão independente](../reviews/first-vertical-review.md), com três achados corrigidos e revalidados. A [ingestão](../reviews/ingestion-review.md) também recebeu revisão independente com quatro achados corrigidos. Probes de compatibilidade não receberam revisão independente.
 
-## Roteiro da apresentação
+## Roteiro da apresentação — escopo atual
 
-Não é realista criar do zero a arquitetura inteira do prompt em 20 minutos. Recomendo 45–60 minutos para workshop, ou uma apresentação de 20 minutos sobre projeto preparado com uma alteração pequena feita ao vivo.
+O [runbook executável](../demo/RUNBOOK.md) substitui o roteiro especulativo anterior. Demo sobre projeto preparado, não construção completa do zero.
 
-| Tempo — versão 20 min | Mostrar | Comandos previstos, a validar no ensaio |
+| Tempo | Mostrar | Implementação real |
 |---|---|---|
-| 0–2 | Pergunta de negócio e erro de soma temporal | Consulta ingênua vs oráculo da fixture |
-| 2–4 | DAG bronze → vault → estrela | `dbt ls`, `dbt docs generate`, `dbt docs serve` |
-| 4–8 | Teste vermelho de revisão/duplicação e correção pequena | `dbt build --select +fct_entity_daily --target dev` |
-| 8–11 | Histórico preservado e SQL da macro | `dbt compile --select sat_daily_report` + inspeção do SQL |
-| 11–14 | Mesmo KPI em duas granularidades e semiaditividade | `mf query` sobre métricas aprovadas |
-| 14–17 | Agente consulta e recusa investidores únicos/carteira oculta | Ferramentas semânticas com trace visível |
-| 17–20 | Diff de regra, testes semânticos e UAT | Resultados de PR previamente preparado + mudança local |
+| 0–3 | PL de fechamento, fluxo e cobertura | MetricFlow sobre 60 classes e seis meses |
+| 3–6 | Fonte, modelo, contrato e linhagem | `dbt ls`, `compile`, docs e `fct_daily` |
+| 6–11 | Ausência convertida indevidamente em zero | Unit test nativo vermelho/verde |
+| 11–18 | SQL válido com PL agregado incorretamente | Mutação YAML, consulta real e oráculo vermelho/verde |
+| 18–22 | Totais iguais escondem regressão diária | Evidência do PR #1 e gate que bloqueou merge/promoção |
+| 22–25 | Histórico e perguntas | Satélite existente; limites da demo |
 
-Os comandos acima são roteiro proposto, não comandos já executados. A sintaxe completa de `mf query` e group-bys será congelada no ensaio com nomes reais retornados pelo catálogo. Não colocar comando impossível num README só para parecer completo.
-
-Workshop: acrescentar `dbt debug`, `deps`, `parse`, `ls`, `compile`, `run`, `test`, `build`, `source freshness`, docs, seleção `+modelo`, `state:modified+` e `--defer`. Explicar diferenças entre run/test/build. Microbatch e `--event-time-start/--event-time-end` ficam em um derivado escolhido e comprovado; não executar contra qualquer tabela incremental. Snapshots nativos podem ser explicados comparativamente, sem duplicar desnecessariamente a historização já feita no Vault.
-
-Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “como conhecido antes”; adicionar carteira não multiplica patrimônio; o agente distingue data comum de last available; ele recusa uma pergunta impossível com evidência; uma mudança só em YAML é detectada pelo CI semântico.
+Preparação/reset: `make demo-prepare` e `make demo-reset`. Ensaio automatizado: `bash demo/rehearse.sh`. Comandos individuais permanecem visíveis no roteiro; não usar o script inteiro como apresentação. Agente, carteira, microbatch e Slim CI não fazem parte desta sessão. Não prometer painel avançado da extensão VS Code.
 
 ## Critérios finais do material didático
 
@@ -154,7 +150,7 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 - Ingestão real é comando separado, não dependência de rede durante o palco.
 - Make targets e VS Code tasks têm uma única fonte de comandos, com `.venv-dbt/bin/dbt` e `.venv-mf/bin/mf` explícitos.
 - Docs mostram linhagem de modelos e colunas produzida por análise estrita; testes conferem arestas esperadas. O painel da extensão não é substituto desses artefatos.
-- Sessão ensaiada três vezes; tempo e memória medidos no laptop usado na apresentação.
+- Sequência técnica ensaiada três vezes com rede bloqueada; tempo/memória registrados. O ensaio falado de 20–25 minutos pelo apresentador é um aceite distinto e ainda necessário.
 - Fonte congelada, testes e artefatos de fallback disponíveis localmente.
 - README distingue capacidade implementada, extensão opcional e limitações conhecidas.
 
@@ -181,3 +177,15 @@ Momentos de impacto: correção tardia altera 330 para 335 mas preserva 330 “c
 Contrato e comandos: [portfolio.md](portfolio.md). Retenção de logs/artefatos do CI permanece 14 dias; disponibilidade dos ZIPs CVM upstream é uma restrição separada. Preparação local não implica publicação remota.
 
 Publicação executada em 28/10/2026: [repositório](https://github.com/danielnrocha/cvm-fund-analytics), [baseline imutável](https://github.com/danielnrocha/cvm-fund-analytics/releases/tag/baseline-v1), [CI remoto](https://github.com/danielnrocha/cvm-fund-analytics/actions/workflows/linux-ci.yml). Histórico de preparação acima permanece datado; publicação e download não estão mais pendentes.
+
+## Preparação da demo — entrega atual
+
+- [x] Spec delimitada e roteiro com os comandos reais do projeto: [live-demo.md](live-demo.md).
+- [x] Ambiente descartável a partir de baseline local verificado; perfil exclusivo e reset com identificação de propriedade.
+- [x] Testes de ciclo de vida escritos antes da implementação; negativos de negócio executados com dbt/MetricFlow reais.
+- [x] Descrições de grão, unidades, captura, ausência e semiaditividade no YAML.
+- [x] Driver de docs local fixado usado também no Makefile e no roteiro.
+- [x] Três ensaios técnicos aprovados com rede bloqueada (23,78 / 21,81 / 22,15 s), revisão adversarial sem bloqueadores e [aceite consolidado](../demo/evidence/acceptance.json). Linhagem de modelos e colunas inspecionada no navegador integrado.
+- [ ] Apresentador ensaiar a fala e navegação em 20–25 minutos, usando o notebook da sessão.
+
+Nada nesta entrega publica nova baseline, promove dev/UAT ou transforma o roadmap de AI BI/Vault completo em capacidade implementada.

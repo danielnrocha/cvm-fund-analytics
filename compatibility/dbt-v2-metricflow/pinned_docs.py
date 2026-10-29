@@ -11,7 +11,8 @@ def verify(driver,lock):
     return digest
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--prepare',action='store_true');parser.add_argument('--bootstrap',action='store_true');parser.add_argument('--verify-only',action='store_true');parser.add_argument('--driver-dir',type=Path,default=P/'drivers');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--project',type=Path,default=P);parser.add_argument('--prepare',action='store_true');parser.add_argument('--bootstrap',action='store_true');parser.add_argument('--verify-only',action='store_true');parser.add_argument('--driver-dir',type=Path,default=P/'drivers');args=parser.parse_args()
+    project=args.project.resolve()
     lock=json.loads((P/'docs-driver.lock.json').read_text())
     if platform.system()+'-'+platform.machine()!=lock['platform']:raise RuntimeError('No verified driver lock for this platform')
     dbt=str(P/'.venv-dbt/bin/dbt');env=os.environ.copy();env['DBT_SEND_ANONYMOUS_USAGE_STATS']='false'
@@ -20,8 +21,8 @@ def main():
     cache=Path.home()/'Library/Caches/com.getdbt/adbc/aarch64-apple-darwin'
     if args.bootstrap:
         # Explicit online setup only; subsequent verification must match the committed hash.
-        subprocess.run([dbt,'compile','--profiles-dir','.', '--static-analysis','strict','--generate-info-schema'],cwd=P,env=env,check=True)
-        subprocess.run([dbt,'docs','generate','--profiles-dir','.', '--no-compile'],cwd=P,env=env,check=True)
+        subprocess.run([dbt,'compile','--profiles-dir','.', '--static-analysis','strict','--generate-info-schema'],cwd=project,env=env,check=True)
+        subprocess.run([dbt,'docs','generate','--profiles-dir','.', '--no-compile'],cwd=project,env=env,check=True)
     dest=args.driver_dir.resolve();driver=dest/lock['filename']
     if args.prepare or args.bootstrap:
         source=cache/lock['filename'];verify(source,lock)
@@ -33,6 +34,6 @@ def main():
     sandbox=P/'docs-driver-isolated.sb'
     sandbox.write_text('(version 1)\n(allow default)\n(deny network*)\n(deny file-read* (subpath '+json.dumps(str(cache.parent))+'))\n')
     env['ADBC_DRIVER_PATH']=str(dest)
-    subprocess.run(['/usr/bin/sandbox-exec','-f',str(sandbox),dbt,'docs','generate','--no-compile','--profiles-dir','.'],cwd=P,env=env,check=True)
+    subprocess.run(['/usr/bin/sandbox-exec','-f',str(sandbox),dbt,'docs','generate','--no-compile','--profiles-dir','.'],cwd=project,env=env,check=True)
     print(json.dumps({'driver':str(driver),'sha256':digest,'network_and_global_cache_blocked':True}))
 if __name__=='__main__':main()

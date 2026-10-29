@@ -1,9 +1,11 @@
 version: 2
 sources:
   - name: cvm_landing
+    description: Immutable source bytes are preserved separately; these physical tables transport derived JSON envelopes and capture metadata.
     schema: landing
     tables:
       - name: raw_envelopes
+        description: One derived envelope per selected source record, with file hash and row provenance.
       - name: captures
       - name: registry_cohort
       - name: report_calendar

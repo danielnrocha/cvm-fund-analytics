@@ -86,6 +86,30 @@
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "CVM: prepare disposable live demo",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "demo-prepare"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: reset disposable live demo (discards demo edits)",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "demo-reset"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
