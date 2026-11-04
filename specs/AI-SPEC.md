@@ -1,5 +1,7 @@
 # CVM analytics agent — design contract
 
+> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
+
 Date: **2026-11-04**. Status: **implementation authorized and in progress; actual model acceptance pending**. Scope: a single-user, local, read-only analytics assistant over the published CVM vertical. Recommendation and alternatives: [stack research](ai-agent-research.md). Evaluation contract: [agent evals](ai-agent-evals.md). Business authority: [metric contracts](metrics.md) and the published semantic manifest, never the LLM's memory.
 
 ## Decision and explicit exclusions

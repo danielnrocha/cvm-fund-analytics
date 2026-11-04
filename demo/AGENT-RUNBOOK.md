@@ -8,7 +8,7 @@ Start with the business question: **“What was the reported net worth at the en
 
 Explain the difference before showing a result: PL is a stock at a common closing date, whereas net flow is accumulated over an interval. A language model must not choose new financial formulas or sum monthly balances. The fixed cohort contains 60 reporting classes; it is not the whole Brazilian fund industry.
 
-The local model proposes a structured intent. Trusted Python validates the metric names, dates, grain and filters. MetricFlow owns the financial computation. The immutable approved DuckDB snapshot owns the data. The deterministic renderer owns the displayed numbers, coverage and provenance. No paid API, Wizard trial or local Docker is part of this runtime.
+The local model proposes a structured intent. Trusted Python validates the metric names, dates, grain and filters. MetricFlow owns the financial computation. The immutable approved DuckDB snapshot owns the data. The deterministic renderer owns the displayed numbers, coverage and provenance. No API-key billing, Wizard trial, local model or local Docker is part of this runtime. Codex uses the presenter’s existing subscription/credits and requires network access.
 
 ## What to open in VS Code
 

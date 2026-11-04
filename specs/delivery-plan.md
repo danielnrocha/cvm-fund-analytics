@@ -1,5 +1,7 @@
 # Plano de entregas e demonstração
 
+> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
+
 > Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A primeira vertical mínima está implementada; a pipeline completa permanece pendente. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
 **Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. Após o ensaio da demo, a prioridade passa ao **design do agente**, antes de implementar: [AI-SPEC](AI-SPEC.md), [pesquisa da stack](ai-agent-research.md) e [evals delimitados](ai-agent-evals.md). Vault completo, carteira, retornos e implementação do agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente. Compare foi retirado do escopo da demo por decisão do usuário.

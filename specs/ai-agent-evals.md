@@ -1,5 +1,7 @@
 # Agent evaluation and adversarial acceptance contract
 
+> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
+
 ## Pre-model qualification
 
 [W01–W12](wizard-agent-spike.md) form a separate deterministic integration gate after the repository refactor. They use Pydantic AI controlled outputs and real MetricFlow queries; their results must not count toward the 120-prompt/360-trial model-quality denominators below. No weights or real analytics-model requests are needed. Cases for security and business policy remain relevant to the later full suite. The technical W-cases remain required; Wizard access is no longer a prerequisite (2026-11-04). Results will be recorded separately from model-quality trials.
