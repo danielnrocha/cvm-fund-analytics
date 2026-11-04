@@ -1,10 +1,10 @@
 # Plano de entregas e demonstração
 
-> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
+The experimental single-user CLI and restricted gateway are implemented. Codex subscription OAuth supplies experimental inference. Deterministic delivery and natural-language acceptance have separate evidence and gates. See [the agent plan](local-agent-implementation-plan.md).
 
 > Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A primeira vertical mínima está implementada; a pipeline completa permanece pendente. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
-**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. Após o ensaio da demo, a prioridade passa ao **design do agente**, antes de implementar: [AI-SPEC](AI-SPEC.md), [pesquisa da stack](ai-agent-research.md) e [evals delimitados](ai-agent-evals.md). Vault completo, carteira, retornos e implementação do agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente. Compare foi retirado do escopo da demo por decisão do usuário.
+**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. O gateway determinístico e o planejador experimental estão implementados. O [contrato](AI-SPEC.md) e os [evals](ai-agent-evals.md) definem os gates restantes. Vault completo, carteira, retornos e aceite do planejador continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente. Compare foi retirado do escopo da demo por decisão do usuário.
 
 **Objetivo:** pipeline local de fundos CVM com histórico verificável, métricas governadas e interface segura para AI BI.
 
@@ -41,7 +41,7 @@ Não criar um framework de configuração novo. SQL+YAML dbt, `uv.lock`, manifes
 - [ ] Na entrega de CI: obter locks de driver por plataforma e hashes dos pacotes Python; validar bootstrap Linux em runner limpo.
 - [x] CVM direta escolhida pelo usuário; recorte definido por profiling real: 60 classes, abril–setembro/2026. [Resultado](cvm-profiling.md).
 
-O resultado específico de VS Code/LSP e a evidência da linhagem constam de [compatibility-extended.md](compatibility-extended.md). A baseline de apresentação usa tarefas VS Code e documentação estática local; recursos avançados da extensão só entram no roteiro com evidência de funcionamento. Wizard continua opcional.
+O resultado específico de VS Code/LSP e a evidência da linhagem constam de [compatibility-extended.md](compatibility-extended.md). A baseline de apresentação usa tarefas VS Code e documentação estática local. Recursos avançados da extensão só entram no roteiro com evidência de funcionamento. Wizard fica fora da configuração do agente.
 
 Aceite: testes reproduzíveis com dois ambientes isolados e um banco local, sem rebuild Core para gerar o manifesto. Não exigir instalação conjunta nem confundir preparação com internet e execução offline. Gates técnicos e profiling concluídos; a entrega atual é preparar e ensaiar a apresentação da vertical implementada.
 
@@ -108,19 +108,19 @@ Aceite: métricas apresentam população, competência e cobertura; carteira par
 - [x] Definir 40 cenários de avaliação, split por família, precisão, ataques e critérios de aceite.
 - [ ] Revisão do design pelo usuário e revisão adversarial independente; recomendação ainda não homologada.
 
-Recomendação: Python 3.12 + Pydantic AI slim + Ollama local + Qwen3.5 4B Q4_K_M; 9B como challenger. Sem API paga obrigatória, Docker local ou SQL livre. **Pesquisa não equivale a benchmark:** nenhum modelo baixado, nenhuma inferência/API paga executada, nenhum agente implementado.
+A pesquisa histórica avaliou modelos locais. A decisão atual usa Python 3.12, Pydantic AI slim, OAuth da assinatura Codex e MetricFlow local. Consultas usam intents tipadas e o runtime local dispensa Docker.
 
 ### 5B — sequência proposta após o design
 
-**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`; [CI pós-merge aprovado](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918), com oráculos preservados, zero diferenças semânticas e regressão deliberada bloqueada. A próxima entrega segue o [plano local gratuito](local-agent-implementation-plan.md), sem trial Wizard.
+**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`. O CI preservou os oráculos, registrou zero diferenças semânticas e bloqueou a regressão deliberada. [CI pós-merge](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918). A próxima entrega segue o [plano do agente local](local-agent-implementation-plan.md), sem trial Wizard.
 
-**Execution decision (2026-11-04):** Wizard trials are excluded. Follow [the local implementation plan](local-agent-implementation-plan.md), using Codex for implementation and Pydantic AI/Ollama/MetricFlow at runtime.
+**Execution decision (2026-11-04):** Wizard trials are excluded. Follow [the local implementation plan](local-agent-implementation-plan.md), using application-owned Codex OAuth through Pydantic AI and a local MetricFlow gateway.
 
 | Step | Deliverable | Gate |
 |---|---|---|
 | 1 | Typed contracts and immutable MetricFlow gateway | Deterministic tests, exact oracles, read-only snapshot and provenance |
 | 2 | Structured local planner and evaluation harness | Function-model tests, bounded policies, no paid fallback |
-| 3 | Actual model benchmark and demo | Frozen evaluation set, actual model digest and accuracy/latency evidence |
+| 3 | Actual model benchmark and demo | Frozen evaluation set, available provider identity and accuracy/latency evidence |
 | 4 | Independent review and release | Remote CI/semantic gate, merge, post-merge validation and local acceptance |
 
 Dependencies and model installation are authorized, subject to available disk/memory. Per-PR CI remains deterministic and does not download weights. Mocked results never count as model quality. Natural-language production readiness requires the acceptance contract.
@@ -225,4 +225,6 @@ Refatoração implementada: modelos por responsabilidade, lint/format nativos, c
 
 ## Local agent execution — 2026-11-04
 
-User authorized [the implementation plan](local-agent-implementation-plan.md) through local production and demo. Wizard trials are excluded. Local Pydantic AI/Ollama/MetricFlow replaces the historical Wizard access gate. Dependency/model installation is authorized, subject to available machine resources. No Docker locally; CI stays on GitHub Actions. Deterministic and actual-model acceptance must remain distinct; an unmeasured model is not production-ready.
+The [implementation plan](local-agent-implementation-plan.md) targets a single-user local CLI. The deterministic plan-file demo uses the sealed baseline and no provider session. GitHub Actions uses a third hash-locked environment for offline agent tests against the sealed candidate while preserving the semantic baseline comparison and mutation gate. The [demo runbook](../demo/AGENT-RUNBOOK.md) covers setup, repeatable rehearsal and experimental subscription-backed questions.
+
+Natural-language acceptance requires reviewed live evaluations and operational evidence. Hidden-value end-to-end cases and multi-turn follow-ups remain open. See [the agent evaluation gates](ai-agent-evals.md).

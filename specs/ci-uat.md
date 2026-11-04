@@ -37,9 +37,11 @@ O comando `compare` retorna status não zero para divergência e preserva o rela
 
 ## CI executável
 
-`ci/Dockerfile` fixa a imagem-base por digest e instala os dois locks Python separadamente. O workflow `.github/workflows/linux-ci.yml` usa Linux ARM64 (`ubuntu-24.04-arm`), com actions fixadas por SHA. Bootstrap online instala dependências, prepara driver Linux e adquire os bytes CVM fixados. Cache é uma otimização: todo arquivo restaurado é validado por tamanho e SHA-256; drift na origem falha sem atualizar `sources.json`.
+`ci/Dockerfile` fixa a imagem-base por digest e instala dbt, MetricFlow e agente em três ambientes Python isolados. O workflow `.github/workflows/linux-ci.yml` usa Linux ARM64 (`ubuntu-24.04-arm`), com actions fixadas por SHA. Bootstrap online instala dependências, prepara driver Linux e adquire os bytes CVM fixados. O workflow valida o tamanho e o SHA-256 de todo arquivo restaurado do cache. Uma divergência na origem falha sem atualizar `sources.json`.
 
 O processo de aceite roda em `docker run --network none`, com os arquivos fonte montados read-only. Executa testes Python, build dbt completo/estrito, oráculos reais, MetricFlow, driver de docs, linhagem de colunas, comparação semântica, promoção/rollback isolados, mutação semiaditiva, replay e rejeições de dados. Relatórios do gate e saídas da comparação ficam fora dos bundles; logs do build e validation.json integram o bundle selado. Workspaces são exclusivos por release.
+
+A suíte do agente usa lock com hashes e testa o candidato selado com MetricFlow real e transporte do modelo simulado. Qualquer teste pulado falha o gate. A etapa grava `tests-agent.log` e roda sem credenciais, inferência ou pesos de modelos.
 
 O CI não publica nos ambientes locais de Daniel. Seus ponteiros são descartáveis e demonstram a política. O artefato `cvm-release` contém evidências e bundles; aprovação e promoção reais usam o CLI no release root escolhido.
 
@@ -58,7 +60,7 @@ Runners padrão em repositório público não exigem serviços dbt pagos; limite
 - O proprietário do filesystem, o código de validação e a escolha humana do baseline são confiáveis. Hashes não são assinatura, ACL ou aprovação protegida.
 - Um autor com poder de mudar o próprio workflow pode alterar os gates: branch protection/review humano continuam necessários para governança real. A proteção remota está registrada na [política de main](main-protection.md); ela não protege contra alteração deliberada pelo próprio administrador.
 - Não reivindicamos validação amd64: a emulação local falhou ao importar DuckDB Python com SIGILL. O alvo previsto deste incremento é Linux ARM64.
-- Locks Python fixam versões; ainda não fixam hashes de todas as distribuições. Driver e imagem-base têm hashes próprios.
+- Os locks de dbt e MetricFlow fixam versões. O lock do agente também fixa hashes das distribuições. Driver e imagem-base têm hashes próprios.
 - Comparação cobre o conjunto explícito de métricas/grãos, não todas as perguntas possíveis de BI. Fonte externa nova e mudança intencional de métrica exigem novo aceite.
 - CI sempre faz full build. Slim CI e lint de formatação SQL são melhorias futuras; parsing/análise estrita e testes de negócio são obrigatórios.
 

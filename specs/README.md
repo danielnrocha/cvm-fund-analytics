@@ -8,10 +8,10 @@ Data da pesquisa: **28 de outubro de 2026**. Estado: **vertical real de PL/fluxo
 2. [Design proposto](design-proposal.md): requisitos, arquitetura, grãos, métricas, ambientes e decisões.
 3. [Plano por entregas](delivery-plan.md): sequência, critérios de aceitação, revisão adversarial e roteiro da demo.
 4. [Avaliação de AI BI](ai-bi-evals.md): casos, oráculos, invariantes e critérios de aprovação.
-5. [Prompt revisado](revised-agent-prompt.md): instruções portáveis para o futuro agente implementador, incluindo Wizard opcional.
-6. [Contrato do agente local](AI-SPEC.md): arquitetura proposta, capacidades, ferramentas restritas, guardrails e critérios de aceite; implementação ainda não iniciada.
-7. [Pesquisa de modelos e frameworks](ai-agent-research.md): M4 Pro/24 GB, custos, alternativas locais/remotas e recomendação provisória de Pydantic AI + Ollama + Qwen3.5 4B.
-8. [Evals do primeiro agente](ai-agent-evals.md): 40 cenários, split por família, oráculos, ataques e gates; sem resultados de LLM medidos.
+5. [Prompt revisado](revised-agent-prompt.md): instruções portáveis para o futuro agente implementador, com a decisão atual de OAuth da assinatura Codex.
+6. [Contrato do agente local](AI-SPEC.md): gateway implementado, planejador experimental e critérios de aceite.
+7. [Pesquisa de modelos e frameworks](ai-agent-research.md): histórico de alternativas locais e remotas anterior à decisão de OAuth.
+8. [Evals do primeiro agente](ai-agent-evals.md): 40 cenários, split por família, oráculos, ataques e separação entre evidência determinística e aceite do modelo.
 
 Stack aprovada pelo usuário: **dbt v2 + DuckDB + MetricFlow local**, apoiada na [prova de compatibilidade executável](compatibility.md). O requisito é não depender de serviços pagos; licença Apache 2.0 integral não é obrigatória. O domínio CVM, o recorte e os contratos foram definidos no profiling abaixo. [Validação complementar de VS Code, linhagem e JSON](compatibility-extended.md).
 
@@ -49,8 +49,8 @@ A [publicação atômica local](snapshot-publication.md) implementa bundles veri
 
 [GitHub Actions remoto, desenvolvimento sem Docker e baseline durável](portfolio.md). Repositório público e baseline imutável publicados; CI remoto ativado. Consultar o runbook para os resultados e a correção identificada no primeiro run.
 
-[Próximo passo do agente: qualificação Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md): escopo sem modelos, critérios W01–W12 e prompt do implementador; execução e acesso autenticado ainda pendentes.
+[Pesquisa histórica Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md): critérios técnicos W01–W12 preservados. A configuração atual usa OAuth da assinatura Codex.
 
 ## Local agent — current decision, 2026-11-04
 
-[Implementation plan](local-agent-implementation-plan.md): permanent free local operation, no Wizard trial, no paid API and no local Docker. Implementation is authorized; deterministic tests and actual-model acceptance are separate gates. This supersedes earlier Wizard qualification prerequisites.
+[Implementation plan](local-agent-implementation-plan.md): single-user local CLI, deterministic offline operation and experimental inference through an existing Codex subscription via application-owned OAuth. See the [demo runbook](../demo/AGENT-RUNBOOK.md) for operational commands and the remaining gates.

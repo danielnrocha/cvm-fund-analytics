@@ -159,7 +159,7 @@ Top10 é contexto-dependente: não somar nem tirar média indiscriminada entre f
 
 ## Interface de AI BI
 
-**Atualização de design, 28/10/2026:** a primeira interface será delimitada por [AI-SPEC.md](AI-SPEC.md), com [pesquisa de stack](ai-agent-research.md) e [evals específicos](ai-agent-evals.md). Planejamento estruturado por modelo local, execução restrita pelo MetricFlow e apresentação determinística. Isso especializa a proposta genérica abaixo; narrativa livre, agente autônomo e gráficos gerados por código não fazem parte da primeira entrega. Implementação e benchmarks permanecem pendentes.
+**Atualização de design, 28/10/2026:** a primeira interface será delimitada por [AI-SPEC.md](AI-SPEC.md), com [pesquisa de stack](ai-agent-research.md) e [evals específicos](ai-agent-evals.md). Planejamento estruturado experimental via OAuth da assinatura Codex, execução restrita pelo MetricFlow local e apresentação determinística. A primeira entrega usa apresentação determinística em terminal. Gateway e planejador experimental implementados. O aceite de linguagem natural permanece pendente.
 
 Fluxo: pergunta → intenção estruturada → validação contra catálogo → plano semântico → SQL compilado → execução read-only → resultado com evidências → gráfico/narrativa.
 
@@ -197,7 +197,7 @@ Freshness tem dois indicadores: tempo desde a captura bem-sucedida e completude 
 | 006 | Full fixture CI obrigatório; Slim CI complementar | Correção não depende de artefatos remotos disponíveis |
 | 007 | MetricFlow local + interface restrita | Sem endpoint hospedado; pequena integração própria |
 | 008 | Snapshot fixo no palco | Reprodutibilidade; ingestão atual é comando separado |
-| 009 | Wizard opcional | Sem bloqueio por trial, conta ou créditos |
+| 009 | Wizard excluído | Agente usa OAuth próprio com assinatura Codex na inferência |
 | 010 | Packages adicionados por necessidade | Começar com dbt_utils; evaluator/audit_helper após prova; demais opcionais |
 
 ## Gates que impedem uma promessa falsa

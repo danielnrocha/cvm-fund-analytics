@@ -1,35 +1,31 @@
 # CVM analytics agent — design contract
 
-> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
-
-Date: **2026-11-04**. Status: **implementation authorized and in progress; actual model acceptance pending**. Scope: a single-user, local, read-only analytics assistant over the published CVM vertical. Recommendation and alternatives: [stack research](ai-agent-research.md). Evaluation contract: [agent evals](ai-agent-evals.md). Business authority: [metric contracts](metrics.md) and the published semantic manifest, never the LLM's memory.
+As of **2026-11-04**, the deterministic gateway and experimental planner are implemented. Natural-language acceptance remains pending. The CLI serves one local user with read-only access to the published CVM vertical. [Agent evals](ai-agent-evals.md) define acceptance. The [metric contracts](metrics.md) and published semantic manifest define business behavior.
 
 ## Decision and explicit exclusions
 
-Use Python 3.12, Pydantic AI slim, local Ollama and Qwen3.5 4B Q4_K_M as the first candidate. Compare 9B only after measuring the 4B candidate. The recommendation is provisional until quality and performance gates pass. No mandatory paid API, hosted telemetry, Docker on the Mac, vector store, RAG pipeline, multi-agent orchestration, SQL-generation fallback or model-driven code execution.
+The runtime uses Python 3.12, Pydantic AI slim, and local MetricFlow. The experimental planner uses the native Pydantic AI Codex provider with application-owned OAuth and no tool registrations. Model choice is provisional until the quality and operational gates pass.
 
-The first release supports facts about reported PL, net flow and reporting coverage for the fixed 60-class April–September 2026 cohort. It does not support returns, investor counts, holdings, consolidated economic wealth, current market estimates, historical managers, latest-available-per-class PL, or time travel through past captures. Those appear in older roadmap evals; they are **unsupported requests** for this release.
+The first scope covers reported PL, net flow and reporting coverage for the fixed 60-class April–September 2026 cohort. Returns, investor counts, holdings, consolidated economic wealth, current market estimates, historical managers, latest-available-per-class PL and time travel through past captures are unsupported.
 
-The dbt extension remains the development/demo interface for dbt. The agent is a separate program runnable in the VS Code terminal; do not present it as a feature of the official extension or dbt Wizard. Compare stays out of the live demo by user decision.
+The official dbt extension remains the dbt development interface. The agent is a separate VS Code terminal program. Compare stays out of the live demo by user decision.
 
-### Permanent free operation
+### Subscription-backed inference
 
-User decision, **2026-11-04**: do not use a dbt Wizard trial. Wizard is removed from implementation and runtime prerequisites. Codex performs the implementation; the deliverable runs independently through Pydantic AI, local Ollama and MetricFlow, without accounts, expiring credits, paid APIs or hosted telemetry. The official dbt extension remains the dbt development interface. Local inference consumes disk, RAM and electricity; permanent free operation means no mandatory service subscription, not zero hardware cost. Historical Wizard research is retained as superseded evidence.
-
-Implementation, dependency installation and model download are authorized. Do not activate billing. Production scope is a single-user local application, not a public web service. Model acceptance remains an explicit gate and cannot be inferred from deterministic tests.
+The user chose existing Codex subscription/credits via OAuth on 2026-11-04. Inference depends on subscription access, quota and network availability. The deterministic path runs without provider access. Application OAuth is separate from Codex CLI credentials and stays on the local machine. CI exercises controlled outputs and mocked HTTPS transport with no credentials. Wizard trials, API-key billing, local model downloads, local Docker and hosted telemetry are outside the authorized setup. The deployment scope is one trusted local user.
 
 ## Reconciliation with the refactored main
 
 Reviewed against main `c884ebc` (PR #3), whose [post-merge CI](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918) passed. Fact/semantic source files now live under `transform/models/marts/`; shared native fixtures under `transform/models/intermediate/`; ingestion metadata under `transform/models/staging/cvm/`. Model IDs, grain and PL/flow contracts did not change. Published bundles may retain old paths; inspect their manifests by identity and never combine current source YAML with a different published database.
 
-Execute the [local implementation plan](local-agent-implementation-plan.md): deterministic contracts and real MetricFlow first, then a local planner and measured model acceptance. The W01–W12 technical boundary cases remain relevant; Wizard access is no longer a gate. `dbt.dbtPath` is a VS Code User/Machine setting, not a valid workspace pin; follow CONTRIBUTING. Keep all three Python environments isolated.
+The [local implementation plan](local-agent-implementation-plan.md) stages deterministic MetricFlow checks before model acceptance. The W01–W12 technical boundary cases remain relevant. Keep the three Python environments isolated and configure `dbt.dbtPath` in VS Code User or Machine settings as documented in CONTRIBUTING.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    U[Question and bounded conversation state] --> C[Trusted catalog and pinned release]
-    C --> P[Local LLM: structured decision]
+    U[Single question] --> C[Trusted catalog and pinned release]
+    C --> P[Codex OAuth: structured decision]
     P --> V[Schema and business policy validation]
     V -->|query| G[Restricted MetricFlow worker]
     G --> D[(Published DuckDB snapshot, read only)]
@@ -38,7 +34,7 @@ flowchart LR
     V -->|clarify or unsupported| T
 ```
 
-This is a bounded agentic workflow, not an open-ended tool loop. The model maps language to an intent; trusted code decides whether and how to execute it. A normal answer needs one LLM request, at most one validation-repair request, then at most two MetricFlow invocations (explain and query). If query execution fails, do not ask the LLM to invent a replacement calculation.
+The model maps language to an intent. Trusted code decides whether and how to execute it. A normal answer needs one model request, at most one validation-repair request, then bounded MetricFlow work to execute the approved intent and verify its SQL. If query execution fails, do not ask the LLM to invent a replacement calculation.
 
 The initial renderer is deterministic. It inserts values, units, dates and coverage from a validated result and selects approved explanatory templates. No second free-text LLM call is required. This sacrifices unrestricted prose to keep numbers and claims grounded. Later narrative generation requires its own grounded-claim evals; adding a nicer chat UI does not require changing this boundary.
 
@@ -55,7 +51,7 @@ Public metrics:
 
 Supporting counts are automatically queried by the gateway: `reporting_entities_eop`, `expected_entities_eop`, `reporting_observations`, `expected_observations`. They supply coverage denominators, not unique-person counts.
 
-Supported grains: total interval, month, day. Dimensions: reporting class and `classification_at_capture`, plus metric time. The catalog must enumerate valid combinations from the pinned manifest/MetricFlow capabilities. Do not assume every Cartesian combination is valid. No arbitrary joins, custom measures, arbitrary aggregation functions, user formulas, metric-value filters or free-text SQL.
+Supported grains: total interval, month, day. Reporting class is the supported non-time grouping. Captured classification is a filter. Classification grouping and multi-dimension groupings remain outside the implemented scope. The catalog must enumerate valid combinations from the pinned manifest/MetricFlow capabilities. Do not assume every Cartesian combination is valid. No arbitrary joins, custom measures, arbitrary aggregation functions, user formulas, metric-value filters or free-text SQL.
 
 Filters: equality or membership on approved class IDs and captured classifications; conjunction only. IDs and values must exist in the frozen cohort. Model-visible names are aliases mapped server-side to exact semantic identifiers. Class names are not currently a supported identifier lookup service. Unknown/ambiguous entities require clarification. Time bounds are validated ISO dates, inclusive as in the installed `mf query` CLI.
 
@@ -97,7 +93,7 @@ No numeric result is generated by the planner. The validator injects both corres
 3. Flow is reported flow. April, May and August have known gaps. PL closing coverage and flow interval coverage are separate statuses; a response can have complete PL and partial flow.
 4. Coverage is a ratio of totals. Query supporting counts under exactly the same population/date filters. Zero denominator means undefined, not 0% or 100%.
 5. “Complete” means complete against the frozen reporting calendar, not auditor certification, freshness, absence of cross-investments or a market census.
-6. No period supplied: ask for a period, unless the immediately preceding accepted query explicitly supplies it. Display any inherited period/population. Resolve relative dates against the supplied clock in `America/Sao_Paulo`, not the snapshot maximum.
+6. No period supplied: ask for a period. Each invocation starts with no inherited dates or filters. Resolve relative dates against the supplied clock in `America/Sao_Paulo`, not the snapshot maximum.
 7. Out-of-snapshot or partly out-of-snapshot ranges receive an explicit unsupported-range response and an available-range alternative. Do not silently clip dates or redefine “last month” as “latest available month”.
 8. End-of-period PL on a non-reporting day uses the contracted reporting calendar within the range and displays the effective date. A range with no expected reporting days returns `no_expected_observations`.
 9. “How much did they capture?” is ambiguous between gross subscriptions and net flow. Clarify; only net flow is published. “Performance”, “best fund”, or an unspecified “average” also requires clarification or an unavailable-capability answer.
@@ -107,7 +103,7 @@ No numeric result is generated by the planner. The validator injects both corres
 
 Logical operations: `get_catalog()`, `describe_metric(id)`, `query_metrics(intent)` and `explain_query(query_id)`. These are project interfaces, not claims about official dbt MCP tools. The initial planner receives the small catalog directly; the host dispatches the validated query. `explain_query` retrieves the exact recorded SQL for an existing query, not arbitrary SQL supplied by the model.
 
-Resolve the configured UAT pointer **once at session start** with the existing publication verification logic. Pin its immutable bundle, database, semantic manifest, code and hashes for all turns. Display release ID and date range. A refresh starts a new session explicitly; an in-flight promotion cannot change the answer's data mid-turn. Do not serve the mutable rehearsal database or current unreviewed source YAML with a published database.
+Resolve the configured UAT pointer **once at session start** with the existing publication verification logic. Pin its immutable bundle, database, semantic manifest, code and hashes for the invocation. Display release ID and date range. A refresh starts a new session explicitly. An in-flight promotion cannot change the pinned data. Do not serve the mutable rehearsal database or current unreviewed source YAML with a published database.
 
 Use the existing `release.uat.collect()` isolation pattern: worker-only temporary project/artifacts, immutable database opened `READ_ONLY`, and fixed MetricFlow executable from `.venv-mf`. Adapt it rather than importing all agent dependencies into the data environment. Hash validation and bundle identity must be part of startup, not a model assertion. Database file permissions alone are insufficient against the owning OS user; the local owner and approved code/bundles are trusted.
 
@@ -134,22 +130,22 @@ Failures return a typed code (`invalid_plan`, `unsupported_capability`, `outside
 | Host → MetricFlow | Fixed executable/cwd/profile, typed filters, no shell | Quotes, Jinja, shell substitution, option/path injection |
 | MetricFlow → DuckDB | Read-only published snapshot; no build/run/mutations | Attempt write and verify snapshot hashes unchanged |
 | DuckDB → OS/network | Disable external file/network access and extension auto-install/load where compatible; no untrusted SQL or bundles | File-read/remote URL attempt rejected; compatibility gate proves normal queries still work |
-| Runtime → providers | Loopback endpoint, approved local model digest, cloud disabled, no automatic fallback | Missing local model fails without a remote request |
+| Runtime → providers | Fixed Codex HTTPS endpoints, private OAuth, no redirects, proxies or automatic fallback | Missing credentials fail closed. Mocked transport checks endpoint and tool restrictions |
 | Result → answer | Deterministic rendering, required coverage/provenance, no raw HTML | Injected fund/category label never becomes an instruction or executable markup |
 
 DuckDB read-only mode protects database writes, not all file/network operations. Hardening must be applied to the actual worker connections and tested. The trusted local single-user baseline is not a sandbox for hostile arbitrary code or other OS users. Public or multi-user deployment requires a new isolation/authentication design.
 
-Initial limits (server-owned): question <=4,000 characters; context <=8,192 tokens; at most 2 LLM requests and 512 output tokens per plan; one active question; up to 3 public metrics, 2 non-time dimensions, 4 filters with <=20 values each; <=500 result rows. Estimate cardinality from cohort/calendar before querying and also request/check 501 rows to detect overflow. Reject over-limit results rather than silently showing a truncated financial total. No all-dimensions cube or autonomous repeated drill-down.
+The host accepts questions up to 4,096 UTF-8 bytes and makes at most two inference requests per turn. Per request, the client caps the wire response at 512 KiB and accepts up to 8 KiB of structured output and 2,048 reported output tokens, including reported reasoning. Each query supports up to three public metrics, one supported non-time grouping, four filters with up to 20 values each, and 500 result rows. Estimate cardinality from cohort/calendar before querying and also request/check 501 rows to detect overflow. Reject over-limit results rather than silently showing a truncated financial total. No all-dimensions cube or autonomous repeated drill-down.
 
 Worker budget: 30 seconds per invocation, 60 seconds end-to-end hard deadline, bounded stdout/stderr/result files (2 MiB each), isolated temp/spill directory, DuckDB target memory budget 2 GiB and threads 2, subject to compatibility probe. Termination must kill/reap descendants, not leave an orphan query. Memory settings alone are not a hard OS memory cap. Clean only directories created and owned by that request.
 
 Operational SLO: warm p95 <=15 seconds, cold p95 <=30 seconds. Request deadline and SLO are different: an answer at 40 seconds may respect the hard deadline but fail demo readiness. Use bounded local caches only if keyed by release+manifest+policy+canonical intent; do not mix releases or treat cached traces as live model evaluation.
 
-No required tracing backend. Record local structured traces with decision, validation outcome, query ID, timings, versions and hashes; omit hidden chain-of-thought, credentials and unnecessary question text. Eval prompts are public synthetic data; interactive raw questions are not committed. Remote inference is an explicitly configured future opt-in with minimal catalog/question payload, provider policy review and spend cap.
+No required tracing backend. Record local structured traces with decision, validation outcome, query ID, timings, versions and hashes. Omit hidden chain-of-thought, credentials and unnecessary question text. The eval prompts are public synthetic data. Keep raw interactive questions out of Git. OAuth inference sends the question and approved catalog. Client output limits do not cap server-side consumption.
 
 ## Presentation and interaction
 
-MVP UI: VS Code terminal showing the interpreted plan, validated answer table, coverage and provenance, with the SQL artifact available to inspect. Maintain at most the last accepted structured intent and one pending clarification; no unbounded transcript. Follow-up “and by month?” changes grain while preserving displayed filters and dates. A new explicit question cannot inherit hidden filters.
+MVP UI: VS Code terminal showing the interpreted plan, validated answer table, coverage and provenance, with the SQL artifact available to inspect. Every invocation is single-turn. Ask a full question with any period and filters. A19-style follow-ups and pending clarification state remain outside the implemented scope and still require qualification before multi-turn support.
 
 Optional chart milestone: deterministic line/bar charts from the same validated table, separate panels for stock and flow, units and partial-period warnings visible, nulls displayed as gaps. No generated Python/JavaScript and no summing chart buckets into stock totals. Chart capability stays off until its tests pass.
 
@@ -157,15 +153,15 @@ Optional chart milestone: deterministic line/bar charts from the same validated 
 
 The [eval contract](ai-agent-evals.md) is normative for this vertical. All deterministic safety/business tests must pass; no critical agent case may fail in three repetitions. Overall held-out action+intent correctness >=95%, but refusals on supported questions cannot inflate the score. Numeric outputs must match independent oracles at their prescribed precision, not merely match another LLM.
 
-Implement in this order: a deterministic Pydantic AI/MetricFlow boundary without a real model; deterministic gateway with TDD; explicitly authorized local-model compatibility/benchmark; bounded planner; full evals and independent adversarial review; presentation UI/optional charts. CI remains GitHub Actions with Docker on the remote runner only. Per-PR deterministic tests require no LLM downloads; actual model acceptance is a separately recorded run tied to exact revisions, artifacts and hardware. Do not present mocked responses as model quality evidence.
+The deterministic gateway and bounded OAuth planner precede full evaluation and independent adversarial review. Optional charts have a separate capability gate. CI remains GitHub Actions with Docker on the remote runner only. Per-PR deterministic tests run without network and exercise the sealed candidate through real MetricFlow. Actual model acceptance is a separately recorded run tied to observed provider metadata, exact application and data revisions, and the client environment. Do not present mocked responses as model quality evidence.
 
 The user explicitly authorized implementation through local production on 2026-11-04. Missing benchmark or independent review still means natural-language functionality is **unaccepted**, not production-ready.
 
 ## Implementation checkpoint — 2026-11-04
 
-Gateway commit `7d575cb` implements typed intents, immutable bundle verification, coverage injection, read-only constrained MetricFlow execution, Decimal results, actual SQL/explain binding and deterministic rendering. Its 32 checks passed against both the frozen baseline and the post-refactor UAT snapshot. Independent review is pending at this checkpoint; no model-quality acceptance follows from these tests.
+Gateway commit `7d575cb` implements typed intents, immutable bundle verification, coverage injection, read-only constrained MetricFlow execution, Decimal results, actual SQL/explain binding and deterministic rendering. Its 32 checks passed against both the frozen baseline and the post-refactor UAT snapshot. This was the gateway checkpoint. The experimental planner and subsequent review corrections are recorded in the [implementation report](../reviews/agent-planner-implementation.md).
 
-Current capability boundary is narrower than the target catalog above: reporting-class grouping and captured-classification filters are supported; classification grouping, multiple non-time dimensions and charts fail closed pending independent goldens. Historical bundles lacking a source Git revision report it as null and retain verified source fingerprints; the gateway implementation has a separate code hash. Owner configuration may explicitly select a verified durable baseline ID; model intents cannot select releases. The standard publication mode resolves UAT once.
+The gateway rejects classification grouping, multiple non-time dimensions and charts pending independent goldens. Historical bundles lacking a source Git revision report it as null and retain verified source fingerprints. The gateway implementation has a separate code hash. The owner can explicitly select a verified durable baseline ID in the CLI configuration. The standard publication mode resolves UAT once.
 
 The installed MetricFlow CLI's automatic update check is suppressed in its fixed local worker entrypoint. Python socket events are denied, and actual DuckDB connections disable external access and extension auto-loading/install. This is not an OS sandbox against the trusted local owner or arbitrary modified native code.
 

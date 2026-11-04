@@ -1,6 +1,6 @@
 # Local analytics agent: stack decision research
 
-> **Current decision — 2026-11-04:** no local model. The user chose existing Codex subscription/credits via OAuth, without API-key billing. Earlier Ollama/Qwen requirements below are superseded. Runtime integration is being qualified; it must preserve the gateway boundary and must not read/copy shared OAuth tokens. This depends on a subscription, quota and network, so it is not permanently free standalone inference. No credentials enter public CI.
+> **Historical research.** The active [design contract](AI-SPEC.md) and [demo runbook](../demo/AGENT-RUNBOOK.md) use application-owned Codex subscription OAuth and a local MetricFlow gateway. The local-model and Wizard proposals below describe prior alternatives.
 
 Research date: **2026-10-28**. Status: recommendation, not an executed model benchmark or an approved implementation. The machine inspected is an Apple M4 Pro, 12 CPU cores, **24 GB unified memory**. No models were downloaded, no inference was run, and no paid APIs were called.
 

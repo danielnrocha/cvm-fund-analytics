@@ -515,3 +515,49 @@ def test_plan_policy_checks_without_invoking_worker(gateway, monkeypatch):
     identity = gateway.get_identity()
     assert len(identity["bundle_sha256"]) == len(identity["gateway_code_sha256"]) == 64
     assert identity["semantic_manifest_sha256"] == gateway.get_catalog()["semantic_manifest_sha256"]
+
+
+def test_synthetic_result_preserves_cents_null_zero_and_unequal_denominators():
+    from datetime import date
+
+    from agent.results import checked_rows, parse_csv
+
+    query = intent(
+        metrics=["reported_net_assets_eop", "net_flow", "reporting_coverage_period"],
+        end_date="2026-05-31",
+        grain="month",
+    )
+    metrics = tuple(query.metrics) + (
+        "reporting_entities_eop", "expected_entities_eop",
+        "reporting_observations", "expected_observations",
+    )
+    months = {
+        "2026-04-01": (date(2026, 4, 29), date(2026, 4, 30)),
+        "2026-05-01": tuple(date(2026, 5, day) for day in range(4, 8)),
+    }
+    raw = (
+        ("metric_time__month," + ",".join(metrics) + "\n").encode()
+        + b"2026-04-01,,17.36,0.25,0,2,1,4\n"
+        + b"2026-05-01,0.00,-9007199254740993.21,0.875,2,2,7,8\n"
+    )
+    first, second = checked_rows(
+        parse_csv(raw, ("metric_time__month",), metrics),
+        query, ("class-a", "class-b"), months, metrics,
+    )
+    assert first.values == {
+        "reported_net_assets_eop": None,
+        "net_flow": Decimal("17.36"),
+        "reporting_coverage_period": Decimal("0.25"),
+    }
+    assert second.values == {
+        "reported_net_assets_eop": Decimal("0.00"),
+        "net_flow": Decimal("-9007199254740993.21"),
+        "reporting_coverage_period": Decimal("0.875"),
+    }
+    for row, cut, reported, expected in (
+        (first, date(2026, 4, 30), 1, 4),
+        (second, date(2026, 5, 7), 7, 8),
+    ):
+        assert row.effective_cut == cut
+        coverage = row.coverage["reporting_coverage_period"]
+        assert (coverage.reported, coverage.expected, coverage.status) == (reported, expected, "partial")

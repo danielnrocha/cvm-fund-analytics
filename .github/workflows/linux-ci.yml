@@ -47,7 +47,7 @@ jobs:
         run: python ci/fetch_inputs.py
       - name: Build pinned Linux runtime and documentation driver (online setup)
         run: docker build --platform linux/arm64 -f ci/Dockerfile -t cvm-ci:run .
-      - name: Execute gates with network disabled
+      - name: Execute semantic and deterministic agent gates with network disabled
         shell: bash
         run: |
           mkdir -p ci-output baseline

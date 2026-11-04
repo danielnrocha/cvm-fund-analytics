@@ -1,6 +1,6 @@
 # Wizard implementation qualification — no model downloads
 
-> **Superseded 2026-11-04:** the user rejected trial-dependent Wizard access. Do not execute account/signup/trial instructions below. They are historical research only. Follow [the free local implementation plan](local-agent-implementation-plan.md); retain W01–W12 as technical test cases.
+> **Superseded 2026-11-04:** the user rejected trial-dependent Wizard access. Do not execute account/signup/trial instructions below. They are historical research only. Follow [the local implementation plan](local-agent-implementation-plan.md) and retain W01–W12 as technical test cases.
 
 Date: 2026-10-28. Status: **proposed next step; not executed**. Implementation source baseline: main `c884ebcf4d16095aa5c48776b20a6f196ae2b7d0` (PR #3). [Post-merge acceptance](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918) passed on Linux ARM64. This document scopes a compatibility spike, not the complete analytics agent.
 

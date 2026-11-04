@@ -123,6 +123,54 @@
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "CVM: install isolated agent dependencies",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "setup-agent"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: test agent offline against sealed baseline",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "test-agent"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: verify agent release and credential status",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "agent-health"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CVM: run deterministic agent demo",
+      "type": "process",
+      "command": "make",
+      "args": [
+        "agent-demo"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
