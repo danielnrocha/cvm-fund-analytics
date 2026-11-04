@@ -1,5 +1,7 @@
 # Especificação de avaliação para AI BI
 
+> **Escopo atualizado em 28/10/2026:** este documento preserva o catálogo amplo de riscos e fixtures do roadmap. Para o primeiro agente sobre a vertical publicada, a autoridade é [AI-SPEC.md](AI-SPEC.md) e [ai-agent-evals.md](ai-agent-evals.md). Retornos, carteira, cotistas, gestores históricos, latest-available e consultas as-of **não são capacidades publicadas**; perguntas sobre elas devem receber resposta de indisponibilidade, não executar os comportamentos futuros descritos abaixo. Nenhum eval de LLM foi executado. O experimento com SQL livre é pesquisa futura opcional, não requisito do MVP.
+
 Estado: desenho da avaliação, sem resultados executados. Objetivo: detectar erro de interpretação, planejamento, cálculo e narrativa separadamente.
 
 Referências metodológicas: [Spider 2.0](https://arxiv.org/abs/2411.07763), [BIRD](https://bird-bench.github.io/), [benchmark semântico da dbt](https://github.com/dbt-labs/dbt-llm-sl-bench). A suíte abaixo é específica deste projeto; não deriva sua dificuldade ou taxa esperada de acerto desses benchmarks.

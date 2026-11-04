@@ -2,7 +2,7 @@
 
 > Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A primeira vertical mínima está implementada; a pipeline completa permanece pendente. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
-**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. A prioridade atual é a [demo prática de 20–25 minutos](live-demo.md). Vault completo, carteira, retornos e agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente.
+**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. Após o ensaio da demo, a prioridade passa ao **design do agente**, antes de implementar: [AI-SPEC](AI-SPEC.md), [pesquisa da stack](ai-agent-research.md) e [evals delimitados](ai-agent-evals.md). Vault completo, carteira, retornos e implementação do agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente. Compare foi retirado do escopo da demo por decisão do usuário.
 
 **Objetivo:** pipeline local de fundos CVM com histórico verificável, métricas governadas e interface segura para AI BI.
 
@@ -98,6 +98,38 @@ Aceite: métricas apresentam população, competência e cobertura; carteira par
 
 ## Entrega 5 — camada semântica e AI BI
 
+### 5A — design do agente (28/10/2026)
+
+- [x] Revisar capacidades reais e separar o catálogo futuro de evals da vertical publicada.
+- [x] Pesquisar modelos/runtimes/frameworks com fontes primárias e verificar hardware M4 Pro/24 GB.
+- [x] Especificar planejador estruturado, gateway MetricFlow restrito, snapshot read-only, resposta determinística e orçamento de execução.
+- [x] Definir 40 cenários de avaliação, split por família, precisão, ataques e critérios de aceite.
+- [ ] Revisão do design pelo usuário e revisão adversarial independente; recomendação ainda não homologada.
+
+Recomendação: Python 3.12 + Pydantic AI slim + Ollama local + Qwen3.5 4B Q4_K_M; 9B como challenger. Sem API paga obrigatória, Docker local ou SQL livre. **Pesquisa não equivale a benchmark:** nenhum modelo baixado, nenhuma inferência/API paga executada, nenhum agente implementado.
+
+### 5B — sequência proposta após o design
+
+**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`; [CI pós-merge aprovado](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918), com oráculos preservados, zero diferenças semânticas e regressão deliberada bloqueada. A próxima entrega é o [spike de qualificação Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md), ainda sem inferência real ou download de modelos.
+
+**Preferência de execução:** priorizar dbt Wizard na extensão oficial, conforme [preferência canônica](AI-SPEC.md#preferred-implementation-assistant). Antes do spike, validar acesso real, condições gratuitas e adequação ao trabalho Python/MetricFlow. Codex apoia spec, plano e revisão; Wizard não é presumido como runtime do agente de analytics. Nenhuma cobrança será ativada automaticamente.
+
+- [x] Inspecionar extensão e pesquisar acesso Wizard: [evidências](wizard-access.md). Trial limitado documentado; CLI ainda não instalado.
+- [ ] Criar/autenticar conta com domínio próprio e verificar elegibilidade, créditos e ausência de cobrança. Login pode iniciar o trial.
+- [ ] Qualificar Wizard com canary Python/Pydantic AI e consulta MetricFlow read-only, sem baixar modelos. Capacidade ainda não comprovada.
+
+| Ordem | Entrega | Aceite obrigatório |
+|---|---|---|
+| 1 | Qualificar Wizard e Pydantic AI + MetricFlow sem modelo real | Acesso gratuito comprovado; W01–W12 verdes, snapshot read-only, oráculos e revisão independente; sem cobrança ou pesos |
+| 2 | Gateway determinístico, começando por testes vermelhos | Filtros tipados, snapshot pinado, read-only real, limites, centavos/nulls, cobertura, explain/SQL e proveniência |
+| 3 | Após autorização de download: benchmark local e planejador com catálogo aprovado | Query/clarify/unsupported; no máximo um reparo; nenhuma permissão de shell, SQL ou mudança de ambiente |
+| 4 | Dataset/evals e revisão adversarial | 120 prompts planejados, três repetições, holdout por família; 100% críticos, >=95% ação/intenção aplicável; revisão independente sem P0/P1 |
+| 5 | Experiência de apresentação no VS Code | Pergunta → plano → resultado/coverage → SQL; gráfico somente depois dos testes de equivalência |
+
+CI por PR continua remoto e determinístico; avaliação real do modelo tem relatório separado vinculado ao SHA e ao modelo. Mocks não comprovam qualidade do agente. Não baixar modelos nem aumentar carga do Mac durante esta fase documental. Os requisitos detalhados estão no [contrato](AI-SPEC.md).
+
+### Checklist funcional
+
 - [ ] Completar catálogo de métricas e dimensões permitidas, com descrições e sinônimos PT/EN.
 - [x] Time spine, ausência vs zero e fechamento comum implementados para PL/fluxo/cobertura.
 - [ ] Retorno composto e produto de consulta latest-available continuam fora desta entrega.
@@ -111,7 +143,7 @@ Aceite: metas de [ai-bi-evals.md](ai-bi-evals.md) satisfeitas ou falhas explicit
 ## Entrega 6 — CI, UAT e release
 
 - [x] Bootstrap CI Linux ARM64: imagem e driver fixados, build, docs e runner completos aprovados offline em container local. [Evidência e limites](ci-uat.md).
-- [x] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota executada; lint de formatação SQL permanece separado.
+- [x] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota executada; lint e format check nativos integrados ao workflow e ao runner offline no PR #3.
 - [x] Guardar artifacts e logs em workspaces exclusivos por release, com invocation ID registrado; baseline selado não é sobrescrito. Workflow preparado para publicar artefatos de cada run.
 - [ ] Slim CI opcional: fixture baseline físico fechado + manifest correspondente; attach read-only; provar que nada escreve no baseline.
 - [x] Gate semântico cobre mudança somente em métrica: mutação de semiaditividade bloqueada em teste real. Workflow não filtra caminhos e configura full build em toda execução; runner Linux local aprovado; execução remota comprovada, incluindo rejeição de regressão diária no PR #1.
@@ -192,4 +224,4 @@ Nada nesta entrega publica nova baseline, promove dev/UAT ou transforma o roadma
 
 ## Organização do repositório — 28/10/2026
 
-Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). O aceite Linux deste PR será executado no GitHub Actions antes do merge.
+Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). PR #3 integrado; aceite Linux pós-merge aprovado no commit `c884ebc`, sem diferenças contra o baseline e com teste negativo bloqueado.

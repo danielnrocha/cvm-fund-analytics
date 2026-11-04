@@ -159,6 +159,8 @@ Top10 é contexto-dependente: não somar nem tirar média indiscriminada entre f
 
 ## Interface de AI BI
 
+**Atualização de design, 28/10/2026:** a primeira interface será delimitada por [AI-SPEC.md](AI-SPEC.md), com [pesquisa de stack](ai-agent-research.md) e [evals específicos](ai-agent-evals.md). Planejamento estruturado por modelo local, execução restrita pelo MetricFlow e apresentação determinística. Isso especializa a proposta genérica abaixo; narrativa livre, agente autônomo e gráficos gerados por código não fazem parte da primeira entrega. Implementação e benchmarks permanecem pendentes.
+
 Fluxo: pergunta → intenção estruturada → validação contra catálogo → plano semântico → SQL compilado → execução read-only → resultado com evidências → gráfico/narrativa.
 
 Proposta mínima de ferramentas: `list_metrics`, `describe_metric`, `list_dimensions`, `query_metrics`, `explain_query`. São contratos do projeto, não promessa de que o MCP oficial os implementa localmente. O backend deve reutilizar MetricFlow; evitar construir outro compilador de métricas.

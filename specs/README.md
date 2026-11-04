@@ -9,6 +9,9 @@ Data da pesquisa: **28 de outubro de 2026**. Estado: **vertical real de PL/fluxo
 3. [Plano por entregas](delivery-plan.md): sequência, critérios de aceitação, revisão adversarial e roteiro da demo.
 4. [Avaliação de AI BI](ai-bi-evals.md): casos, oráculos, invariantes e critérios de aprovação.
 5. [Prompt revisado](revised-agent-prompt.md): instruções portáveis para o futuro agente implementador, incluindo Wizard opcional.
+6. [Contrato do agente local](AI-SPEC.md): arquitetura proposta, capacidades, ferramentas restritas, guardrails e critérios de aceite; implementação ainda não iniciada.
+7. [Pesquisa de modelos e frameworks](ai-agent-research.md): M4 Pro/24 GB, custos, alternativas locais/remotas e recomendação provisória de Pydantic AI + Ollama + Qwen3.5 4B.
+8. [Evals do primeiro agente](ai-agent-evals.md): 40 cenários, split por família, oráculos, ataques e gates; sem resultados de LLM medidos.
 
 Stack aprovada pelo usuário: **dbt v2 + DuckDB + MetricFlow local**, apoiada na [prova de compatibilidade executável](compatibility.md). O requisito é não depender de serviços pagos; licença Apache 2.0 integral não é obrigatória. O domínio CVM, o recorte e os contratos foram definidos no profiling abaixo. [Validação complementar de VS Code, linhagem e JSON](compatibility-extended.md).
 
@@ -45,3 +48,5 @@ A [publicação atômica local](snapshot-publication.md) implementa bundles veri
 ## Publicação como portfólio
 
 [GitHub Actions remoto, desenvolvimento sem Docker e baseline durável](portfolio.md). Repositório público e baseline imutável publicados; CI remoto ativado. Consultar o runbook para os resultados e a correção identificada no primeiro run.
+
+[Próximo passo do agente: qualificação Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md): escopo sem modelos, critérios W01–W12 e prompt do implementador; execução e acesso autenticado ainda pendentes.
