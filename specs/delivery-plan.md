@@ -110,23 +110,18 @@ Recomendação: Python 3.12 + Pydantic AI slim + Ollama local + Qwen3.5 4B Q4_K_
 
 ### 5B — sequência proposta após o design
 
-**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`; [CI pós-merge aprovado](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918), com oráculos preservados, zero diferenças semânticas e regressão deliberada bloqueada. A próxima entrega é o [spike de qualificação Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md), ainda sem inferência real ou download de modelos.
+**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`; [CI pós-merge aprovado](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918), com oráculos preservados, zero diferenças semânticas e regressão deliberada bloqueada. A próxima entrega segue o [plano local gratuito](local-agent-implementation-plan.md), sem trial Wizard.
 
-**Preferência de execução:** priorizar dbt Wizard na extensão oficial, conforme [preferência canônica](AI-SPEC.md#preferred-implementation-assistant). Antes do spike, validar acesso real, condições gratuitas e adequação ao trabalho Python/MetricFlow. Codex apoia spec, plano e revisão; Wizard não é presumido como runtime do agente de analytics. Nenhuma cobrança será ativada automaticamente.
+**Execution decision (2026-11-04):** Wizard trials are excluded. Follow [the local implementation plan](local-agent-implementation-plan.md), using Codex for implementation and Pydantic AI/Ollama/MetricFlow at runtime.
 
-- [x] Inspecionar extensão e pesquisar acesso Wizard: [evidências](wizard-access.md). Trial limitado documentado; CLI ainda não instalado.
-- [ ] Criar/autenticar conta com domínio próprio e verificar elegibilidade, créditos e ausência de cobrança. Login pode iniciar o trial.
-- [ ] Qualificar Wizard com canary Python/Pydantic AI e consulta MetricFlow read-only, sem baixar modelos. Capacidade ainda não comprovada.
-
-| Ordem | Entrega | Aceite obrigatório |
+| Step | Deliverable | Gate |
 |---|---|---|
-| 1 | Qualificar Wizard e Pydantic AI + MetricFlow sem modelo real | Acesso gratuito comprovado; W01–W12 verdes, snapshot read-only, oráculos e revisão independente; sem cobrança ou pesos |
-| 2 | Gateway determinístico, começando por testes vermelhos | Filtros tipados, snapshot pinado, read-only real, limites, centavos/nulls, cobertura, explain/SQL e proveniência |
-| 3 | Após autorização de download: benchmark local e planejador com catálogo aprovado | Query/clarify/unsupported; no máximo um reparo; nenhuma permissão de shell, SQL ou mudança de ambiente |
-| 4 | Dataset/evals e revisão adversarial | 120 prompts planejados, três repetições, holdout por família; 100% críticos, >=95% ação/intenção aplicável; revisão independente sem P0/P1 |
-| 5 | Experiência de apresentação no VS Code | Pergunta → plano → resultado/coverage → SQL; gráfico somente depois dos testes de equivalência |
+| 1 | Typed contracts and immutable MetricFlow gateway | Deterministic tests, exact oracles, read-only snapshot and provenance |
+| 2 | Structured local planner and evaluation harness | Function-model tests, bounded policies, no paid fallback |
+| 3 | Actual model benchmark and demo | Frozen evaluation set, actual model digest and accuracy/latency evidence |
+| 4 | Independent review and release | Remote CI/semantic gate, merge, post-merge validation and local acceptance |
 
-CI por PR continua remoto e determinístico; avaliação real do modelo tem relatório separado vinculado ao SHA e ao modelo. Mocks não comprovam qualidade do agente. Não baixar modelos nem aumentar carga do Mac durante esta fase documental. Os requisitos detalhados estão no [contrato](AI-SPEC.md).
+Dependencies and model installation are authorized, subject to available disk/memory. Per-PR CI remains deterministic and does not download weights. Mocked results never count as model quality. Natural-language production readiness requires the acceptance contract.
 
 ### Checklist funcional
 

@@ -78,3 +78,7 @@ Related primary sources: [DuckDB security](https://www.duckdb.org/docs/current/o
 ## Post-refactor sequencing
 
 Main `c884ebc` preserves the metric contract and has passing remote acceptance. The next experiment is [Wizard qualification with deterministic Pydantic AI outputs](wizard-agent-spike.md), not an Ollama/model installation. The model recommendation above remains provisional; no hardware benchmark or language evaluation has been performed.
+
+## Decision update — 2026-11-04
+
+The user authorized implementation through local production and rejected Wizard trials. Earlier no-download restrictions describe the historical research phase. Use [the local implementation plan](local-agent-implementation-plan.md). No model benchmark has passed yet. Ollama supports disabling cloud features with `OLLAMA_NO_CLOUD=1` ([official source](https://github.com/ollama/ollama/blob/main/envconfig/config.go)); the application must additionally reject remote/cloud model identities and non-loopback endpoints. Pydantic AI supports schema-constrained local Ollama output ([official integration](https://pydantic.dev/docs/ai/models/ollama/)), which does not itself guarantee business-correct intent.
