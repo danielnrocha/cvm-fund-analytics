@@ -158,3 +158,11 @@ The [eval contract](ai-agent-evals.md) is normative for this vertical. All deter
 Implement in this order: a deterministic Pydantic AI/MetricFlow boundary without a real model; deterministic gateway with TDD; explicitly authorized local-model compatibility/benchmark; bounded planner; full evals and independent adversarial review; presentation UI/optional charts. CI remains GitHub Actions with Docker on the remote runner only. Per-PR deterministic tests require no LLM downloads; actual model acceptance is a separately recorded run tied to exact revisions, artifacts and hardware. Do not present mocked responses as model quality evidence.
 
 The user explicitly authorized implementation through local production on 2026-11-04. Missing benchmark or independent review still means natural-language functionality is **unaccepted**, not production-ready.
+
+## Implementation checkpoint — 2026-11-04
+
+Gateway commit `7d575cb` implements typed intents, immutable bundle verification, coverage injection, read-only constrained MetricFlow execution, Decimal results, actual SQL/explain binding and deterministic rendering. Its 32 checks passed against both the frozen baseline and the post-refactor UAT snapshot. Independent review is pending at this checkpoint; no model-quality acceptance follows from these tests.
+
+Current capability boundary is narrower than the target catalog above: reporting-class grouping and captured-classification filters are supported; classification grouping, multiple non-time dimensions and charts fail closed pending independent goldens. Historical bundles lacking a source Git revision report it as null and retain verified source fingerprints; the gateway implementation has a separate code hash. Owner configuration may explicitly select a verified durable baseline ID; model intents cannot select releases. The standard publication mode resolves UAT once.
+
+The installed MetricFlow CLI's automatic update check is suppressed in its fixed local worker entrypoint. Python socket events are denied, and actual DuckDB connections disable external access and extension auto-loading/install. This is not an OS sandbox against the trusted local owner or arbitrary modified native code.
