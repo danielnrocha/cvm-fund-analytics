@@ -1,6 +1,7 @@
 import json
 
 from agent.cli import main
+from test_gateway import gateway, mf_executable
 
 
 def test_plan_file_never_requires_oauth(tmp_path, capsys):
@@ -80,3 +81,31 @@ def test_plan_only_rejects_policy_invalid_model_decision(monkeypatch, capsys):
     captured = capsys.readouterr()
     assert captured.out == ""
     assert captured.err.splitlines()[0] == "unsupported_capability"
+
+
+def test_outside_snapshot_refusal_shows_verified_range(gateway, monkeypatch, capsys):
+    from contextlib import asynccontextmanager
+
+    from pydantic_ai.messages import ModelResponse, TextPart
+    from pydantic_ai.models.function import FunctionModel
+
+    from agent import cli
+
+    def model(messages, info):
+        return ModelResponse(parts=[TextPart(json.dumps({"decision": {
+            "action": "unsupported", "reason": "outside_snapshot", "alternatives": [],
+        }}))])
+
+    @asynccontextmanager
+    async def codex_model(store):
+        yield FunctionModel(model)
+
+    monkeypatch.setattr(cli, "codex_model", codex_model)
+    assert main([
+        "--release-root", str(gateway._db.parents[2]), "--release-id", gateway._release_id,
+        "--mf", str(gateway._mf), "ask", "What was the net flow in October 2026?",
+    ]) == 0
+    assert capsys.readouterr().out.splitlines()[-2:] == [
+        "Unsupported: outside_snapshot.",
+        "Available snapshot dates: 2026-04-01 through 2026-09-30 (inclusive).",
+    ]

@@ -37,6 +37,9 @@ def configured_gateway(args: argparse.Namespace) -> Gateway:
 def _print_result(gateway, decision: Decision, *, deadline: float, explain: bool) -> None:
     outcome = run_decision(gateway, decision, deadline=deadline)
     print(render_outcome(outcome))
+    if gateway is not None and isinstance(outcome, UnsupportedIntent) and outcome.reason == "outside_snapshot":
+        catalog = gateway.get_catalog()
+        print(f"Available snapshot dates: {catalog['start_date']} through {catalog['end_date']} (inclusive).")
     if explain and isinstance(decision, QueryIntent) and outcome.provenance.compiled_sql_sha256:
         print("Executed SQL")
         print(gateway.explain_query(outcome.query_id))
