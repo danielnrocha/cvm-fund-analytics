@@ -1,0 +1,4 @@
+# Gateway and deterministic tests, isolated from dbt/MetricFlow and model runtimes.
+pydantic>=2.12,<3
+PyYAML>=6,<7
+pytest>=8,<10
