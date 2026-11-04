@@ -41,7 +41,7 @@ O comando `compare` retorna status não zero para divergência e preserva o rela
 
 O processo de aceite roda em `docker run --network none`, com os arquivos fonte montados read-only. Executa testes Python, build dbt completo/estrito, oráculos reais, MetricFlow, driver de docs, linhagem de colunas, comparação semântica, promoção/rollback isolados, mutação semiaditiva, replay e rejeições de dados. Relatórios do gate e saídas da comparação ficam fora dos bundles; logs do build e validation.json integram o bundle selado. Workspaces são exclusivos por release.
 
-A suíte do agente usa lock com hashes e testa o candidato selado com MetricFlow real e transporte do modelo simulado. Qualquer teste pulado falha o gate. A etapa grava `tests-agent.log` e roda sem credenciais, inferência ou pesos de modelos.
+A suíte do agente usa lock com hashes e testa o candidato selado com MetricFlow real e transporte do modelo simulado. O gate falha se houver testes pulados, marcados como falha esperada ou desmarcados da execução. A etapa grava `tests-agent.log` e roda sem credenciais, inferência ou pesos de modelos.
 
 O CI não publica nos ambientes locais de Daniel. Seus ponteiros são descartáveis e demonstram a política. O artefato `cvm-release` contém evidências e bundles; aprovação e promoção reais usam o CLI no release root escolhido.
 

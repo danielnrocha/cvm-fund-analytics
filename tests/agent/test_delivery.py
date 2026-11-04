@@ -19,20 +19,29 @@ QUERY_CASES = {
 }
 
 
-def test_required_integration_rejects_skipped_cases(tmp_path):
+@pytest.mark.parametrize(("body", "options", "outcome"), [
+    ("pytest.skip('missing runtime')", [], "skipped"),
+    ("pytest.xfail('expected missing runtime')", [], "xfailed"),
+    ("raise AssertionError('gateway test must run')", ["-k", "still_passes"], "deselected"),
+])
+def test_required_integration_rejects_omitted_cases(tmp_path, body, options, outcome):
     shutil.copyfile(ROOT / "tests/agent/conftest.py", tmp_path / "conftest.py")
-    (tmp_path / "test_skipped.py").write_text(
-        "import pytest\n\ndef test_gateway_unavailable():\n    pytest.skip('missing runtime')\n"
+    (tmp_path / "test_integration.py").write_text(
+        "import pytest\n\ndef test_still_passes():\n    pass\n"
+        f"\ndef test_required_gateway():\n    {body}\n"
     )
+    env = os.environ.copy()
+    env.pop("PYTEST_ADDOPTS", None)
     result = subprocess.run(
-        [sys.executable, "-m", "pytest", "-q", "--require-integration"],
+        [sys.executable, "-m", "pytest", "-q", "--require-integration", *options],
         cwd=tmp_path,
+        env=env,
         capture_output=True,
         text=True,
         timeout=20,
     )
     assert result.returncode == 1, result.stdout + result.stderr
-    assert "Required agent suite skipped 1 test" in result.stdout
+    assert f"Required agent suite {outcome} 1 test" in result.stdout
 
 
 def test_demo_uses_real_gateway_without_login(gateway, tmp_path):

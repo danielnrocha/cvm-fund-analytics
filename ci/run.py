@@ -50,6 +50,7 @@ def main():
         CVM_TEST_RELEASE_ID=a.id,
         CVM_TEST_MF=str(ROOT/'compatibility/dbt-v2-metricflow/.venv-mf/bin/mf'),
     )
+    agent_env.pop('PYTEST_ADDOPTS', None)
     run('tests-agent', [
         '/opt/venv-agent/bin/python', '-m', 'pytest', '-q',
         'tests/agent', '--require-integration',
