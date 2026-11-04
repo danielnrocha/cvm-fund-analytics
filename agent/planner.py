@@ -1,9 +1,11 @@
 """Bounded, single-turn structured planner for the pinned analytics catalog."""
 import asyncio
+import re
 import time
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from datetime import date, datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import httpx2
@@ -13,7 +15,7 @@ from pydantic_ai.messages import ModelResponse, TextPart, ThinkingPart
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai_codex import OpenAICodexModel
 from pydantic_ai.providers.openai_codex import OpenAICodexProvider
-from pydantic_ai.usage import UsageLimits
+from pydantic_ai.usage import RunUsage, UsageLimits
 
 from agent.auth import CredentialStore
 from agent.catalog import canonical, sha256
@@ -66,6 +68,20 @@ class Plan:
     schema_sha256: str
     catalog_sha256: str
     decision_sha256: str
+    served_model: str | None
+    input_tokens: int
+    output_tokens: int
+    model_requests: int
+    unmeasured_requests: int
+
+    def trace(self) -> dict:
+        data = asdict(self)
+        del data["decision"]
+        return data
+
+
+def planner_code_sha256() -> str:
+    return sha256(Path(__file__).read_bytes())
 
 
 async def plan(model: Model, question: str, catalog: dict, *, deadline: float,
@@ -81,22 +97,27 @@ async def plan(model: Model, question: str, catalog: dict, *, deadline: float,
     planner = Agent(model, instructions=INSTRUCTIONS, output_type=NativeOutput(DecisionEnvelope, strict=True),
                     retries=0, model_settings=SETTINGS)
     planner.instrument = False
+    total_usage = RunUsage()
     try:
         async with asyncio.timeout(remaining):
             for attempt in (1, 2):
                 request = prompt.decode()
                 if attempt == 2:
                     request += "\nThe prior response failed schema validation. Return only the required object."
+                usage = RunUsage()
                 try:
                     result = await planner.run(
-                        request, usage_limits=UsageLimits(request_limit=1, output_tokens_limit=OUTPUT_TOKENS)
+                        request, usage=usage,
+                        usage_limits=UsageLimits(request_limit=1, output_tokens_limit=OUTPUT_TOKENS)
                     )
                 except UnexpectedModelBehavior:
                     if attempt == 1:
                         continue
                     raise PlannerError("invalid_model_output") from None
-                parts = [part for message in result.new_messages() if isinstance(message, ModelResponse)
-                         for part in message.parts]
+                finally:
+                    total_usage.incr(usage)
+                responses = [message for message in result.new_messages() if isinstance(message, ModelResponse)]
+                parts = [part for response in responses for part in response.parts]
                 if any(not isinstance(part, (TextPart, ThinkingPart)) for part in parts):
                     raise PlannerError("unexpected_provider_output")
                 text_bytes = sum(len(part.content.encode()) for part in parts if isinstance(part, TextPart))
@@ -104,8 +125,13 @@ async def plan(model: Model, question: str, catalog: dict, *, deadline: float,
                 packed = canonical(decision.model_dump(mode="json"))
                 if max(text_bytes, len(packed)) > OUTPUT_BYTES:
                     raise PlannerError("model_output_limit")
-                return Plan(decision, attempt, sha256(canonical([INSTRUCTIONS, prompt.decode()])), schema_hash,
-                            sha256(canonical(catalog)), sha256(packed))
+                name = responses[-1].model_name
+                served_model = name if name and re.fullmatch(r"gpt-[a-z0-9.-]{1,64}", name) else None
+                return Plan(
+                    decision, attempt, sha256(canonical([INSTRUCTIONS, prompt.decode()])), schema_hash,
+                    sha256(canonical(catalog)), sha256(packed), served_model, total_usage.input_tokens,
+                    total_usage.output_tokens, total_usage.requests, total_usage.unmeasured_requests,
+                )
     except UsageLimitExceeded:
         raise PlannerError("model_output_limit") from None
     except TimeoutError:

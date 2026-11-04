@@ -118,6 +118,9 @@ def test_codex_wire_has_no_tools_or_http_retries(monkeypatch, tmp_path, status, 
         outcome = asyncio.run(run())
         assert outcome.decision.action == "clarify"
         assert outcome.attempts == 1
+        assert outcome.served_model == "gpt-6-luna"
+        assert outcome.input_tokens == outcome.output_tokens == 20
+        assert outcome.model_requests == 1
     else:
         with pytest.raises(PlannerError, match=f"^{code}$"):
             asyncio.run(run())

@@ -7,13 +7,16 @@ import sys
 import time
 from pathlib import Path
 
+import pydantic_ai
 from pydantic import TypeAdapter, ValidationError
 
 from agent.auth import AuthError, CredentialStore
 from agent.catalog import canonical, sha256
 from agent.contracts import ClarifyIntent, Decision, GatewayError, QueryIntent, UnsupportedIntent
 from agent.gateway import Gateway
-from agent.planner import BACKEND, MODEL, OUTPUT_BYTES, TURN_SECONDS, PlannerError, codex_model, plan, run_decision
+from agent.planner import (
+    BACKEND, MODEL, OUTPUT_BYTES, TURN_SECONDS, PlannerError, codex_model, plan, planner_code_sha256, run_decision,
+)
 from agent.render import render_result
 
 DECISION = TypeAdapter(Decision)
@@ -31,6 +34,14 @@ def configured_gateway(args: argparse.Namespace) -> Gateway:
     return Gateway(args.release_root, args.mf.resolve(), release_id=args.release_id)
 
 
+def _print_result(gateway, decision: Decision, *, deadline: float, explain: bool) -> None:
+    outcome = run_decision(gateway, decision, deadline=deadline)
+    print(render_outcome(outcome))
+    if explain and isinstance(decision, QueryIntent) and outcome.provenance.compiled_sql_sha256:
+        print("Executed SQL")
+        print(gateway.explain_query(outcome.query_id))
+
+
 def render_outcome(outcome) -> str:
     if isinstance(outcome, ClarifyIntent):
         return f"Clarification needed: {outcome.reason} ({', '.join(outcome.missing_slots)})"
@@ -44,15 +55,18 @@ async def _ask(args, store: CredentialStore, gateway: Gateway, deadline: float) 
     async with codex_model(store) as model:
         result = await plan(model, args.question, gateway.get_catalog(), deadline=deadline)
     print(f"Mode: experimental Codex OAuth ({MODEL})")
-    print(f"Planner attempts: {result.attempts}")
-    print(f"Prompt SHA-256: {result.prompt_sha256}")
-    print(f"Schema SHA-256: {result.schema_sha256}")
-    print(f"Catalog SHA-256: {result.catalog_sha256}")
-    print(f"Decision SHA-256: {result.decision_sha256}")
+    trace = {"requested_model": MODEL, "planner_code_sha256": planner_code_sha256(),
+             "elapsed_ms": int((time.monotonic() - (deadline - TURN_SECONDS)) * 1000), **result.trace()}
+    print("Planner trace: " + json.dumps(trace, sort_keys=True))
     if args.plan_only:
         print(json.dumps(result.decision.model_dump(mode="json"), ensure_ascii=True, sort_keys=True))
     else:
-        print(render_outcome(run_decision(gateway, result.decision, deadline=deadline)))
+        _print_result(gateway, result.decision, deadline=deadline, explain=args.explain)
+
+
+def configure_terminal() -> None:
+    logging.disable(logging.CRITICAL)
+    pydantic_ai.BANNER_ENABLED = False
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -61,12 +75,15 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     ask = commands.add_parser("ask", help="Experimental natural-language planner")
     ask.add_argument("question")
-    ask.add_argument("--plan-only", action="store_true", help="Display the structured decision without executing it")
+    display = ask.add_mutually_exclusive_group()
+    display.add_argument("--plan-only", action="store_true", help="Display the structured decision without executing it")
+    display.add_argument("--explain", action="store_true", help="Print the verified executed SQL for a query")
     plan_file = commands.add_parser("plan-file", help="Execute a deterministic JSON Decision")
     plan_file.add_argument("path", type=Path)
+    plan_file.add_argument("--explain", action="store_true", help="Print the verified executed SQL for a query")
     commands.add_parser("health", help="Inspect the credential file and optionally verify a gateway release")
     args = parser.parse_args(argv)
-    logging.disable(logging.CRITICAL)
+    configure_terminal()
     store = CredentialStore()
     deadline = time.monotonic() + TURN_SECONDS
     try:
@@ -88,7 +105,7 @@ def main(argv: list[str] | None = None) -> int:
             decision = DECISION.validate_json(data)
             gateway = configured_gateway(args) if isinstance(decision, QueryIntent) else None
             print("Mode: deterministic plan file")
-            print(render_outcome(run_decision(gateway, decision, deadline=deadline)))
+            _print_result(gateway, decision, deadline=deadline, explain=args.explain)
     except GatewayError as exc:
         print(exc.code, file=sys.stderr)
         return 1

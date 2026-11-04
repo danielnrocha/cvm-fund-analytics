@@ -2,7 +2,6 @@
 import argparse
 import asyncio
 import json
-import logging
 import sys
 import time
 from dataclasses import dataclass
@@ -13,9 +12,12 @@ from pathlib import Path
 
 from agent.auth import AuthError, CredentialStore
 from agent.catalog import POLICY, canonical, sha256
-from agent.cli import DECISION, add_gateway_options, configured_gateway
+from agent.cli import DECISION, add_gateway_options, configure_terminal, configured_gateway
 from agent.contracts import Decision, GatewayError, QueryIntent, QueryResult
-from agent.planner import BACKEND, MODEL, SETTINGS, TURN_SECONDS, PlannerError, codex_model, plan, run_decision
+from agent.planner import (
+    BACKEND, INSTRUCTIONS, MODEL, SETTINGS, TURN_SECONDS, PlannerError, codex_model, plan, planner_code_sha256,
+    run_decision,
+)
 
 DATASET = Path(__file__).parent / "evaluation/v1"
 FROZEN_SHA256 = {
@@ -112,9 +114,7 @@ async def evaluate(model, gateway, cases: list[Case], *, repeats: int, execute: 
                 decision = normalized(planned.decision)
                 row.update(
                     exact=any(decision == normalized(item) for item in case.expected),
-                    action=planned.decision.action, attempts=planned.attempts,
-                    prompt_sha256=planned.prompt_sha256, schema_sha256=planned.schema_sha256,
-                    catalog_sha256=planned.catalog_sha256, decision_sha256=planned.decision_sha256,
+                    action=planned.decision.action, **planned.trace(),
                 )
                 if execute and row["exact"] and isinstance(planned.decision, QueryIntent):
                     result = run_decision(gateway, planned.decision, deadline=deadline)
@@ -139,7 +139,9 @@ async def _run(args, cases, dataset_hash) -> dict:
     families = sorted({case.family for case in cases})
     return {
         "mode": "experimental live model evaluation", "dataset_version": "1",
-        "dataset_sha256": dataset_hash, "split": args.split, "model": MODEL, "backend": BACKEND,
+        "dataset_sha256": dataset_hash, "split": args.split, "requested_model": MODEL, "backend": BACKEND,
+        "planner_code_sha256": planner_code_sha256(), "runner_code_sha256": sha256(Path(__file__).read_bytes()),
+        "instructions_sha256": sha256(INSTRUCTIONS.encode()),
         "pydantic_ai_version": version("pydantic-ai-slim"), "settings": SETTINGS,
         "release_id": gateway.get_catalog()["release_id"], "summary": summary,
         "families": {family: summarize([row for row in rows if row["case"].startswith(f"{family}-")])
@@ -162,7 +164,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--limit must be positive")
     if (args.split == "holdout" or args.limit * args.repeats > 3) and not args.authorize_expanded:
         parser.error("expanded and holdout runs require --authorize-expanded after review")
-    logging.disable(logging.CRITICAL)
+    configure_terminal()
     try:
         cases, digest = load_cases(args.split)
         print(json.dumps(asyncio.run(_run(args, cases[:args.limit], digest)), sort_keys=True))
