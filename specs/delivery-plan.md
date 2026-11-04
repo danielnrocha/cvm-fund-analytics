@@ -1,8 +1,10 @@
 # Plano de entregas e demonstração
 
+The experimental single-user CLI and restricted gateway are implemented. Codex subscription OAuth supplies experimental inference. Deterministic delivery and natural-language acceptance have separate evidence and gates. See [the agent plan](local-agent-implementation-plan.md).
+
 > Stack aprovada pelo usuário em 28/10/2026: **dbt v2 + DuckDB + MetricFlow local**, sem serviços pagos obrigatórios. A primeira vertical mínima está implementada; a pipeline completa permanece pendente. Evidências e limites: [compatibilidade](compatibility.md) e [editor, linhagem e JSON](compatibility-extended.md).
 
-**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. A prioridade atual é a [demo prática de 20–25 minutos](live-demo.md). Vault completo, carteira, retornos e agente continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente.
+**Estado atual:** vertical CVM, ingestão congelada, histórico mínimo, PL/fluxo/cobertura, publicação atômica, CI remoto e proteção de main implementados. O gateway determinístico e o planejador experimental estão implementados. O [contrato](AI-SPEC.md) e os [evals](ai-agent-evals.md) definem os gates restantes. Vault completo, carteira, retornos e aceite do planejador continuam no roadmap. Checklists históricos abaixo não são pré-requisitos adicionais para apresentar a vertical existente. Compare foi retirado do escopo da demo por decisão do usuário.
 
 **Objetivo:** pipeline local de fundos CVM com histórico verificável, métricas governadas e interface segura para AI BI.
 
@@ -39,7 +41,7 @@ Não criar um framework de configuração novo. SQL+YAML dbt, `uv.lock`, manifes
 - [ ] Na entrega de CI: obter locks de driver por plataforma e hashes dos pacotes Python; validar bootstrap Linux em runner limpo.
 - [x] CVM direta escolhida pelo usuário; recorte definido por profiling real: 60 classes, abril–setembro/2026. [Resultado](cvm-profiling.md).
 
-O resultado específico de VS Code/LSP e a evidência da linhagem constam de [compatibility-extended.md](compatibility-extended.md). A baseline de apresentação usa tarefas VS Code e documentação estática local; recursos avançados da extensão só entram no roteiro com evidência de funcionamento. Wizard continua opcional.
+O resultado específico de VS Code/LSP e a evidência da linhagem constam de [compatibility-extended.md](compatibility-extended.md). A baseline de apresentação usa tarefas VS Code e documentação estática local. Recursos avançados da extensão só entram no roteiro com evidência de funcionamento. Wizard fica fora da configuração do agente.
 
 Aceite: testes reproduzíveis com dois ambientes isolados e um banco local, sem rebuild Core para gerar o manifesto. Não exigir instalação conjunta nem confundir preparação com internet e execução offline. Gates técnicos e profiling concluídos; a entrega atual é preparar e ensaiar a apresentação da vertical implementada.
 
@@ -98,6 +100,33 @@ Aceite: métricas apresentam população, competência e cobertura; carteira par
 
 ## Entrega 5 — camada semântica e AI BI
 
+### 5A — design do agente (28/10/2026)
+
+- [x] Revisar capacidades reais e separar o catálogo futuro de evals da vertical publicada.
+- [x] Pesquisar modelos/runtimes/frameworks com fontes primárias e verificar hardware M4 Pro/24 GB.
+- [x] Especificar planejador estruturado, gateway MetricFlow restrito, snapshot read-only, resposta determinística e orçamento de execução.
+- [x] Definir 40 cenários de avaliação, split por família, precisão, ataques e critérios de aceite.
+- [ ] Revisão do design pelo usuário e revisão adversarial independente; recomendação ainda não homologada.
+
+A pesquisa histórica avaliou modelos locais. A decisão atual usa Python 3.12, Pydantic AI slim, OAuth da assinatura Codex e MetricFlow local. Consultas usam intents tipadas e o runtime local dispensa Docker.
+
+### 5B — sequência proposta após o design
+
+**Pré-requisito concluído:** refatoração integrada pelo PR #3 em `c884ebc`. O CI preservou os oráculos, registrou zero diferenças semânticas e bloqueou a regressão deliberada. [CI pós-merge](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918). A próxima entrega segue o [plano do agente local](local-agent-implementation-plan.md), sem trial Wizard.
+
+**Execution decision (2026-11-04):** Wizard trials are excluded. Follow [the local implementation plan](local-agent-implementation-plan.md), using application-owned Codex OAuth through Pydantic AI and a local MetricFlow gateway.
+
+| Step | Deliverable | Gate |
+|---|---|---|
+| 1 | Typed contracts and immutable MetricFlow gateway | Deterministic tests, exact oracles, read-only snapshot and provenance |
+| 2 | Structured local planner and evaluation harness | Function-model tests, bounded policies, no paid fallback |
+| 3 | Actual model benchmark and demo | Frozen evaluation set, available provider identity and accuracy/latency evidence |
+| 4 | Independent review and release | Remote CI/semantic gate, merge, post-merge validation and local acceptance |
+
+Dependencies and model installation are authorized, subject to available disk/memory. Per-PR CI remains deterministic and does not download weights. Mocked results never count as model quality. Natural-language production readiness requires the acceptance contract.
+
+### Checklist funcional
+
 - [ ] Completar catálogo de métricas e dimensões permitidas, com descrições e sinônimos PT/EN.
 - [x] Time spine, ausência vs zero e fechamento comum implementados para PL/fluxo/cobertura.
 - [ ] Retorno composto e produto de consulta latest-available continuam fora desta entrega.
@@ -111,7 +140,7 @@ Aceite: metas de [ai-bi-evals.md](ai-bi-evals.md) satisfeitas ou falhas explicit
 ## Entrega 6 — CI, UAT e release
 
 - [x] Bootstrap CI Linux ARM64: imagem e driver fixados, build, docs e runner completos aprovados offline em container local. [Evidência e limites](ci-uat.md).
-- [x] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota executada; lint de formatação SQL permanece separado.
+- [x] CI de PR: workflow e runner implementados com dois locks, full build estrito, unit/data tests, replay, rejeições, `mf validate-configs`, oráculos, mutação semântica e arestas de linhagem. Aceite Linux local aprovado; ativação remota executada; lint e format check nativos integrados ao workflow e ao runner offline no PR #3.
 - [x] Guardar artifacts e logs em workspaces exclusivos por release, com invocation ID registrado; baseline selado não é sobrescrito. Workflow preparado para publicar artefatos de cada run.
 - [ ] Slim CI opcional: fixture baseline físico fechado + manifest correspondente; attach read-only; provar que nada escreve no baseline.
 - [x] Gate semântico cobre mudança somente em métrica: mutação de semiaditividade bloqueada em teste real. Workflow não filtra caminhos e configura full build em toda execução; runner Linux local aprovado; execução remota comprovada, incluindo rejeição de regressão diária no PR #1.
@@ -192,4 +221,10 @@ Nada nesta entrega publica nova baseline, promove dev/UAT ou transforma o roadma
 
 ## Organização do repositório — 28/10/2026
 
-Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). O aceite Linux deste PR será executado no GitHub Actions antes do merge.
+Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). PR #3 integrado; aceite Linux pós-merge aprovado no commit `c884ebc`, sem diferenças contra o baseline e com teste negativo bloqueado.
+
+## Local agent execution — 2026-11-04
+
+The [implementation plan](local-agent-implementation-plan.md) targets a single-user local CLI. The deterministic plan-file demo uses the sealed baseline and no provider session. GitHub Actions uses a third hash-locked environment for offline agent tests against the sealed candidate while preserving the semantic baseline comparison and mutation gate. The [demo runbook](../demo/AGENT-RUNBOOK.md) covers setup, repeatable rehearsal and experimental subscription-backed questions.
+
+Natural-language acceptance requires reviewed live evaluations and operational evidence. Hidden-value end-to-end cases and multi-turn follow-ups remain open. See [the agent evaluation gates](ai-agent-evals.md).

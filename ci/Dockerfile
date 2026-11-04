@@ -3,6 +3,8 @@ ENV DBT_SEND_ANONYMOUS_USAGE_STATS=false PYTHONUNBUFFERED=1
 WORKDIR /workspace
 COPY compatibility/dbt-v2-metricflow/requirements-*.lock /tmp/locks/
 RUN python -m venv /opt/venv-dbt && /opt/venv-dbt/bin/pip install --no-cache-dir -r /tmp/locks/requirements-dbt.lock && python -m venv /opt/venv-mf && /opt/venv-mf/bin/pip install --no-cache-dir -r /tmp/locks/requirements-mf.lock
+COPY agent/requirements.lock /tmp/locks/requirements-agent.lock
+RUN python -m venv /opt/venv-agent && /opt/venv-agent/bin/pip install --no-cache-dir --require-hashes -r /tmp/locks/requirements-agent.lock
 COPY . /workspace/
 RUN ln -s /opt/venv-dbt compatibility/dbt-v2-metricflow/.venv-dbt && ln -s /opt/venv-mf compatibility/dbt-v2-metricflow/.venv-mf
 

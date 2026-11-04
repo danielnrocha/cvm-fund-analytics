@@ -49,7 +49,7 @@ flowchart LR
 
 - Extend the current identity/history models into the full planned Data Vault architecture and additional marts.
 - Add returns and holdings analytics after validating the relevant sources and business contracts.
-- Build and evaluate an AI BI agent over the semantic layer, using the [planned evaluation scenarios](specs/ai-bi-evals.md).
+- Qualify the experimental natural-language planner against the [agent evaluation contract](specs/ai-agent-evals.md).
 - Add complete Python distribution hashes and strengthen long-term availability of frozen source archives.
 
 These items are planned work, not implemented capabilities. The [delivery plan](specs/delivery-plan.md) records their scope and acceptance criteria.
@@ -59,6 +59,19 @@ These items are planned work, not implemented capabilities. The [delivery plan](
 Use the [presenter runbook](demo/RUNBOOK.md) for real commands and two red/green exercises: missing values incorrectly replaced by zero, and a stock metric incorrectly summed across time. `make demo-prepare` creates a disposable project from a locally verified baseline; `make demo-reset` discards only that marked workspace. `bash demo/rehearse.sh` checks the complete sequence without Docker. Prepare dependencies and the baseline before going offline.
 
 The [demo specification](specs/live-demo.md) separates technical rehearsal evidence from the presenter's spoken rehearsal. It does not require the full Data Vault or an AI agent.
+
+## Optional analytics agent
+
+The single-user CLI reads a sealed CVM release through a restricted local MetricFlow gateway. The deterministic demo runs without inference. Experimental natural-language questions use an application-owned OAuth session backed by an existing Codex subscription and quota, with network access required. See the [agent runbook](demo/AGENT-RUNBOOK.md) for setup, rehearsal and acceptance status.
+
+```sh
+make setup-agent
+make fetch-baseline # first restore, after make setup
+make test-agent
+make agent-demo
+```
+
+Remote CI adds the required deterministic agent suite against the sealed candidate in the existing network-disabled Linux job. It uses mocked planner transport and real MetricFlow, with no OAuth, model weights or live inference.
 
 ## Run locally
 
@@ -95,7 +108,7 @@ The repository and baseline are published. The [publication runbook](specs/portf
 | Immutable ingestion | [Ingestion contract](specs/ingestion.md) |
 | Semantic gate and runtime | [CI/UAT specification](specs/ci-uat.md) |
 | Roadmap and remaining work | [Delivery plan](specs/delivery-plan.md) |
-| AI BI evaluation design, not a deployed agent | [Evaluation scenarios](specs/ai-bi-evals.md) |
+| Local analytics agent | [Contract](specs/AI-SPEC.md) · [Evaluation gates](specs/ai-agent-evals.md) |
 
 The `compatibility/` directory contains earlier experiments, not the production entrypoint. Python dependencies are version-pinned; complete distribution hashes remain future work. Evidence records have timestamps and apply to the stated revision/scope, not every later edit.
 

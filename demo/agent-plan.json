@@ -1,0 +1,10 @@
+{
+  "action": "query",
+  "metrics": ["reported_net_assets_eop", "net_flow"],
+  "start_date": "2026-04-01",
+  "end_date": "2026-09-30",
+  "grain": "total",
+  "dimensions": [],
+  "filters": [],
+  "presentation": "table"
+}

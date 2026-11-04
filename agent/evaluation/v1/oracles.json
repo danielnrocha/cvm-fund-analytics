@@ -1,0 +1,1738 @@
+{
+  "D01": {
+    "rows": [
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "119385193058.06"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "D02": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            7554,
+            7560
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_observations": 7560,
+          "reporting_observations": 7554
+        },
+        "values": {
+          "net_flow": "4725910556.15"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "D03": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            1196,
+            1200
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-04-30",
+        "group": {
+          "metric_time__month": "2026-04-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1200,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1196
+        },
+        "values": {
+          "net_flow": "1226480088.40",
+          "reported_net_assets_eop": "109568170483.04"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1199,
+            1200
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "metric_time__month": "2026-05-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1200,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1199
+        },
+        "values": {
+          "net_flow": "-308203062.21",
+          "reported_net_assets_eop": "110473691592.44"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1260,
+            1260
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-06-30",
+        "group": {
+          "metric_time__month": "2026-06-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1260,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1260
+        },
+        "values": {
+          "net_flow": "1121105426.83",
+          "reported_net_assets_eop": "112891311818.67"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1380,
+            1380
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-07-31",
+        "group": {
+          "metric_time__month": "2026-07-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1380,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1380
+        },
+        "values": {
+          "net_flow": "2368618346.76",
+          "reported_net_assets_eop": "116615972210.14"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1259,
+            1260
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-08-31",
+        "group": {
+          "metric_time__month": "2026-08-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1260,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1259
+        },
+        "values": {
+          "net_flow": "402382657.29",
+          "reported_net_assets_eop": "118248666378.67"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1260,
+            1260
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {
+          "metric_time__month": "2026-09-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1260,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1260
+        },
+        "values": {
+          "net_flow": "-84472900.92",
+          "reported_net_assets_eop": "119385193058.06"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "D04": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            1196,
+            1200
+          ]
+        },
+        "effective_cut": "2026-04-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_observations": 1200,
+          "reporting_observations": 1196
+        },
+        "values": {
+          "net_flow": "1226480088.40"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "D05": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            1260,
+            1260
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_observations": 1260,
+          "reporting_observations": 1260
+        },
+        "values": {
+          "net_flow": "-84472900.92"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "D07": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            0,
+            1
+          ],
+          "reported_net_assets_eop": [
+            0,
+            1
+          ]
+        },
+        "effective_cut": "2026-08-28",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "expected_observations": 1,
+          "reporting_entities_eop": 0,
+          "reporting_observations": 0
+        },
+        "values": {
+          "net_flow": null,
+          "reported_net_assets_eop": null
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "D08": {
+    "rows": [
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "119385193058.06"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "D12": {
+    "rows": [
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-09-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "119385193058.06"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "D21": {
+    "rows": [
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            60,
+            60
+          ],
+          "reporting_coverage_period": [
+            1260,
+            1260
+          ]
+        },
+        "effective_cut": "2026-06-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1260,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1260
+        },
+        "values": {
+          "reporting_coverage_eop": "1",
+          "reporting_coverage_period": "1"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "D22": {
+    "rows": [
+      {
+        "counts": {
+          "reporting_coverage_period": [
+            396,
+            400
+          ]
+        },
+        "effective_cut": "2026-04-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_observations": 400,
+          "reporting_observations": 396
+        },
+        "values": {
+          "reporting_coverage_period": "0.99"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "D23": {
+    "rows": [
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:10187"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:1024"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:11282"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:11519"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:1174"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:11810"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:12073"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:12074"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:12121"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:12350"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:13425"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:14044"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:14537"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:14559"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:14802"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:15084"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:15512"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:15953"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:16637"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17058"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17100"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17497"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17580"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17657"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:17832"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:18152"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:18259"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:18734"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:19413"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:19888"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:20145"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:20342"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:20459"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:20558"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:20673"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:21695"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:22264"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:22454"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:22910"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:23114"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:2324"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:23661"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:25137"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:2839"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:2933"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:340"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:5194"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:5314"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:5535"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:6020"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:6062"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:621"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:6311"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:7012"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:740"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:7884"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:8734"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:8775"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:9255"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      },
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            1,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "reporting_entity": "CVM:CLASS:9666"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 1
+        },
+        "values": {
+          "reporting_coverage_eop": "1"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "H01": {
+    "rows": [
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-04-30",
+        "group": {
+          "metric_time__month": "2026-04-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "109568170483.04"
+        }
+      },
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-05-29",
+        "group": {
+          "metric_time__month": "2026-05-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "110473691592.44"
+        }
+      },
+      {
+        "counts": {
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-06-02",
+        "group": {
+          "metric_time__month": "2026-06-01"
+        },
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "reporting_entities_eop": 60
+        },
+        "values": {
+          "reported_net_assets_eop": "110716879089.14"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "H02": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            60,
+            60
+          ],
+          "reported_net_assets_eop": [
+            60,
+            60
+          ]
+        },
+        "effective_cut": "2026-08-31",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 60,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 60
+        },
+        "values": {
+          "net_flow": "61977350.01",
+          "reported_net_assets_eop": "118248666378.67"
+        }
+      }
+    ],
+    "status": "ok"
+  },
+  "H03": {
+    "rows": [
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            60,
+            60
+          ],
+          "reporting_coverage_period": [
+            1196,
+            1200
+          ]
+        },
+        "effective_cut": "2026-04-30",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 60,
+          "expected_observations": 1200,
+          "reporting_entities_eop": 60,
+          "reporting_observations": 1196
+        },
+        "values": {
+          "reporting_coverage_eop": "1",
+          "reporting_coverage_period": "0.9966666666666666666666666667"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "H04": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            1380,
+            1380
+          ]
+        },
+        "effective_cut": "2026-07-31",
+        "group": {
+          "metric_time__month": "2026-07-01"
+        },
+        "supporting_counts": {
+          "expected_observations": 1380,
+          "reporting_observations": 1380
+        },
+        "values": {
+          "net_flow": "2368618346.76"
+        }
+      },
+      {
+        "counts": {
+          "net_flow": [
+            1259,
+            1260
+          ]
+        },
+        "effective_cut": "2026-08-31",
+        "group": {
+          "metric_time__month": "2026-08-01"
+        },
+        "supporting_counts": {
+          "expected_observations": 1260,
+          "reporting_observations": 1259
+        },
+        "values": {
+          "net_flow": "402382657.29"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "H05": {
+    "rows": [],
+    "status": "no_expected_observations"
+  },
+  "H15": {
+    "rows": [
+      {
+        "counts": {
+          "reporting_coverage_eop": [
+            0,
+            1
+          ]
+        },
+        "effective_cut": "2026-05-25",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 1,
+          "reporting_entities_eop": 0
+        },
+        "values": {
+          "reporting_coverage_eop": "0"
+        }
+      }
+    ],
+    "status": "partial"
+  },
+  "H16": {
+    "rows": [
+      {
+        "counts": {
+          "net_flow": [
+            920,
+            920
+          ],
+          "reported_net_assets_eop": [
+            40,
+            40
+          ]
+        },
+        "effective_cut": "2026-07-31",
+        "group": {},
+        "supporting_counts": {
+          "expected_entities_eop": 40,
+          "expected_observations": 920,
+          "reporting_entities_eop": 40,
+          "reporting_observations": 920
+        },
+        "values": {
+          "net_flow": "2399967879.62",
+          "reported_net_assets_eop": "115670145440.55"
+        }
+      }
+    ],
+    "status": "ok"
+  }
+}

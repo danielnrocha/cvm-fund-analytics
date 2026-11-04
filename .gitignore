@@ -7,7 +7,7 @@ baseline/
 # Local tooling, generated state and publication staging
 .DS_Store
 .code-review-graph/
-.venv*/
+.venv*
 **/.user.yml
 **/target/
 **/logs/

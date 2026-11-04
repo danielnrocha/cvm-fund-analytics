@@ -17,8 +17,8 @@ def main():
     os.environ.pop('PYTHONOPTIMIZE',None)
     out=a.output.resolve();out.mkdir(parents=True,exist_ok=True);root=out/'releases'
     (ROOT/'transform/evidence').mkdir(exist_ok=True)
-    def run(name,args):
-        with (out/(name+'.log')).open('w') as f:subprocess.run(args,cwd=ROOT,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=900)
+    def run(name,args,*,env=None):
+        with (out/(name+'.log')).open('w') as f:subprocess.run(args,cwd=ROOT,env=env,stdout=f,stderr=subprocess.STDOUT,check=True,timeout=900)
     run('lint',[str(ROOT/'compatibility/dbt-v2-metricflow/.venv-dbt/bin/dbt'),'lint','--project-dir','transform','--profiles-dir','transform','--no-version-check'])
     run('format-check',[str(ROOT/'compatibility/dbt-v2-metricflow/.venv-dbt/bin/dbt'),'format','--check','--project-dir','transform','--profiles-dir','transform','--no-version-check'])
     for group in ['business','ingestion','release','ci','demo']:
@@ -43,6 +43,18 @@ def main():
     run('semantic-mutation',[str(PYTHON),str(ROOT/'tests/ci/check_semantic_gate.py'),'--root',str(root),'--baseline',a.id,'--output',str(out/'semantic-mutation.json')])
     run('history',[str(PYTHON),str(ROOT/'scripts/check_history.py')])
     run('rejections',[str(PYTHON),str(ROOT/'scripts/check_rejections.py')])
+    # Exercise the sealed candidate after the existing publication and semantic gates.
+    agent_env = dict(
+        os.environ,
+        CVM_TEST_RELEASE_ROOT=str(root),
+        CVM_TEST_RELEASE_ID=a.id,
+        CVM_TEST_MF=str(ROOT/'compatibility/dbt-v2-metricflow/.venv-mf/bin/mf'),
+    )
+    agent_env.pop('PYTEST_ADDOPTS', None)
+    run('tests-agent', [
+        '/opt/venv-agent/bin/python', '-m', 'pytest', '-q',
+        'tests/agent', '--require-integration',
+    ], env=agent_env)
     shutil.copytree(ROOT/'transform/evidence',out/'integration-evidence')
     result={'passed':True,'platform':platform.platform(),'candidate':a.id,'required_lineage_edges':lineage,'baseline':baseline,'bootstrap':a.bootstrap,'gate':str(gate),'metrics':read_metrics(root,'uat')}
     (out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
