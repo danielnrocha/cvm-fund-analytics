@@ -15,3 +15,7 @@ transform/evidence
 ci-output
 baseline
 dist
+
+# Local task workspaces are never part of the remote build context.
+.worktrees
+.superpowers
