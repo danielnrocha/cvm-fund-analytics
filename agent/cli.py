@@ -53,9 +53,11 @@ def render_outcome(outcome) -> str:
 
 async def _ask(args, store: CredentialStore, gateway: Gateway, deadline: float) -> None:
     async with codex_model(store) as model:
-        result = await plan(model, args.question, gateway.get_catalog(), deadline=deadline)
+        result = await plan(model, args.question, gateway.get_catalog(), deadline=deadline,
+                            validate_intent=gateway.validate_intent)
     print(f"Mode: experimental Codex OAuth ({MODEL})")
     trace = {"requested_model": MODEL, "planner_code_sha256": planner_code_sha256(),
+             "verified_identity": gateway.get_identity(),
              "elapsed_ms": int((time.monotonic() - (deadline - TURN_SECONDS)) * 1000), **result.trace()}
     print("Planner trace: " + json.dumps(trace, sort_keys=True))
     if args.plan_only:
@@ -90,10 +92,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "health":
             data = {"backend": BACKEND, "model": MODEL, "auth": store.status(), "gateway": "unconfigured"}
             if any((args.release_root, args.release_id, args.mf)):
-                catalog = configured_gateway(args).get_catalog()
-                data.update(gateway="verified", release_id=catalog["release_id"],
-                            semantic_manifest_sha256=catalog["semantic_manifest_sha256"],
-                            catalog_sha256=sha256(canonical(catalog)))
+                gateway = configured_gateway(args)
+                data.update(gateway="verified", **gateway.get_identity(),
+                            catalog_sha256=sha256(canonical(gateway.get_catalog())))
             print(json.dumps(data, sort_keys=True))
         elif args.command == "ask":
             asyncio.run(_ask(args, store, configured_gateway(args), deadline))
@@ -111,6 +112,8 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     except (AuthError, PlannerError) as exc:
         print(str(exc), file=sys.stderr)
+        if isinstance(exc, PlannerError) and exc.trace:
+            print("Planner trace: " + json.dumps(exc.trace, sort_keys=True), file=sys.stderr)
         return 1
     except (OSError, ValidationError):
         print("invalid_plan" if args.command == "plan-file" else "agent_error", file=sys.stderr)

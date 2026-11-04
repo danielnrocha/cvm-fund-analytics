@@ -1,15 +1,18 @@
 """Bounded, single-turn structured planner for the pinned analytics catalog."""
 import asyncio
+import json
 import re
 import time
+from collections.abc import Callable
 from contextlib import asynccontextmanager
-from dataclasses import asdict, dataclass
+from contextvars import ContextVar
+from dataclasses import dataclass
 from datetime import date, datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import httpx2
-from pydantic_ai import Agent, NativeOutput
+from pydantic_ai import Agent, NativeOutput, capture_run_messages
 from pydantic_ai.exceptions import ModelHTTPError, UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.messages import ModelResponse, TextPart, ThinkingPart
 from pydantic_ai.models import Model
@@ -19,7 +22,7 @@ from pydantic_ai.usage import RunUsage, UsageLimits
 
 from agent.auth import CredentialStore
 from agent.catalog import canonical, sha256
-from agent.contracts import Decision, QueryIntent, StrictModel
+from agent.contracts import Decision, GatewayError, QueryIntent, StrictModel
 
 MODEL = "gpt-6-luna"
 BACKEND = "openai-codex"
@@ -55,6 +58,10 @@ For unsupported decisions include alternatives only when a public metric is a ge
 class PlannerError(Exception):
     """A public error code safe to report without attaching provider details."""
 
+    def __init__(self, code: str, trace: dict | None = None):
+        self.trace = trace if trace is not None else {}
+        super().__init__(code)
+
 
 class DecisionEnvelope(StrictModel):
     decision: Decision
@@ -63,60 +70,97 @@ class DecisionEnvelope(StrictModel):
 @dataclass(frozen=True)
 class Plan:
     decision: Decision
-    attempts: int
-    prompt_sha256: str
-    schema_sha256: str
-    catalog_sha256: str
-    decision_sha256: str
-    served_model: str | None
-    input_tokens: int
-    output_tokens: int
-    model_requests: int
-    unmeasured_requests: int
+    evidence: dict
 
     def trace(self) -> dict:
-        data = asdict(self)
-        del data["decision"]
-        return data
+        return self.evidence
 
 
 def planner_code_sha256() -> str:
     return sha256(Path(__file__).read_bytes())
 
 
+_ATTEMPT = ContextVar[dict | None]("codex_attempt", default=None)
+
+
+def _served_model(responses: list[ModelResponse]) -> str | None:
+    name = responses[-1].model_name if responses else None
+    return name if name and re.fullmatch(r"gpt-[a-z0-9.-]{1,64}", name) else None
+
+
+def _complete_attempt(evidence: dict, responses: list[ModelResponse], usage: RunUsage) -> None:
+    if evidence["request_evidence"] == "framework":
+        evidence["model_requests"] = usage.requests
+    measured = usage.requests > 0 and not usage.unmeasured_requests
+    evidence.update(
+        input_tokens=usage.input_tokens if measured else None,
+        output_tokens=usage.output_tokens if measured else None,
+        served_model=_served_model(responses),
+    )
+
+
+def _summarize_trace(catalog_hash: str, attempts: list[dict]) -> dict:
+    def reported_total(key):
+        if not attempts or any(item[key] is None for item in attempts):
+            return None
+        return sum(item[key] for item in attempts)
+
+    return {
+        "catalog_sha256": catalog_hash, "attempts": len(attempts), "attempt_trace": tuple(attempts),
+        "model_requests": sum(item["model_requests"] for item in attempts),
+        "input_tokens": reported_total("input_tokens"), "output_tokens": reported_total("output_tokens"),
+        "unmeasured_requests": sum(item["model_requests"] for item in attempts if item["output_tokens"] is None),
+        "served_model": attempts[-1]["served_model"] if attempts else None,
+    }
+
+
 async def plan(model: Model, question: str, catalog: dict, *, deadline: float,
-               reference_date: date | None = None) -> Plan:
-    if not question.strip() or len(question.encode()) > QUESTION_BYTES:
-        raise PlannerError("invalid_question")
-    clock = reference_date or datetime.now(ZoneInfo("America/Sao_Paulo")).date()
-    prompt = canonical({"question": question, "catalog": catalog, "reference_date": clock.isoformat()})
-    schema_hash = sha256(canonical(DecisionEnvelope.model_json_schema()))
-    remaining = deadline - time.monotonic()
-    if remaining <= 0:
-        raise PlannerError("timeout")
-    planner = Agent(model, instructions=INSTRUCTIONS, output_type=NativeOutput(DecisionEnvelope, strict=True),
-                    retries=0, model_settings=SETTINGS)
-    planner.instrument = False
-    total_usage = RunUsage()
+               reference_date: date | None = None,
+               validate_intent: Callable[[QueryIntent], None] | None = None) -> Plan:
+    catalog_hash = sha256(canonical(catalog))
+    attempts = []
     try:
-        async with asyncio.timeout(remaining):
-            for attempt in (1, 2):
-                request = prompt.decode()
-                if attempt == 2:
+        if not question.strip() or len(question.encode()) > QUESTION_BYTES:
+            raise PlannerError("invalid_question")
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise PlannerError("timeout")
+        clock = reference_date or datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+        prompt = canonical({"question": question, "catalog": catalog, "reference_date": clock.isoformat()}).decode()
+        schema_hash = sha256(canonical(DecisionEnvelope.model_json_schema()))
+        planner = Agent(model, instructions=INSTRUCTIONS, output_type=NativeOutput(DecisionEnvelope, strict=True),
+                        retries=0, model_settings=SETTINGS)
+        planner.instrument = False
+        async with asyncio.timeout(deadline - time.monotonic()):
+            for number in (1, 2):
+                request = prompt
+                if number == 2:
                     request += "\nThe prior response failed schema validation. Return only the required object."
+                evidence = {
+                    "attempt": number, "model_requests": 0,
+                    "request_evidence": "not_sent" if isinstance(model, OpenAICodexModel) else "framework",
+                    "prompt_sha256": sha256(canonical([INSTRUCTIONS, request])), "schema_sha256": schema_hash,
+                }
+                attempts.append(evidence)
+                token = _ATTEMPT.set(evidence)
+                started = time.monotonic()
                 usage = RunUsage()
-                try:
-                    result = await planner.run(
-                        request, usage=usage,
-                        usage_limits=UsageLimits(request_limit=1, output_tokens_limit=OUTPUT_TOKENS)
-                    )
-                except UnexpectedModelBehavior:
-                    if attempt == 1:
-                        continue
-                    raise PlannerError("invalid_model_output") from None
-                finally:
-                    total_usage.incr(usage)
-                responses = [message for message in result.new_messages() if isinstance(message, ModelResponse)]
+                with capture_run_messages() as messages:
+                    try:
+                        result = await planner.run(
+                            request, usage=usage,
+                            usage_limits=UsageLimits(request_limit=1, output_tokens_limit=OUTPUT_TOKENS),
+                        )
+                    except UnexpectedModelBehavior:
+                        evidence["outcome"] = "invalid_model_output"
+                        if number == 1:
+                            continue
+                        raise PlannerError("invalid_model_output") from None
+                    finally:
+                        responses = [message for message in messages if isinstance(message, ModelResponse)]
+                        _complete_attempt(evidence, responses, usage)
+                        evidence["elapsed_ms"] = int((time.monotonic() - started) * 1000)
+                        _ATTEMPT.reset(token)
                 parts = [part for response in responses for part in response.parts]
                 if any(not isinstance(part, (TextPart, ThinkingPart)) for part in parts):
                     raise PlannerError("unexpected_provider_output")
@@ -125,24 +169,32 @@ async def plan(model: Model, question: str, catalog: dict, *, deadline: float,
                 packed = canonical(decision.model_dump(mode="json"))
                 if max(text_bytes, len(packed)) > OUTPUT_BYTES:
                     raise PlannerError("model_output_limit")
-                name = responses[-1].model_name
-                served_model = name if name and re.fullmatch(r"gpt-[a-z0-9.-]{1,64}", name) else None
-                return Plan(
-                    decision, attempt, sha256(canonical([INSTRUCTIONS, prompt.decode()])), schema_hash,
-                    sha256(canonical(catalog)), sha256(packed), served_model, total_usage.input_tokens,
-                    total_usage.output_tokens, total_usage.requests, total_usage.unmeasured_requests,
-                )
+                if isinstance(decision, QueryIntent):
+                    if validate_intent is None:
+                        raise PlannerError("policy_validation_required")
+                    validate_intent(decision)
+                if deadline <= time.monotonic():
+                    raise PlannerError("timeout")
+                evidence["outcome"] = "accepted"
+                trace = _summarize_trace(catalog_hash, attempts)
+                trace.update(prompt_sha256=evidence["prompt_sha256"], schema_sha256=evidence["schema_sha256"],
+                             decision_sha256=sha256(packed))
+                return Plan(decision, trace)
     except UsageLimitExceeded:
-        raise PlannerError("model_output_limit") from None
+        code = "model_output_limit"
     except TimeoutError:
-        raise PlannerError("timeout") from None
+        code = "timeout"
     except ModelHTTPError as exc:
-        raise PlannerError(f"provider_http_{exc.status_code}") from None
-    except PlannerError:
-        raise
+        code = f"provider_http_{exc.status_code}"
+    except GatewayError as exc:
+        code = exc.code
+    except PlannerError as exc:
+        code = str(exc)
     except Exception:
-        raise PlannerError("provider_error") from None
-    raise PlannerError("invalid_model_output")
+        code = "provider_error"
+    if attempts:
+        attempts[-1].setdefault("outcome", code)
+    raise PlannerError(code, _summarize_trace(catalog_hash, attempts)) from None
 
 
 def run_decision(gateway, decision: Decision, *, deadline: float):
@@ -177,6 +229,16 @@ async def _guard_request(request: httpx2.Request) -> None:
     # SDK option cloning can re-read environment headers on every request.
     request.headers.pop("openai-organization", None)
     request.headers.pop("openai-project", None)
+    evidence = _ATTEMPT.get()
+    if evidence is not None and request.url.host == "chatgpt.com":
+        if evidence["model_requests"]:
+            raise PlannerError("provider_request_limit")
+        body = json.loads(request.content)
+        evidence.update(
+            request_evidence="wire", model_requests=evidence["model_requests"] + 1,
+            prompt_sha256=sha256(canonical([body.get("instructions"), body["input"]])),
+            schema_sha256=sha256(canonical(body["text"]["format"]["schema"])),
+        )
 
 
 async def _guard_response(response: httpx2.Response) -> None:

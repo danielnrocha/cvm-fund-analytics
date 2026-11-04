@@ -10,11 +10,6 @@ from pydantic_ai.models.function import FunctionModel
 from agent.planner import PlannerError, plan, run_decision
 
 
-@pytest.fixture(autouse=True)
-def disable_live_models(monkeypatch):
-    monkeypatch.setattr(models, "ALLOW_MODEL_REQUESTS", False)
-
-
 def test_native_output_repair_is_bounded_and_drops_bad_response():
     attempts = []
     accepted = {"decision": {"action": "clarify", "reason": "missing_period", "missing_slots": ["period"]}}
@@ -28,9 +23,13 @@ def test_native_output_repair_is_bounded_and_drops_bad_response():
         return ModelResponse(parts=[TextPart(content)])
 
     outcome = asyncio.run(plan(FunctionModel(model), "Qual o PL?", {}, deadline=time.monotonic() + 2))
-    assert outcome.attempts == 2
+    assert outcome.trace()["attempts"] == 2
     assert outcome.decision.model_dump() == accepted["decision"]
     assert "unsafe secret raw output" not in attempts[1]
+    first, second = outcome.trace()["attempt_trace"]
+    assert first["prompt_sha256"] != second["prompt_sha256"]
+    assert first["schema_sha256"] == second["schema_sha256"]
+    assert first["outcome"] == "invalid_model_output"
 
 
 def test_invalid_output_stops_after_two_calls():
@@ -117,13 +116,18 @@ def test_codex_wire_has_no_tools_or_http_retries(monkeypatch, tmp_path, status, 
     if code is None:
         outcome = asyncio.run(run())
         assert outcome.decision.action == "clarify"
-        assert outcome.attempts == 1
-        assert outcome.served_model == "gpt-6-luna"
-        assert outcome.input_tokens == outcome.output_tokens == 20
-        assert outcome.model_requests == 1
+        assert outcome.trace()["attempts"] == 1
+        assert outcome.trace()["served_model"] == "gpt-6-luna"
+        assert outcome.trace()["input_tokens"] == outcome.trace()["output_tokens"] == 20
+        assert outcome.trace()["model_requests"] == 1
     else:
-        with pytest.raises(PlannerError, match=f"^{code}$"):
+        with pytest.raises(PlannerError, match=f"^{code}$") as failure:
             asyncio.run(run())
+        failed_attempt, = failure.value.trace["attempt_trace"]
+        assert failed_attempt["model_requests"] == 1
+        assert failed_attempt["input_tokens"] is failed_attempt["output_tokens"] is None
+        assert failed_attempt["served_model"] is None
+        assert failed_attempt["request_evidence"] == "wire"
     assert len(requests) == 1
     request = requests[0]
     assert str(request.url) == "https://chatgpt.com/backend-api/codex/responses"
@@ -138,6 +142,10 @@ def test_codex_wire_has_no_tools_or_http_retries(monkeypatch, tmp_path, status, 
     assert body["text"]["format"]["type"] == "json_schema"
     assert body["text"]["format"]["strict"] is True
     assert "max_output_tokens" not in body
+    from agent.catalog import canonical, sha256
+    evidence = outcome.trace()["attempt_trace"][0] if code is None else failed_attempt
+    assert evidence["schema_sha256"] == sha256(canonical(body["text"]["format"]["schema"]))
+    assert evidence["prompt_sha256"] == sha256(canonical([body.get("instructions"), body["input"]]))
 
 
 def test_provider_reported_token_limit_does_not_trigger_repair():
@@ -152,3 +160,23 @@ def test_provider_reported_token_limit_does_not_trigger_repair():
     with pytest.raises(PlannerError, match="model_output_limit"):
         asyncio.run(plan(FunctionModel(model), "PL", {}, deadline=time.monotonic() + 2))
     assert len(calls) == 1
+
+
+def test_policy_invalid_query_is_not_accepted_after_schema_validation():
+    from agent.contracts import GatewayError
+
+    content = json.dumps({"decision": {
+        "action": "query", "metrics": ["net_flow"], "start_date": "2026-04-01",
+        "end_date": "2026-04-30", "grain": "total", "dimensions": [], "filters": [], "presentation": "chart",
+    }})
+
+    def model(messages, info):
+        return ModelResponse(parts=[TextPart(content)])
+
+    def validate(intent):
+        assert intent.presentation == "chart"
+        raise GatewayError("unsupported_capability")
+
+    with pytest.raises(PlannerError, match="unsupported_capability") as failure:
+        asyncio.run(plan(FunctionModel(model), "chart", {}, deadline=time.monotonic() + 2, validate_intent=validate))
+    assert len(failure.value.trace["attempt_trace"]) == 1

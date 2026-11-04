@@ -90,6 +90,34 @@ class Gateway:
             "semantic_manifest_sha256": self._manifest_hash,
         }
 
+    def get_identity(self) -> dict:
+        """Return the verified snapshot and runtime identity without running a query."""
+        return {
+            "release_id": self._release_id,
+            "bundle_sha256": self._bundle_hash,
+            "semantic_manifest_sha256": self._manifest_hash,
+            "source_revision": self._source_revision,
+            "source_fingerprint": self._source_fingerprint,
+            "gateway_code_sha256": self._code_hash,
+            "engine_versions": dict(self._versions),
+        }
+
+    def validate_intent(self, intent: QueryIntent) -> None:
+        """Check the same typed catalog policy used at execution without starting a worker."""
+        self._validated_query(intent)
+
+    def _validated_query(self, intent: QueryIntent):
+        # Frozen models still contain mutable lists. Revalidate a detached copy,
+        # including instances built with model_construct().
+        try:
+            if type(intent) is not QueryIntent:
+                raise GatewayError("invalid_plan")
+            intent = QueryIntent.model_validate(intent.model_dump(warnings=False))
+        except (ValidationError, ValueError, TypeError) as exc:
+            raise GatewayError("invalid_plan") from exc
+        members, buckets, where = self._catalog.bind(intent)
+        return intent, members, buckets, where
+
     def describe_metric(self, metric_id: str) -> dict:
         return self._catalog.describe_metric(metric_id)
 
@@ -112,16 +140,7 @@ class Gateway:
         start = time.monotonic()
         deadline = start + 60 if deadline is None else min(start + 60, deadline)
         _check_deadline(deadline)
-        # Frozen models still contain mutable lists. Revalidate a detached copy
-        # at the execution boundary, including model_construct() callers.
-        try:
-            if type(intent) is not QueryIntent:
-                raise GatewayError("invalid_plan")
-            intent = QueryIntent.model_validate(intent.model_dump(warnings=False))
-        except (ValidationError, ValueError, TypeError) as exc:
-            raise GatewayError("invalid_plan") from exc
-
-        members, buckets, where = self._catalog.bind(intent)
+        intent, members, buckets, where = self._validated_query(intent)
         metrics = tuple(dict.fromkeys(
             intent.metrics + [count for metric in intent.metrics for count in METRICS[metric][3]]
         ))
@@ -176,10 +195,7 @@ class Gateway:
             metric_definitions={m: METRICS[m][1] for m in intent.metrics},
             units={m: METRICS[m][0] for m in intent.metrics},
             provenance=Provenance(
-                release_id=self._release_id, bundle_sha256=self._bundle_hash,
-                semantic_manifest_sha256=self._manifest_hash, source_revision=self._source_revision,
-                source_fingerprint=self._source_fingerprint, gateway_code_sha256=self._code_hash,
-                engine_versions=dict(self._versions),
+                **self.get_identity(),
                 raw_result_sha256=sha256(raw) if raw is not None else None,
                 compiled_sql_sha256=sha256(sql) if sql is not None else None, sources=SOURCES,
             ),

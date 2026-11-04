@@ -498,3 +498,20 @@ def test_expired_host_deadline_rejects_before_worker(gateway, monkeypatch):
     with pytest.raises(GatewayError) as caught:
         gateway.query_metrics(intent(), deadline=time.monotonic() - 1)
     assert caught.value.code == "timeout"
+
+
+def test_plan_policy_checks_without_invoking_worker(gateway, monkeypatch):
+    from agent.contracts import GatewayError
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("planning started MetricFlow")
+
+    monkeypatch.setattr(gateway, "_query_pair", forbidden)
+    gateway.validate_intent(intent())
+    for invalid in (intent(presentation="chart"), intent(start_date="2026-01-01"),
+                    intent(filters=[{"field": "reporting_entity", "op": "eq", "values": ["unknown"]}])):
+        with pytest.raises(GatewayError):
+            gateway.validate_intent(invalid)
+    identity = gateway.get_identity()
+    assert len(identity["bundle_sha256"]) == len(identity["gateway_code_sha256"]) == 64
+    assert identity["semantic_manifest_sha256"] == gateway.get_catalog()["semantic_manifest_sha256"]

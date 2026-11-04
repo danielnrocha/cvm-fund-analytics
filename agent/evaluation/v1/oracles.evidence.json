@@ -1,0 +1,9 @@
+{
+  "source_sql": "SELECT entity_id, classification_at_capture, report_date, pl, net_flow, reported, expected FROM main.fct_daily ORDER BY report_date, entity_id",
+  "source_snapshot_sha256": "f86324f20c6cd6d264236d713192533bac778ff24d91dfaafde3284cc93f419a",
+  "derivation_sha256": "5ae122ffa4ffa833f22105d819bc44214a0dc529c32e5a74c648d2e0e72dee9d",
+  "output_sha256": "c09c94327d3b7334a1838acc1f0345f0232190cce57135c942cf6b25b68616b7",
+  "families": 18,
+  "rows": 84,
+  "method": "Independent Python Decimal aggregation of sealed fact rows; no MetricFlow or agent imports; frozen published monthly and full-period oracles cross-checked."
+}
