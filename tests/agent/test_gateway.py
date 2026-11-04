@@ -14,10 +14,15 @@ MF = PRIMARY / "compatibility/dbt-v2-metricflow/.venv-mf/bin/mf"
 
 
 @pytest.fixture
-def gateway(tmp_path):
+def mf_executable():
+    return Path(os.getenv("CVM_TEST_MF", str(MF)))
+
+
+@pytest.fixture
+def gateway(tmp_path, mf_executable):
     from agent.gateway import Gateway
 
-    mf = Path(os.getenv("CVM_TEST_MF", str(MF)))
+    mf = mf_executable
     release_root = os.getenv("CVM_TEST_RELEASE_ROOT")
     if release_root:
         return Gateway(Path(release_root), mf, release_id=os.getenv("CVM_TEST_RELEASE_ID"))
@@ -177,7 +182,7 @@ def test_worker_timeout_and_output_budget(tmp_path):
     assert caught.value.code == "tool_error"
 
 
-def test_bundle_tampering_rejected_before_worker(tmp_path):
+def test_bundle_tampering_rejected_before_worker(tmp_path, mf_executable):
     from agent.contracts import GatewayError
     from agent.gateway import Gateway
     from release.snapshots import seal
@@ -194,7 +199,7 @@ def test_bundle_tampering_rejected_before_worker(tmp_path):
     db.chmod(0o644)
     db.write_bytes(b"tampered")
     with pytest.raises(GatewayError) as caught:
-        Gateway(root, MF)
+        Gateway(root, mf_executable)
     assert caught.value.code == "snapshot_invalid"
 
 
@@ -338,10 +343,10 @@ def test_explain_and_query_use_same_worker_arguments(gateway, monkeypatch):
     )
 
 
-def test_fixed_entry_blocks_python_network(tmp_path):
+def test_fixed_entry_blocks_python_network(tmp_path, mf_executable):
     import sys
 
-    from agent.worker import ENTRY, run_worker
+    from agent.worker import run_worker
 
     probe = tmp_path / "probe.py"
     probe.write_text(
@@ -355,11 +360,11 @@ def test_fixed_entry_blocks_python_network(tmp_path):
     )
     # The wrapper is run inside the installed MetricFlow environment, as in
     # production. Use a controlled entry only to try a socket directly.
-    if not MF.exists() and not os.getenv("CVM_TEST_MF"):
+    if not mf_executable.exists():
         pytest.skip("MetricFlow environment required")
-    mf = Path(os.getenv("CVM_TEST_MF", str(MF)))
-    python = str(mf.with_name("python"))
-    assert run_worker([python, "-I", str(ENTRY), str(probe)], tmp_path, {
+    python = str(mf_executable.with_name("python"))
+    entry = ROOT / "agent/_mf_entry.py"
+    assert run_worker([python, "-I", str(entry), str(probe)], tmp_path, {
         "HOME": str(tmp_path), "TMPDIR": str(tmp_path),
     }, timeout=5).strip() == b"network denied"
 
@@ -386,3 +391,110 @@ def test_actual_executed_sql_mismatch_blocks_answer(gateway, monkeypatch):
     with pytest.raises(GatewayError) as caught:
         gateway.query_metrics(intent(metrics=["net_flow"]))
     assert caught.value.code == "result_invalid"
+
+
+def test_clipped_monthly_bounds_preserve_exact_coverage_and_closing_values(gateway):
+    # Independent direct aggregate of frozen fct_daily on the requested dates,
+    # using the last report_date per month as the closing cut.
+    expected = (
+        ("2026-04-01", "2026-04-30", "109568170483.04", "1068725316.01", 1137, 1140),
+        ("2026-05-01", "2026-05-29", "110473691592.44", "-308203062.21", 1199, 1200),
+        ("2026-06-01", "2026-06-02", "110716879089.14", "117438309.55", 120, 120),
+    )
+    result = gateway.query_metrics(intent(grain="month", start_date="2026-04-02",
+                                          end_date="2026-06-02"))
+    for row, oracle in zip(result.rows, expected, strict=True):
+        month, cut, pl, flow, reported, expected_count = oracle
+        assert row.group == {"metric_time__month": month}
+        assert row.effective_cut.isoformat() == cut
+        assert row.values == {"reported_net_assets_eop": Decimal(pl), "net_flow": Decimal(flow)}
+        assert row.supporting_counts == {
+            "reporting_entities_eop": 60, "expected_entities_eop": 60,
+            "reporting_observations": reported, "expected_observations": expected_count,
+        }
+
+
+def test_wrapper_edit_after_startup_does_not_change_executed_code(gateway, tmp_path, monkeypatch):
+    import agent.gateway as gateway_module
+    import agent.worker as worker_module
+
+    checkout = tmp_path / "checkout"
+    checkout.mkdir()
+    for name in gateway_module._GATEWAY_FILES:
+        (checkout / name).write_bytes((ROOT / "agent" / name).read_bytes())
+    entry = checkout / "_mf_entry.py"
+    original = entry.read_bytes()
+    monkeypatch.setattr(gateway_module, "__file__", str(checkout / "gateway.py"))
+    monkeypatch.setattr(worker_module, "ENTRY", entry, raising=False)
+    session = gateway_module.Gateway(gateway._db.parents[2], gateway._mf,
+                                     release_id=gateway._release_id)
+    entry.write_text("raise RuntimeError('wrapper changed after startup')\n")
+    run_worker = gateway_module.run_worker
+
+    def observe(argv, cwd, *args, **kwargs):
+        staged_entry = Path(argv[2])
+        assert staged_entry.parent == cwd
+        assert staged_entry.read_bytes() == original
+        return run_worker(argv, cwd, *args, **kwargs)
+
+    monkeypatch.setattr(gateway_module, "run_worker", observe)
+    result = session.query_metrics(intent(metrics=["net_flow"]))
+    assert result.rows[0].values["net_flow"] == Decimal("1226480088.40")
+    assert result.provenance.gateway_code_sha256 == gateway._code_hash
+    assert result.provenance.source_revision is None
+
+
+@pytest.mark.parametrize("has_rows", [True, False])
+def test_host_rejects_result_when_final_work_crosses_deadline(gateway, monkeypatch, has_rows):
+    from types import SimpleNamespace
+
+    import agent.gateway as module
+    from agent.contracts import GatewayError
+
+    clock = SimpleNamespace(now=0.0)
+    monkeypatch.setattr(module, "time", SimpleNamespace(monotonic=lambda: clock.now))
+    if has_rows:
+        query = gateway._query_pair
+        validate = module.checked_rows
+
+        def nearly_late(*args):
+            result = query(*args)
+            clock.now = 59.0
+            return result
+
+        def late_validation(*args):
+            rows = validate(*args)
+            clock.now = 61.0
+            return rows
+
+        monkeypatch.setattr(gateway, "_query_pair", nearly_late)
+        monkeypatch.setattr(module, "checked_rows", late_validation)
+        request = intent(metrics=["net_flow"])
+    else:
+        verify = gateway._check_db
+
+        def late_check(*args):
+            verify(*args)
+            clock.now = 61.0
+
+        monkeypatch.setattr(gateway, "_check_db", late_check)
+        request = intent(start_date="2026-04-03", end_date="2026-04-05")
+
+    with pytest.raises(GatewayError) as caught:
+        gateway.query_metrics(request)
+    assert caught.value.code == "timeout"
+    assert gateway._explanations == {}
+
+
+def test_expired_host_deadline_rejects_before_worker(gateway, monkeypatch):
+    import time
+
+    from agent.contracts import GatewayError
+
+    def forbidden(*_args, **_kwargs):
+        pytest.fail("an expired deadline started a worker")
+
+    monkeypatch.setattr("agent.gateway.run_worker", forbidden)
+    with pytest.raises(GatewayError) as caught:
+        gateway.query_metrics(intent(), deadline=time.monotonic() - 1)
+    assert caught.value.code == "timeout"

@@ -1,5 +1,4 @@
 """Worker process, scratch project, and installed MetricFlow runtime boundary."""
-import json
 import os
 import signal
 import subprocess
@@ -20,7 +19,6 @@ VERSIONS = {
     "duckdb": "2.0.0",
     "metricflow": "0.213.0",
 }
-ENTRY = Path(__file__).with_name("_mf_entry.py").resolve()
 # Set file size limits before exec without using preexec_fn in a threaded host.
 _LIMIT_EXEC = """
 import os, resource, sys
@@ -119,5 +117,5 @@ def scratch_project(db: Path, manifest: bytes, dbt_project: bytes):
         yield project, env
 
 
-def metricflow_args(mf: Path, query_args: list[str]) -> list[str]:
-    return [str(mf.with_name("python")), "-I", str(ENTRY), str(mf), *query_args]
+def metricflow_args(mf: Path, entry: Path, query_args: list[str]) -> list[str]:
+    return [str(mf.with_name("python")), "-I", str(entry), str(mf), *query_args]
