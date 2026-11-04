@@ -225,3 +225,7 @@ Nada nesta entrega publica nova baseline, promove dev/UAT ou transforma o roadma
 ## Organização do repositório — 28/10/2026
 
 Refatoração implementada: modelos por responsabilidade, lint/format nativos, configuração da extensão oficial e exercícios atualizados. Aceite local: 88 testes Python, 48 recursos dbt, oráculos de PL/fluxo, dois exercícios vermelho/verde, replay e quatro arestas de linhagem. Comparação com baseline sem diferenças; revisão independente resolvida. [Design](repository-review.md), [plano](repository-refactor-plan.md) e [evidência](../reviews/repository-refactor-review.md). PR #3 integrado; aceite Linux pós-merge aprovado no commit `c884ebc`, sem diferenças contra o baseline e com teste negativo bloqueado.
+
+## Local agent execution — 2026-11-04
+
+User authorized [the implementation plan](local-agent-implementation-plan.md) through local production and demo. Wizard trials are excluded. Local Pydantic AI/Ollama/MetricFlow replaces the historical Wizard access gate. Dependency/model installation is authorized, subject to available machine resources. No Docker locally; CI stays on GitHub Actions. Deterministic and actual-model acceptance must remain distinct; an unmeasured model is not production-ready.

@@ -2,7 +2,7 @@
 
 ## Pre-model qualification
 
-[W01–W12](wizard-agent-spike.md) form a separate deterministic integration gate after the repository refactor. They use Pydantic AI controlled outputs and real MetricFlow queries; their results must not count toward the 120-prompt/360-trial model-quality denominators below. No weights or real analytics-model requests are needed. Cases for security and business policy remain relevant to the later full suite. No W-case has been executed yet.
+[W01–W12](wizard-agent-spike.md) form a separate deterministic integration gate after the repository refactor. They use Pydantic AI controlled outputs and real MetricFlow queries; their results must not count toward the 120-prompt/360-trial model-quality denominators below. No weights or real analytics-model requests are needed. Cases for security and business policy remain relevant to the later full suite. The technical W-cases remain required; Wizard access is no longer a prerequisite (2026-11-04). Results will be recorded separately from model-quality trials.
 
 
 Date: **2026-10-28**. State: **specified, not executed**. Applies to [AI-SPEC](AI-SPEC.md). Existing data/MetricFlow test results remain evidence for those layers only. There are no measured LLM accuracy, latency, safety or model-comparison scores yet.

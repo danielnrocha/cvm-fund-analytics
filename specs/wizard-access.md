@@ -1,5 +1,7 @@
 # Wizard access qualification
 
+> **Superseded 2026-11-04:** the user rejected trial-dependent Wizard access. Do not execute account/signup/trial instructions below. They are historical research only. Follow [the free local implementation plan](local-agent-implementation-plan.md); retain W01–W12 as technical test cases.
+
 Verified: **2026-10-28**. Status: **documentation and local installation inspected; authenticated access and implementation canary pending**.
 
 | Question | Evidence and result |

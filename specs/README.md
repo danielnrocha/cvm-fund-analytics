@@ -50,3 +50,7 @@ A [publicação atômica local](snapshot-publication.md) implementa bundles veri
 [GitHub Actions remoto, desenvolvimento sem Docker e baseline durável](portfolio.md). Repositório público e baseline imutável publicados; CI remoto ativado. Consultar o runbook para os resultados e a correção identificada no primeiro run.
 
 [Próximo passo do agente: qualificação Wizard/Pydantic AI/MetricFlow](wizard-agent-spike.md): escopo sem modelos, critérios W01–W12 e prompt do implementador; execução e acesso autenticado ainda pendentes.
+
+## Local agent — current decision, 2026-11-04
+
+[Implementation plan](local-agent-implementation-plan.md): permanent free local operation, no Wizard trial, no paid API and no local Docker. Implementation is authorized; deterministic tests and actual-model acceptance are separate gates. This supersedes earlier Wizard qualification prerequisites.

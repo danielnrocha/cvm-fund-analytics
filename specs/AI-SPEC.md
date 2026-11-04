@@ -1,6 +1,6 @@
 # CVM analytics agent — design contract
 
-Date: **2026-10-28**. Status: **proposed design; no agent implementation or model eval executed**. Scope: a single-user, local, read-only analytics assistant over the published CVM vertical. Recommendation and alternatives: [stack research](ai-agent-research.md). Evaluation contract: [agent evals](ai-agent-evals.md). Business authority: [metric contracts](metrics.md) and the published semantic manifest, never the LLM's memory.
+Date: **2026-11-04**. Status: **implementation authorized and in progress; actual model acceptance pending**. Scope: a single-user, local, read-only analytics assistant over the published CVM vertical. Recommendation and alternatives: [stack research](ai-agent-research.md). Evaluation contract: [agent evals](ai-agent-evals.md). Business authority: [metric contracts](metrics.md) and the published semantic manifest, never the LLM's memory.
 
 ## Decision and explicit exclusions
 
@@ -10,17 +10,17 @@ The first release supports facts about reported PL, net flow and reporting cover
 
 The dbt extension remains the development/demo interface for dbt. The agent is a separate program runnable in the VS Code terminal; do not present it as a feature of the official extension or dbt Wizard. Compare stays out of the live demo by user decision.
 
-### Preferred implementation assistant
+### Permanent free operation
 
-User preference, reaffirmed **2026-10-28**: **prefer dbt Wizard inside the official VS Code extension wherever feasible**, with Codex supporting specifications, planning, validation and review. This is a development-workflow preference, not a requirement to use Wizard as the analytics runtime. Before the first implementation spike, verify actual account availability, free-use limits and suitability for the planned Python/MetricFlow work. Do not assume that a free extension implies free Wizard usage, or that a trial guarantees ongoing availability. Do not activate billing or change the no-required-paid-service constraint. Keep the deliverable runnable independently of Wizard; use another implementation assistant only where Wizard is unavailable or unsuitable, explaining the concrete limitation. This section is the canonical preference for this project.
+User decision, **2026-11-04**: do not use a dbt Wizard trial. Wizard is removed from implementation and runtime prerequisites. Codex performs the implementation; the deliverable runs independently through Pydantic AI, local Ollama and MetricFlow, without accounts, expiring credits, paid APIs or hosted telemetry. The official dbt extension remains the dbt development interface. Local inference consumes disk, RAM and electricity; permanent free operation means no mandatory service subscription, not zero hardware cost. Historical Wizard research is retained as superseded evidence.
 
-Access inspection on **2026-10-28**: the official extension is installed, but authenticated Wizard access and Python/MetricFlow suitability remain unverified. The documented free offer is a limited trial; the local workflow uses Wizard CLI alongside the extension. The user has a domain but no dbt account. See [access evidence and qualification canary](wizard-access.md). Do not present this as an available native chat or completed compatibility test.
+Implementation, dependency installation and model download are authorized. Do not activate billing. Production scope is a single-user local application, not a public web service. Model acceptance remains an explicit gate and cannot be inferred from deterministic tests.
 
 ## Reconciliation with the refactored main
 
 Reviewed against main `c884ebc` (PR #3), whose [post-merge CI](https://github.com/danielnrocha/cvm-fund-analytics/actions/runs/40802646918) passed. Fact/semantic source files now live under `transform/models/marts/`; shared native fixtures under `transform/models/intermediate/`; ingestion metadata under `transform/models/staging/cvm/`. Model IDs, grain and PL/flow contracts did not change. Published bundles may retain old paths; inspect their manifests by identity and never combine current source YAML with a different published database.
 
-The next step is the [Wizard qualification spike](wizard-agent-spike.md), using Pydantic AI test models with real MetricFlow and a pinned read-only snapshot. It precedes any local-model download or benchmark. Wizard access remains a separate unverified gate. `dbt.dbtPath` is a VS Code User/Machine setting, not a valid workspace pin; follow CONTRIBUTING. Keep all three Python environments isolated.
+Execute the [local implementation plan](local-agent-implementation-plan.md): deterministic contracts and real MetricFlow first, then a local planner and measured model acceptance. The W01–W12 technical boundary cases remain relevant; Wizard access is no longer a gate. `dbt.dbtPath` is a VS Code User/Machine setting, not a valid workspace pin; follow CONTRIBUTING. Keep all three Python environments isolated.
 
 ## Architecture
 
@@ -155,6 +155,6 @@ Optional chart milestone: deterministic line/bar charts from the same validated 
 
 The [eval contract](ai-agent-evals.md) is normative for this vertical. All deterministic safety/business tests must pass; no critical agent case may fail in three repetitions. Overall held-out action+intent correctness >=95%, but refusals on supported questions cannot inflate the score. Numeric outputs must match independent oracles at their prescribed precision, not merely match another LLM.
 
-Implement in this order after design review: Wizard access qualification and a deterministic Pydantic AI/MetricFlow spike without a real model; deterministic gateway with TDD; explicitly authorized local-model compatibility/benchmark; bounded planner; full evals and independent adversarial review; presentation UI/optional charts. CI remains GitHub Actions with Docker on the remote runner only. Per-PR deterministic tests require no LLM downloads; actual model acceptance is a separately recorded run tied to exact revisions, artifacts and hardware. Do not present mocked responses as model quality evidence.
+Implement in this order: a deterministic Pydantic AI/MetricFlow boundary without a real model; deterministic gateway with TDD; explicitly authorized local-model compatibility/benchmark; bounded planner; full evals and independent adversarial review; presentation UI/optional charts. CI remains GitHub Actions with Docker on the remote runner only. Per-PR deterministic tests require no LLM downloads; actual model acceptance is a separately recorded run tied to exact revisions, artifacts and hardware. Do not present mocked responses as model quality evidence.
 
-No implementation is authorized by a passing design self-review. User requested spec/research/evals first. Missing benchmark or independent review means **proposed**, not production-ready.
+The user explicitly authorized implementation through local production on 2026-11-04. Missing benchmark or independent review still means natural-language functionality is **unaccepted**, not production-ready.
