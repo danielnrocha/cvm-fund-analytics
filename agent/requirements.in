@@ -1,4 +1,6 @@
-# Gateway and deterministic tests, isolated from dbt/MetricFlow and model runtimes.
+# Gateway, structured Codex OAuth planner, and deterministic tests.
 pydantic>=2.12,<3
 PyYAML>=6,<7
 pytest>=8,<10
+pydantic-ai-slim[openai]==2.66.0
+httpx2>=2.16,<3
